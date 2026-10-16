@@ -1,0 +1,80 @@
+@startuml 06-paquetes
+' Vista de desarrollo (4+1) — Figura 4.6: diagrama de paquetes (monorepo sgp-kotoduo)
+skinparam packageStyle folder
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #1F3A5F
+}
+
+package "sgp-kotoduo" {
+  package "apps/web/src" as WEB {
+    package "app (rutas, layout, guardas por rol)" as WAPP
+    package "features" as WF {
+      package "auth" as WF1
+      package "mi-trabajo" as WF4
+      package "ordenes" as WF3
+      package "plantillas" as WF2
+      package "insumos" as WF5
+      package "diseno" as WF6
+      package "panel" as WF7
+      package "admin" as WF8
+    }
+    package "ui (componentes del sistema de diseño)" as WUI
+    package "lib (cliente API, sesión en memoria)" as WLIB
+  }
+
+  package "apps/api/src" as API {
+    package "modules" as AM {
+      package "<modulo>/routes" as R
+      package "<modulo>/controller" as C
+      package "<modulo>/service" as S
+      package "<modulo>/repository" as REP
+    }
+    package "middleware" as AMW
+    package "jobs (outbox-relay, verificador-atrasos)" as AJ
+    package "infra (db, mongo, r2, push, logger, config)" as AINF
+    package "errors" as AERR
+  }
+
+  package "packages/shared" as SH {
+    package "schemas (Zod)" as SHZ
+    package "permisos" as SHP
+    package "dominio (enums de estado)" as SHD
+  }
+
+  package "db" as DB {
+    package "migrations (node-pg-migrate)" as MIG
+    package "mongo (validadores, índices)" as MON
+    package "seeds" as SEED
+  }
+
+  package "tests" as T {
+    package "unit (Vitest)" as TU
+    package "integration (Supertest + Testcontainers)" as TI
+    package "e2e (Playwright)" as TE
+    package "perf (k6)" as TP
+  }
+}
+
+WAPP ..> WF : <<import>>
+WF ..> WUI : <<import>>
+WF ..> WLIB : <<import>>
+WLIB ..> SH : <<import>>
+R ..> C : <<import>>
+C ..> S : <<import>>
+S ..> REP : <<import>>
+REP ..> AINF : <<import>>
+R ..> AMW : <<import>>
+C ..> SHZ : <<import>>
+AMW ..> SHP : <<import>>
+S ..> SHD : <<import>>
+S ..> AERR : <<import>>
+AJ ..> AINF : <<import>>
+T ..> API : <<access>>
+T ..> WEB : <<access>>
+note bottom of AM
+  Regla de dependencias: routes -> controller -> service -> repository.
+  Ningún paquete importa "hacia arriba"; repository es el único
+  que ejecuta SQL (consultas parametrizadas).
+end note
+@enduml

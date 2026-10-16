@@ -1,0 +1,100 @@
+/* SGP-Kotoduo — Prototipo navegable (Anexo D). Design tokens de la sección 5.4 */
+:root {
+  --color-primario: #1E40AF;
+  --color-primario-suave: #DBEAFE;
+  --color-acento: #C2410C;
+  --color-exito: #15803D;
+  --color-exito-suave: #DCFCE7;
+  --color-advertencia: #A16207;
+  --color-advertencia-suave: #FEF3C7;
+  --color-peligro: #B91C1C;
+  --color-peligro-suave: #FEE2E2;
+  --color-texto: #111827;
+  --color-texto-2: #4B5563;
+  --color-borde: #D1D5DB;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --fs-h1: 1.5rem; --fs-h2: 1.25rem; --fs-base: 1rem; --fs-meta: .875rem;
+  --radio: 10px; --esp: 8px; --toque: 48px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-fondo); color: var(--color-texto); font-size: var(--fs-base); line-height: 1.5; }
+h1 { font-size: var(--fs-h1); margin: 0 0 calc(var(--esp)*2); }
+h2 { font-size: var(--fs-h2); margin: calc(var(--esp)*3) 0 var(--esp); }
+a { color: var(--color-primario); }
+:focus-visible { outline: 3px solid var(--color-primario); outline-offset: 2px; }
+.meta { color: var(--color-texto-2); font-size: var(--fs-meta); }
+
+/* Layout mobile-first: barra superior + contenido + navegación inferior */
+.topbar { background: var(--color-primario); color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+.topbar a { color: #fff; }
+.marca { font-weight: 700; }
+main { padding: 16px; max-width: 1200px; margin: 0 auto 80px; }
+.nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--color-superficie); border-top: 1px solid var(--color-borde); }
+.nav a { flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: var(--color-texto-2); font-size: var(--fs-meta); }
+.nav a[aria-current="page"] { color: var(--color-primario); font-weight: 700; }
+.nav .ico { font-size: 1.25rem; }
+
+/* Componentes */
+.card { background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: var(--radio); padding: 16px; margin-bottom: 12px; }
+.card a.cubre { text-decoration: none; color: inherit; display: block; }
+.fila { display: flex; gap: var(--esp); align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: var(--toque); padding: 0 20px; border-radius: var(--radio); border: 2px solid var(--color-primario); background: var(--color-primario); color: #fff; font-size: var(--fs-base); font-weight: 600; cursor: pointer; text-decoration: none; }
+.btn.secundario { background: transparent; color: var(--color-primario); }
+.btn.peligro { background: var(--color-peligro); border-color: var(--color-peligro); }
+.btn.bloque { width: 100%; }
+.acciones { display: grid; gap: 8px; margin-top: 12px; }
+.chip { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: var(--fs-meta); font-weight: 600; }
+.chip.disponible { background: var(--color-primario-suave); color: var(--color-primario); }
+.chip.encurso { background: var(--color-advertencia-suave); color: #92400E; }
+.chip.terminada { background: var(--color-exito-suave); color: var(--color-exito); }
+.chip.bloqueada, .chip.atrasada { background: var(--color-peligro-suave); color: var(--color-peligro); }
+.chip.pendiente { background: #F3F4F6; color: var(--color-texto-2); }
+.chip.urgente { background: #FFEDD5; color: var(--color-acento); }
+.aviso { border-radius: var(--radio); padding: 12px 16px; margin: 12px 0; font-weight: 600; }
+.aviso.exito { background: var(--color-exito-suave); color: var(--color-exito); }
+.aviso.alerta { background: var(--color-peligro-suave); color: var(--color-peligro); }
+.aviso.info { background: var(--color-primario-suave); color: var(--color-primario); }
+[hidden] { display: none !important; }
+
+/* Formularios */
+label { display: block; font-weight: 600; margin: 12px 0 4px; }
+input, select, textarea { width: 100%; min-height: var(--toque); padding: 10px 12px; border: 1px solid var(--color-borde); border-radius: var(--radio); font-size: var(--fs-base); font-family: inherit; background: #fff; }
+.ayuda { font-size: var(--fs-meta); color: var(--color-texto-2); margin-top: 4px; }
+dialog { border: none; border-radius: var(--radio); padding: 20px; width: min(92vw, 480px); }
+dialog::backdrop { background: rgba(17,24,39,.5); }
+
+/* Pasos (timeline de etapas) */
+ol.pasos { list-style: none; padding: 0; margin: 0; }
+ol.pasos li { display: flex; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--color-borde); }
+ol.pasos .num { width: 28px; height: 28px; border-radius: 50%; background: #F3F4F6; display: grid; place-items: center; font-weight: 700; flex: none; }
+ol.pasos li.actual .num { background: var(--color-primario); color: #fff; }
+ol.pasos li.hecha .num { background: var(--color-exito); color: #fff; }
+
+/* Tablas: en móvil se muestran como tarjetas */
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--color-borde); }
+th { font-size: var(--fs-meta); color: var(--color-texto-2); }
+.kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.kpi { background: #fff; border: 1px solid var(--color-borde); border-radius: var(--radio); padding: 12px; }
+.kpi b { display: block; font-size: 1.75rem; }
+
+@media (max-width: 599px) {
+  table.responsive thead { display: none; }
+  table.responsive tr { display: block; border: 1px solid var(--color-borde); border-radius: var(--radio); margin-bottom: 12px; }
+  table.responsive td { display: flex; justify-content: space-between; gap: 12px; border: none; }
+  table.responsive td::before { content: attr(data-label); font-weight: 600; color: var(--color-texto-2); }
+}
+@media (min-width: 600px) {
+  .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .acciones { grid-template-columns: repeat(2, 1fr); }
+  .kpis { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 1024px) {
+  body { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: auto 1fr; }
+  .topbar { grid-column: 1 / -1; }
+  .nav { position: static; flex-direction: column; border-top: none; border-right: 1px solid var(--color-borde); padding-top: 12px; }
+  .nav a { flex: none; flex-direction: row; justify-content: flex-start; gap: 10px; padding: 0 20px; font-size: var(--fs-base); }
+  main { margin-bottom: 0; width: 100%; }
+}

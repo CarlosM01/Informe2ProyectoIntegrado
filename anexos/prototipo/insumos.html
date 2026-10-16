@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SGP-Kotoduo · Insumos</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<header class="topbar"><span class="marca">SGP-Kotoduo</span><a href="index.html">Salir</a></header>
+<nav class="nav" aria-label="Principal">
+  <a href="panel.html"><span class="ico">📊</span>Panel</a>
+  <a href="plantillas.html"><span class="ico">🧩</span>Plantillas</a>
+  <a href="insumos.html" aria-current="page"><span class="ico">📦</span>Insumos</a>
+  <a href="ordenes-nueva.html"><span class="ico">➕</span>Nueva OT</a>
+</nav>
+<main>
+  <h1>Insumos y alertas</h1>
+  <p class="meta">P-08 · Encargada de Producción (los operarios ven el stock en modo lectura)</p>
+
+  <h2>Alertas abiertas</h2>
+  <article class="card" id="alerta">
+    <div class="fila"><strong>Papel sublimación rollo 1,6 m</strong><span class="chip bloqueada">⚠ Automática</span></div>
+    <p>Stock 1,00 rollo · mínimo 2,00 · requerido por OT activas: 0,60 · <strong>saldo proyectado 0,40</strong></p>
+    <p class="meta">Afecta: OT-2026-0001 (Impresión de transfer) · creada hoy 14:32</p>
+    <div class="acciones"><button class="btn" onclick="document.getElementById('dlgIngreso').showModal()">Registrar ingreso</button><button class="btn secundario">Marcar en gestión</button></div>
+  </article>
+  <div id="ok" class="aviso exito" role="status" hidden>✔ Ingreso registrado: stock 5,00 rollos. Alerta cerrada.</div>
+
+  <h2>Stock</h2>
+  <table class="responsive">
+    <thead><tr><th>Código</th><th>Insumo</th><th>Stock</th><th>Mínimo</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td data-label="Código">PAP-SUB-RL</td><td data-label="Insumo">Papel sublimación rollo 1,6 m</td><td data-label="Stock" id="stock">1,00 rollo</td><td data-label="Mínimo">2,00</td><td data-label="Estado"><span id="est" class="chip bloqueada">⚠ Bajo mínimo</span></td></tr>
+      <tr><td data-label="Código">TIN-PLT-K</td><td data-label="Insumo">Tinta plotter negro</td><td data-label="Stock">2,00 L</td><td data-label="Mínimo">1,00</td><td data-label="Estado"><span class="chip terminada">✔ OK</span></td></tr>
+      <tr><td data-label="Código">TIN-SUB-CY</td><td data-label="Insumo">Tinta sublimación cian</td><td data-label="Stock">3,00 L</td><td data-label="Mínimo">1,00</td><td data-label="Estado"><span class="chip terminada">✔ OK</span></td></tr>
+      <tr><td data-label="Código">TEL-DRY-BL</td><td data-label="Insumo">Tela dry-fit blanca</td><td data-label="Stock">120 m</td><td data-label="Mínimo">40</td><td data-label="Estado"><span class="chip terminada">✔ OK</span></td></tr>
+      <tr><td data-label="Código">LON-13OZ</td><td data-label="Insumo">Lona front 13 oz</td><td data-label="Stock">60 m²</td><td data-label="Mínimo">20</td><td data-label="Estado"><span class="chip terminada">✔ OK</span></td></tr>
+    </tbody>
+  </table>
+</main>
+<dialog id="dlgIngreso" aria-labelledby="ti">
+  <h2 id="ti" style="margin-top:0">Registrar ingreso</h2>
+  <label for="cant">Cantidad recibida (rollos)</label><input id="cant" inputmode="decimal" value="4">
+  <label for="com">Comentario</label><input id="com" value="Compra proveedor habitual">
+  <div class="acciones"><button class="btn secundario" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn" onclick="ingresar()">Registrar</button></div>
+</dialog>
+<script>
+  function ingresar() {
+    document.getElementById('dlgIngreso').close();
+    document.getElementById('alerta').hidden = true; document.getElementById('ok').hidden = false;
+    document.getElementById('stock').textContent = '5,00 rollos';
+    var e = document.getElementById('est'); e.className = 'chip terminada'; e.textContent = '✔ OK';
+  }
+</script>
+</body>
+</html>

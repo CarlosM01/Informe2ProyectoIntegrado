@@ -1,0 +1,60 @@
+@startuml 08-despliegue
+' Vista física (4+1) — Figura 4.8: diagrama de despliegue
+skinparam node {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+}
+
+node "Smartphone del trabajador\n(Android 10+ / iOS 16.4+)" as MOV {
+  artifact "PWA SGP-Kotoduo\n(instalada)" as PWA1
+  component "Service Worker" as SW1
+}
+node "PC de oficina\n(Chrome / Edge / Firefox)" as PC {
+  artifact "PWA SGP-Kotoduo\n(navegador)" as PWA2
+}
+
+cloud "Cloudflare (borde)" as CF {
+  node "DNS + Proxy\nTLS 1.3, WAF, rate limiting" as EDGE
+  node "Cloudflare Pages\n<<static hosting>>" as PAGES {
+    artifact "web dist/\n(HTML, JS, CSS, manifest)" as DIST
+  }
+  node "Cloudflare R2\n<<object storage>>" as R2 {
+    artifact "bucket sgp-evidencias\n(privado, URLs prefirmadas)" as BKT
+    artifact "bucket sgp-respaldos\n(pg_dump cifrado)" as BKP
+  }
+}
+
+cloud "Render (us-east, Virginia)" as RENDER {
+  node "Web Service\n<<contenedor Docker>>" as WS {
+    component "Node.js 24 LTS\nAPI Express (apps/api)" as APIC
+    component "Relay Outbox +\nverificador de atrasos" as JOBC
+  }
+}
+
+cloud "Neon (AWS us-east-1)" as NEON {
+  database "PostgreSQL 16\nsgp (rama main)\n<<cifrado en reposo>>" as PGDB
+}
+cloud "MongoDB Atlas (AWS us-east-1)" as ATLAS {
+  database "Cluster MongoDB 8\nsgp_docs\n<<cifrado en reposo>>" as MGDB
+}
+cloud "Push services\n(FCM, APNs, Mozilla)" as PUSH
+cloud "GitHub" as GH {
+  node "Repositorio + Actions\n(CI/CD, respaldo nocturno)" as GHA
+}
+
+MOV -- EDGE : HTTPS 443\nsgp.kotoduo.cl
+PC -- EDGE : HTTPS 443
+EDGE -- PAGES : sgp.kotoduo.cl
+EDGE -- WS : HTTPS 443\napi.sgp.kotoduo.cl
+APIC -- PGDB : TLS 5432\n(pool, sslmode=verify-full)
+APIC -- MGDB : TLS 27017\n(SRV, IP allowlist)
+JOBC -- PGDB
+JOBC -- MGDB
+JOBC -- PUSH : HTTPS (VAPID)
+PUSH -- SW1 : push
+APIC -- R2 : S3 API (firma URLs)
+PWA1 ..> BKT : PUT/GET\nURL prefirmada (5 min)
+GHA -- RENDER : deploy hook\n(tras CI verde)
+GHA -- PAGES : deploy web
+GHA -- BKP : pg_dump diario\n(cifrado age)
+@enduml

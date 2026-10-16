@@ -1,0 +1,58 @@
+@startuml 03-secuencia-terminar-etapa
+' Vista lógica (4+1) — Figura 4.3: CU-06 Terminar etapa y avanzar a la siguiente área
+autonumber
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+actor "Operario" as OP
+participant "PWA\n(Mi Trabajo)" as PWA
+participant "API Express\n/etapas/:id/terminar" as API
+participant "authn + requierePermiso\n('etapas.avanzar_propias')" as SEC
+participant "EtapaService" as ES
+database "PostgreSQL\n(sgp)" as PG
+participant "Relay Outbox\n(proceso programado)" as RL
+database "MongoDB\n(sgp_docs)" as MG
+participant "Web Push" as WP
+actor "Siguiente responsable\n/ Encargada" as NX
+
+OP -> PWA : Toca "Terminar etapa"\n(+ consumos de insumo)
+PWA -> API : POST /api/v1/etapas/{id}/terminar\nAuthorization: Bearer <JWT>\n{version, consumos[]}
+API -> SEC : validar JWT y permiso
+SEC --> API : actor {id, roles}
+API -> API : validar body (Zod)
+API -> ES : terminar(id, version, consumos, actor)
+ES -> PG : BEGIN
+ES -> PG : SELECT ... FROM etapa_orden\nWHERE id=$1 FOR UPDATE
+PG --> ES : etapa {estado, responsable_id, version}
+
+alt responsable_id <> actor.id
+  ES --> API : ErrorAutorizacion
+  API --> PWA : 403 Forbidden (sin detalle interno)
+else version <> etapa.version
+  ES --> API : ErrorConflicto
+  API --> PWA : 409 Conflict ("la etapa fue actualizada")
+else estado = EN_CURSO
+  ES -> PG : UPDATE etapa_orden SET estado='TERMINADA'
+  loop por cada consumo
+    ES -> PG : INSERT movimiento_insumo (CONSUMO)
+    note right of PG : trigger trg_movimiento_insumo\nactualiza stock y, si queda\nbajo el mínimo, crea\nalerta_insumo AUTOMATICA
+  end
+  ES -> PG : UPDATE siguiente etapa SET estado='DISPONIBLE'
+  opt no quedan etapas
+    ES -> PG : UPDATE orden_trabajo SET estado='TERMINADA'
+  end
+  ES -> PG : INSERT outbox_evento (ETAPA_TERMINADA)
+  ES -> PG : COMMIT
+  ES --> API : ResultadoAvance {siguienteEtapa, area, alertas}
+  API --> PWA : 200 OK
+  PWA --> OP : "Listo. Sigue: Sublimado (Sublimación)"
+end
+
+== Asíncrono (cada 5 s) ==
+RL -> PG : SELECT ... FROM outbox_evento\nWHERE procesado_en IS NULL\nFOR UPDATE SKIP LOCKED
+RL -> MG : bitacora_eventos.updateOne({_id:'evt-n'},\n{$setOnInsert}, {upsert:true})
+RL -> MG : notificaciones.insertOne(...)
+RL -> WP : enviar aviso (VAPID)
+WP -> NX : "OT-2026-0001: Sublimado disponible"
+RL -> PG : UPDATE outbox_evento SET procesado_en=now()
+@enduml

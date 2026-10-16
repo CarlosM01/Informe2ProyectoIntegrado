@@ -1,0 +1,94 @@
+@startuml 05-componentes
+' Vista de desarrollo (4+1) — Figura 4.5: diagrama de componentes
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+}
+
+package "apps/web — PWA (React + TypeScript)" {
+  [Shell PWA\n(enrutador, layout)] as SHELL
+  [Service Worker\n(Workbox: caché + push)] as SW
+  [Módulo auth] as W1
+  [Módulo mi-trabajo] as W4
+  [Módulo ordenes] as W3
+  [Módulo plantillas] as W2
+  [Módulo insumos] as W5
+  [Módulo diseno] as W6
+  [Módulo panel] as W7
+  [Módulo admin] as W8
+  [Cliente API\n(fetch + TanStack Query)] as APICLI
+}
+
+package "packages/shared" {
+  [Esquemas Zod\n+ tipos DTO] as ZOD
+  [Mapa de permisos\nRBAC] as PERM
+}
+
+package "apps/api — API REST (Node.js + Express)" {
+  portin "HTTPS /api/v1" as REST
+  [Middleware de seguridad\n(helmet, cors, rate-limit,\nauthn JWT, requierePermiso)] as MW
+  [M1 Autenticación y Usuarios] as M1
+  [M2 Plantillas de Proceso] as M2
+  [M3 Órdenes de Trabajo] as M3
+  [M4 Mi Trabajo / Etapas] as M4
+  [M5 Insumos y Alertas] as M5
+  [M6 Aprobación de Diseño] as M6
+  [M7 Panel de Supervisión] as M7
+  [M8 Bitácora y Auditoría] as M8
+  [Relay Outbox +\nPlanificador de atrasos] as JOB
+  [Infra: PgPool, MongoClient,\nR2Client, PushClient, Logger] as INFRA
+}
+
+database "PostgreSQL" as PG
+database "MongoDB" as MG
+cloud "Cloudflare R2\n(objetos)" as R2
+cloud "Servicio Web Push\n(FCM / APNs / Mozilla)" as PUSH
+
+SHELL --> W1
+SHELL --> W4
+SHELL --> W3
+SHELL --> W2
+SHELL --> W5
+SHELL --> W6
+SHELL --> W7
+SHELL --> W8
+W1 ..> APICLI
+W4 ..> APICLI
+W3 ..> APICLI
+W5 ..> APICLI
+W6 ..> APICLI
+W7 ..> APICLI
+APICLI ..> ZOD
+SHELL ..> PERM : oculta acciones\nno permitidas
+APICLI --> REST : JSON/HTTPS
+W6 --> R2 : PUT con URL\nprefirmada
+SW <-- PUSH
+
+REST --> MW
+MW --> M1
+MW --> M2
+MW --> M3
+MW --> M4
+MW --> M5
+MW --> M6
+MW --> M7
+MW --> M8
+MW ..> PERM
+M3 ..> M2 : usa plantilla
+M4 ..> M5 : registra consumo
+M6 ..> M4 : habilita producción
+M1 ..> INFRA
+M3 ..> INFRA
+M4 ..> INFRA
+M5 ..> INFRA
+M7 ..> INFRA
+M8 ..> INFRA
+JOB ..> INFRA
+M3 ..> ZOD
+M4 ..> ZOD
+INFRA --> PG : SQL/TLS
+INFRA --> MG : MongoDB/TLS
+INFRA --> R2 : S3 API
+INFRA --> PUSH : VAPID
+@enduml

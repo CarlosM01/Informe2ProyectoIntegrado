@@ -1,0 +1,20 @@
+@startuml 04-estados-etapa
+' Vista lógica (4+1) — Figura 4.4: máquina de estados de EtapaOrden
+' (implementada en EtapaOrden.puedeTransicionar() y en el trigger trg_etapa_transicion)
+hide empty description
+[*] --> PENDIENTE : orden registrada\n(etapas generadas)
+PENDIENTE --> DISPONIBLE : etapa anterior TERMINADA\n[o es la primera]
+PENDIENTE --> OMITIDA : Encargada omite\n[no aplica al trabajo]
+DISPONIBLE --> EN_CURSO : responsable "Iniciar"
+DISPONIBLE --> OMITIDA : Encargada omite
+EN_CURSO --> BLOQUEADA : "Reportar problema"\n[motivo obligatorio]
+BLOQUEADA --> EN_CURSO : problema resuelto
+EN_CURSO --> TERMINADA : responsable "Terminar"\n/ habilita siguiente etapa
+TERMINADA --> [*]
+OMITIDA --> [*]
+note right of BLOQUEADA
+  motivo_bloqueo NOT NULL
+  (ck_etapa_bloqueo)
+  Notifica a la Encargada
+end note
+@enduml

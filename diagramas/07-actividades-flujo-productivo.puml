@@ -1,0 +1,77 @@
+@startuml 07-actividades-flujo-productivo
+' Vista de procesos (4+1) — Figura 4.7: flujo productivo con carriles (equivalente a BPMN)
+skinparam activity {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+}
+skinparam swimlaneWidth same
+
+|Vendedor|
+start
+:Recibir solicitud del cliente
+(medidas, cantidades, referencia);
+:Registrar orden de trabajo
+seleccionando el tipo de trabajo (CU-04);
+|SGP-Kotoduo|
+:Generar etapas desde la plantilla
+y calcular requerimiento de insumos;
+:Calcular fecha estimada de término;
+if (¿Insumos proyectados bajo el mínimo?) then (sí)
+  :Crear alerta automática de insumo
+  y notificar a la Encargada;
+else (no)
+endif
+if (¿El tipo de trabajo requiere diseño?) then (sí)
+  |Diseñador|
+  repeat
+    :Elaborar propuesta de diseño;
+    :Subir versión de diseño (CU-07);
+    |Vendedor|
+    :Presentar diseño al cliente y
+    registrar su respuesta;
+  repeat while (¿Cliente aprueba?) is (no: registrar motivo)
+  -> sí;
+else (no)
+endif
+|Encargada de Producción|
+:Asignar o confirmar responsables de etapas;
+|SGP-Kotoduo|
+:Habilitar primera etapa de producción (DISPONIBLE)
+y notificar al responsable;
+|Operario|
+repeat
+  :Consultar Mi Trabajo:
+  etapa, instrucciones e insumos (CU-05);
+  :Iniciar etapa;
+  if (¿Insumos suficientes?) then (no)
+    :Reportar faltante (CU-09);
+    |Encargada de Producción|
+    :Gestionar reposición
+    y cerrar alerta;
+    |Operario|
+  else (sí)
+  endif
+  :Ejecutar actividad;
+  fork
+    :Registrar consumo de insumos;
+  fork again
+    :Adjuntar evidencia (foto/nota)
+    [opcional];
+  end fork
+  :Terminar etapa (CU-06);
+  |SGP-Kotoduo|
+  fork
+    :Habilitar siguiente etapa y
+    notificar a su responsable;
+  fork again
+    :Registrar evento en bitácora;
+  end fork
+  |Operario|
+repeat while (¿Quedan etapas?) is (sí)
+-> no;
+|SGP-Kotoduo|
+:Marcar orden como TERMINADA;
+|Vendedor|
+:Registrar entrega al cliente (ENTREGADA);
+stop
+@enduml

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SGP-Kotoduo · Aprobación de diseño</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<header class="topbar"><span class="marca">SGP-Kotoduo</span><a href="index.html">Salir</a></header>
+<nav class="nav" aria-label="Principal">
+  <a href="ordenes-nueva.html"><span class="ico">➕</span>Nueva orden</a>
+  <a href="panel.html"><span class="ico">📋</span>Órdenes</a>
+  <a href="aprobacion-diseno.html" aria-current="page"><span class="ico">🎨</span>Diseños</a>
+</nav>
+<main>
+  <h1>Diseño · OT-2026-0001</h1>
+  <p class="meta">P-05 · Camisetas sublimadas Club Deportivo</p>
+  <div class="dos-col">
+    <section class="card">
+      <div class="fila"><strong>Versión 2</strong><span id="chip" class="chip encurso">◐ Pendiente de respuesta</span></div>
+      <div style="aspect-ratio:3/2;background:linear-gradient(135deg,#1E40AF,#93C5FD);border-radius:10px;display:grid;place-items:center;color:#fff;margin:12px 0" role="img" aria-label="Vista previa del diseño versión 2">Vista previa v2</div>
+      <p class="meta">Subido por Camila (Diseñadora) · 23-11-2026 18:05</p>
+      <p>"Se ajusta el escudo según la observación del cliente."</p>
+      <div id="res" class="aviso exito" role="status" hidden>✔ Diseño aprobado. Producción habilitada: Impresión de transfer quedó disponible.</div>
+      <div id="botones" class="acciones">
+        <button class="btn" onclick="aprobar()">✔ Cliente aprueba</button>
+        <button class="btn secundario" onclick="document.getElementById('dlgRechazo').showModal()">✖ Cliente pide cambios</button>
+      </div>
+      <p class="ayuda">Quien sube un diseño no puede registrar su aprobación.</p>
+    </section>
+    <section class="card">
+      <h2 style="margin-top:0">Historial</h2>
+      <ol class="pasos">
+        <li><span class="num">1</span><div>Versión 1 · <span class="chip bloqueada">✖ Rechazada</span><br><span class="meta">"El escudo debe ir a la izquierda" — Vendedor, 22-11</span></div></li>
+        <li class="actual"><span class="num">2</span><div>Versión 2 · pendiente</div></li>
+      </ol>
+    </section>
+  </div>
+</main>
+<dialog id="dlgRechazo" aria-labelledby="tr">
+  <h2 id="tr" style="margin-top:0">Cambios solicitados</h2>
+  <label for="mot">¿Qué pidió el cliente? (obligatorio)</label><textarea id="mot" rows="3" required></textarea>
+  <div class="acciones"><button class="btn secundario" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn" onclick="this.closest('dialog').close()">Enviar a Diseño</button></div>
+</dialog>
+<script>
+  function aprobar() {
+    var c = document.getElementById('chip'); c.className = 'chip terminada'; c.textContent = '✔ Aprobado';
+    document.getElementById('botones').hidden = true; document.getElementById('res').hidden = false;
+  }
+</script>
+</body>
+</html>

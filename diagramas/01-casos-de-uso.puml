@@ -1,0 +1,63 @@
+@startuml 01-casos-de-uso
+' Vista de escenarios (4+1) — Figura 4.9
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+}
+
+actor "Usuario autenticado" as U
+actor "Operario" as OP
+actor "Diseñador" as DI
+actor "Vendedor" as VE
+actor "Encargada de Producción" as EP
+actor "Administrador" as AD
+actor "Planificador\n(proceso programado)" as SCH <<sistema>>
+
+OP -|> U
+DI -|> U
+VE -|> U
+EP -|> U
+AD -|> EP
+
+rectangle "SGP-Kotoduo" {
+  usecase "CU-01 Iniciar sesión\n(con MFA si corresponde)" as CU01
+  usecase "CU-02 Gestionar usuarios y roles" as CU02
+  usecase "CU-03 Gestionar plantillas de proceso" as CU03
+  usecase "CU-04 Registrar orden de trabajo" as CU04
+  usecase "Generar etapas desde plantilla" as CU04a
+  usecase "CU-05 Consultar Mi Trabajo" as CU05
+  usecase "CU-06 Actualizar avance de etapa" as CU06
+  usecase "Registrar evidencia" as CU06a
+  usecase "CU-07 Gestionar aprobación de diseño" as CU07
+  usecase "CU-08 Gestionar insumos y movimientos" as CU08
+  usecase "CU-09 Reportar faltante / alerta de insumo" as CU09
+  usecase "CU-10 Supervisar producción" as CU10
+  usecase "CU-11 Consultar bitácora de auditoría" as CU11
+  usecase "Notificar siguiente responsable" as NOT
+}
+
+U  --> CU01
+AD --> CU02
+AD --> CU11
+EP --> CU03
+EP --> CU08
+EP --> CU10
+VE --> CU04
+VE --> CU07
+DI --> CU07
+DI --> CU05
+OP --> CU05
+OP --> CU06
+OP --> CU09
+DI --> CU06
+SCH --> CU10 : detecta órdenes\nen riesgo
+
+CU04 ..> CU04a : <<include>>
+CU06 ..> NOT : <<include>>
+CU06a ..> CU06 : <<extend>>\n[foto o nota]
+CU09 ..> CU06 : <<extend>>\n[insumo insuficiente]
+CU07 ..> NOT : <<include>>
+@enduml

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SGP-Kotoduo · Nueva orden</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<header class="topbar"><span class="marca">SGP-Kotoduo</span><a href="index.html">Salir</a></header>
+<nav class="nav" aria-label="Principal">
+  <a href="ordenes-nueva.html" aria-current="page"><span class="ico">➕</span>Nueva orden</a>
+  <a href="panel.html"><span class="ico">📋</span>Órdenes</a>
+  <a href="aprobacion-diseno.html"><span class="ico">🎨</span>Diseños</a>
+</nav>
+<main>
+  <h1>Nueva orden de trabajo</h1>
+  <p class="meta">P-04 · Vendedor · No se registran datos de contacto ni montos (acordado con Kotoduo)</p>
+  <form id="f" class="card">
+    <div class="dos-col">
+      <div>
+        <label for="tipo">Tipo de trabajo</label>
+        <select id="tipo"><option>Uniforme deportivo sublimado</option><option>Letrero publicitario</option><option>Polerón de generación</option></select>
+        <label for="titulo">Título</label><input id="titulo" maxlength="120" value="Camisetas sublimadas Club Deportivo">
+        <label for="ref">Cliente (institución)</label><input id="ref" maxlength="80" value="Club Deportivo Temuco">
+        <p class="ayuda">Solo el nombre de la institución.</p>
+      </div>
+      <div>
+        <label for="cant">Cantidad</label><input id="cant" type="number" min="1" value="30">
+        <label for="esp">Especificaciones (tallas, medidas, colores)</label><textarea id="esp" rows="3">S 5 · M 15 · L 10 · azul y blanco</textarea>
+        <label for="pri">Prioridad</label><select id="pri"><option>Normal</option><option>Alta</option><option>Urgente</option><option>Baja</option></select>
+        <label for="fc">Fecha comprometida</label><input id="fc" type="date" value="2026-11-26">
+      </div>
+    </div>
+    <div class="acciones"><button class="btn" type="submit">Revisar y registrar</button></div>
+  </form>
+
+  <section id="resumen" class="card" hidden>
+    <div class="aviso exito" role="status">✔ OT-2026-0001 registrada. Se generaron 6 etapas.</div>
+    <div class="aviso alerta">⚠ Papel de sublimación quedará bajo el mínimo: se avisó a la Encargada de Producción.</div>
+    <ol class="pasos">
+      <li class="actual"><span class="num">1</span><div>Diseño y aprobación · Diseño · 4 h</div></li>
+      <li><span class="num">2</span><div>Impresión de transfer · Impresión gran formato · 3 h</div></li>
+      <li><span class="num">3</span><div>Sublimado · Sublimación · 4 h</div></li>
+      <li><span class="num">4</span><div>Corte · Corte · 3 h</div></li>
+      <li><span class="num">5</span><div>Confección · Confección · 8 h</div></li>
+      <li><span class="num">6</span><div>Control y despacho · 1 h</div></li>
+    </ol>
+    <p class="meta">Fecha estimada de término: 24-11-2026 (antes del compromiso ✔)</p>
+  </section>
+</main>
+<script>
+  document.getElementById('f').addEventListener('submit', function (e) {
+    e.preventDefault(); this.hidden = true; document.getElementById('resumen').hidden = false;
+  });
+</script>
+</body>
+</html>

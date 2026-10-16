@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SGP-Kotoduo · OT-2026-0001</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<header class="topbar"><a href="mi-trabajo.html">← Volver</a><span class="marca">OT-2026-0001</span></header>
+<nav class="nav" aria-label="Principal">
+  <a href="mi-trabajo.html" aria-current="page"><span class="ico">🧰</span>Mi Trabajo</a>
+  <a href="insumos.html"><span class="ico">📦</span>Insumos</a>
+  <a href="#"><span class="ico">🔔</span>Avisos</a>
+</nav>
+<main>
+  <p class="meta">P-03 · Camisetas sublimadas Club Deportivo · 30 unidades · Entrega 26-11-2026</p>
+
+  <section class="card" aria-labelledby="t-etapa">
+    <div class="fila"><h1 id="t-etapa" style="margin:0">Impresión de transfer</h1><span id="chip" class="chip disponible">● Disponible</span></div>
+    <p class="meta">Área Impresión gran formato · Etapa 2 de 6 · Estimado 3 h</p>
+    <h2>Instrucciones</h2>
+    <p>Imprimir diseño en papel de sublimación con perfil de color validado. Revisar que el diseño aprobado sea la <strong>versión 2</strong>.</p>
+    <h2>Insumos de esta etapa</h2>
+    <ul>
+      <li>Papel sublimación rollo 1,6 m — 0,60 rollo <span class="chip bloqueada">⚠ stock bajo</span></li>
+      <li>Tinta sublimación cian — 0,30 L</li>
+    </ul>
+    <p class="meta">Tallas: S 5 · M 15 · L 10 · Colores: azul, blanco</p>
+
+    <div id="exito" class="aviso exito" role="status" hidden>✔ Listo. Sigue: <u>Sublimado</u> — área Sublimación (responsable: Ana). Le avisamos.</div>
+
+    <div class="acciones">
+      <button id="principal" class="btn bloque">▶ Iniciar etapa</button>
+      <button class="btn secundario bloque" onclick="document.getElementById('dlgFaltante').showModal()">📦 Reportar faltante</button>
+      <button class="btn secundario bloque" onclick="document.getElementById('dlgProblema').showModal()">⚠ Reportar problema</button>
+      <button class="btn secundario bloque" onclick="document.getElementById('dlgFoto').showModal()">📷 Adjuntar foto o nota</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">Recorrido del trabajo</h2>
+    <ol class="pasos">
+      <li class="hecha"><span class="num">✓</span><div>Diseño y aprobación<br><span class="meta">Diseño · terminada</span></div></li>
+      <li class="actual"><span class="num">2</span><div><strong>Impresión de transfer</strong><br><span class="meta">Impresión gran formato · tú</span></div></li>
+      <li><span class="num">3</span><div>Sublimado<br><span class="meta">Sublimación · Ana</span></div></li>
+      <li><span class="num">4</span><div>Corte<br><span class="meta">Corte · sin asignar</span></div></li>
+      <li><span class="num">5</span><div>Confección<br><span class="meta">Confección · Luis</span></div></li>
+      <li><span class="num">6</span><div>Control y despacho<br><span class="meta">Control y despacho</span></div></li>
+    </ol>
+  </section>
+</main>
+
+<dialog id="dlgTerminar" aria-labelledby="tt">
+  <h2 id="tt" style="margin-top:0">Terminar etapa</h2>
+  <p>Confirma cuánto usaste (puedes corregir):</p>
+  <label for="c1">Papel sublimación (rollo)</label><input id="c1" inputmode="decimal" value="0,60">
+  <label for="c2">Tinta sublimación cian (L)</label><input id="c2" inputmode="decimal" value="0,30">
+  <div class="acciones"><button class="btn secundario" onclick="this.closest('dialog').close()">Cancelar</button><button id="confirmar" class="btn">✔ Terminar</button></div>
+</dialog>
+<dialog id="dlgFaltante" aria-labelledby="tf">
+  <h2 id="tf" style="margin-top:0">Reportar faltante</h2>
+  <label for="ins">Insumo</label><select id="ins"><option>Papel sublimación rollo 1,6 m</option><option>Tinta sublimación cian</option></select>
+  <label for="cf">¿Cuánto falta? (opcional)</label><input id="cf" inputmode="decimal">
+  <label for="cm">Comentario</label><textarea id="cm" rows="2">Queda medio rollo, no alcanza para las 30.</textarea>
+  <div class="acciones"><button class="btn secundario" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn" onclick="this.closest('dialog').close();alert('Aviso enviado a la Encargada de Producción (prototipo)')">Enviar aviso</button></div>
+</dialog>
+<dialog id="dlgProblema" aria-labelledby="tp">
+  <h2 id="tp" style="margin-top:0">Reportar problema</h2>
+  <label for="mo">Motivo (obligatorio)</label><textarea id="mo" rows="3" required></textarea>
+  <p class="ayuda">La etapa quedará "Bloqueada" y se avisará a la Encargada.</p>
+  <div class="acciones"><button class="btn secundario" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn peligro" onclick="this.closest('dialog').close()">Bloquear etapa</button></div>
+</dialog>
+<dialog id="dlgFoto" aria-labelledby="tfo">
+  <h2 id="tfo" style="margin-top:0">Adjuntar evidencia</h2>
+  <label for="fo">Foto (jpg, png, webp · máx. 10 MB)</label><input id="fo" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">
+  <label for="no">Nota</label><textarea id="no" rows="2"></textarea>
+  <div class="acciones"><button class="btn secundario" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn" onclick="this.closest('dialog').close()">Guardar</button></div>
+</dialog>
+
+<script>
+  // Solo simula el cambio visual de estado (sin lógica de negocio)
+  var estado = 'DISPONIBLE', btn = document.getElementById('principal'), chip = document.getElementById('chip');
+  btn.addEventListener('click', function () {
+    if (estado === 'DISPONIBLE') {
+      estado = 'EN_CURSO'; chip.className = 'chip encurso'; chip.textContent = '◐ En curso'; btn.textContent = '✔ Terminar etapa';
+    } else if (estado === 'EN_CURSO') {
+      document.getElementById('dlgTerminar').showModal();
+    }
+  });
+  document.getElementById('confirmar').addEventListener('click', function () {
+    document.getElementById('dlgTerminar').close();
+    estado = 'TERMINADA'; chip.className = 'chip terminada'; chip.textContent = '✔ Terminada';
+    btn.hidden = true; document.getElementById('exito').hidden = false;
+  });
+</script>
+</body>
+</html>

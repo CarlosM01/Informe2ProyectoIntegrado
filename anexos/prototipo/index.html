@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SGP-Kotoduo · Ingresar</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body style="display:block">
+<header class="topbar"><span class="marca">SGP-Kotoduo</span><span class="meta" style="color:#fff">Prototipo v2 · P-01</span></header>
+<main style="max-width:420px">
+  <h1>Ingresar</h1>
+  <p class="meta">Sistema de Gestión y Seguimiento Productivo</p>
+  <form id="login">
+    <label for="usuario">Usuario</label>
+    <input id="usuario" autocomplete="username" value="operario.sub">
+    <label for="clave">Contraseña</label>
+    <input id="clave" type="password" autocomplete="current-password" value="••••••••••••">
+    <label for="rol">Simular rol (solo prototipo)</label>
+    <select id="rol">
+      <option value="mi-trabajo.html">Operario</option>
+      <option value="mi-trabajo.html">Diseñador</option>
+      <option value="ordenes-nueva.html">Vendedor</option>
+      <option value="panel.html">Encargada de Producción</option>
+      <option value="panel.html">Administrador</option>
+    </select>
+    <p class="ayuda">En el sistema real, la pantalla de inicio depende del rol de la cuenta. La Encargada y el Administrador ingresan además un código MFA.</p>
+    <div class="acciones" style="grid-template-columns:1fr"><button class="btn bloque" type="submit">Ingresar</button></div>
+    <p class="ayuda">¿Olvidaste tu contraseña? Pide a la Encargada de Producción una clave temporal.</p>
+  </form>
+</main>
+<script>
+  document.getElementById('login').addEventListener('submit', function (e) {
+    e.preventDefault();
+    location.href = document.getElementById('rol').value;
+  });
+</script>
+</body>
+</html>
