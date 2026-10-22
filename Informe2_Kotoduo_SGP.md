@@ -141,7 +141,7 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 | Usuarios y permisos diferenciados (RF-01; HU-11) | M1 + RBAC compartido entre front-end y API | Secciones 7.1–7.3, CP-09, CP-10, CP-27, CP-28 |
 | Trazabilidad de cambios y responsables (RF-12; HU-12) | M8 Bitácora: outbox transaccional → MongoDB | Secciones 6.4–6.5, Fig. 4.17, CP-11 |
 | App práctica para celular (RNF-01, RNF-02) | PWA *mobile-first* instalable | Secciones 4.7 y 5.4, CP-22, CP-34 |
-| Sin presupuesto definido (RNF-08) | Servicios gestionados con capa gratuita o de bajo costo | Sección 4.7 |
+| Sin presupuesto definido (RNF-08) | Servicios gestionados con capa gratuita o de bajo costo; infraestructura como código como mejora ideal para cambiar de proveedor sin rediseñar | Sección 4.7 (Tablas 4.2 y 4.3) |
 
 ---
 
@@ -482,6 +482,8 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 
 **Ambientes:** *local* (Docker Compose con PostgreSQL y MongoDB), *staging* (rama Neon `staging`, servicio Render de *preview*) y *producción*.
 
+**Aprovisionamiento:** por el plazo acotado de construcción, los recursos de *staging* y producción se configuran desde los paneles de los proveedores. Cada uno se registra en un inventario del repositorio con su servicio, plan, región y variables de entorno. El ideal, planteado como mejora posterior, es declararlos como **infraestructura como código** para reproducir la topología de la Figura 4.18 con otro proveedor sin rediseñarla (sección 4.7, Tabla 4.3).
+
 ### 4.6 Vista de escenarios o casos de uso (2.1.2.3)
 
 Los once casos de uso se dividen en tres diagramas, uno por subsistema, para que cada interesado vea solo los que le conciernen.
@@ -559,11 +561,41 @@ Los once casos de uso se dividen en tres diagramas, uno por subsistema, para que
 | Borde / red | Cloudflare DNS, proxy y WAF | TLS 1.3, reglas WAF administradas, *rate limiting* | Protección DDoS y WAF sin costo adicional; oculta el origen | Cloudflare Access para restringir `/admin` |
 | CI/CD | GitHub Actions + GitHub Environments | Lint, pruebas, SAST, auditoría de dependencias, *build*, despliegue con aprobación manual a producción | Integrado al repositorio; 2.000 min/mes gratis en repositorios privados | Despliegues *blue-green* |
 | Contenedores | Docker + Docker Compose | Ambiente local idéntico a producción; Testcontainers en CI | Elimina el "en mi máquina funciona"; pruebas de integración contra motores reales | Orquestación (Kubernetes) solo si la escala lo exige |
+| Infraestructura como código (**ideal, fuera del alcance comprometido**) | **OpenTofu** (módulos en `infra/`) + Trivy (análisis de configuración) | DNS, WAF, hosting de la PWA, servicio de la API, bases de datos y *buckets* de *staging* y producción | Infraestructura reproducible y revisable en PR; los módulos por rol permiten cambiar de proveedor sin rediseñar (RNF-08); licencia abierta MPL 2.0, sin costo y compatible con los proveedores del ecosistema Terraform | Primera mejora tras el piloto; luego, cambio de proveedor módulo a módulo (Tabla 4.3) |
 | Observabilidad | `pino` (logs JSON), Sentry (errores), UptimeRobot (disponibilidad) | Logs con `request_id`, alertas de error y caída | Planes gratuitos; diagnósticos sin exponer datos sensibles en logs | Métricas de negocio (tiempo por etapa) en un tablero |
 | Gestión del proyecto | GitHub Projects (tablero Scrum) | Backlog, Sprints, tablero y burndown | Vincula HU ↔ PR ↔ CI en una sola herramienta | — |
 | Diagramas | PlantUML | Todas las figuras del informe | Diagramas como texto, versionables y revisables en PR | — |
 
 **Costo mensual estimado de operación** (valores referenciales a validar al contratar, RNF-08): Cloudflare Pages, R2 y WAF US$ 0; Render Starter ≈ US$ 7; Neon Free US$ 0 (Launch ≈ US$ 19 si se superan 0,5 GB); Atlas M0 US$ 0 (M10 si se superan 512 MB); GitHub, Sentry y UptimeRobot US$ 0. **Total inicial ≈ US$ 7–10/mes**, compatible con la ausencia de presupuesto definido. El crecimiento previsto (~1.500 OT/año, ~12.000 etapas/año) cabe en las capas iniciales por al menos dos años.
+
+**Infraestructura como código y portabilidad entre proveedores (práctica ideal)**
+
+Kotoduo no tiene un presupuesto definido (RNF-08), y los precios y las capas gratuitas de los servicios cloud cambian con el tiempo. Lo ideal es que la infraestructura no quede amarrada a un proveedor y se declare en archivos versionados con **OpenTofu**, la bifurcación de código abierto de Terraform que mantiene la Linux Foundation (licencia MPL 2.0). Así, si un proveedor sube sus precios, elimina su capa gratuita o Kotoduo obtiene créditos en otra nube, bastaría con cambiar el módulo afectado y volver a desplegar la misma arquitectura.
+
+**Alcance dentro del plazo.** Como la construcción dura un mes (sección 3.1), la IaC **no forma parte del alcance comprometido**. Se plantea como práctica ideal y como primera mejora después del piloto. Dentro del plazo solo se asegura lo que la hace posible sin costo adicional: el principio 2 (interfaces estándar), que ya forma parte del diseño, y el inventario de recursos de la sección 4.5, que sirve de punto de partida para escribir los módulos.
+
+*Principios de diseño de la IaC, para cuando se adopte:*
+
+1. **Módulos por rol, no por proveedor.** La configuración se divide en seis módulos: borde y DNS, front-end, cómputo de la API, base de datos estructurada, base de datos no estructurada y almacenamiento de archivos. Cada módulo entrega las mismas salidas sin importar quién lo implemente: URL de la API, cadenas de conexión y nombre del *bucket*. Cambiar de proveedor significa reemplazar la implementación de un módulo; los demás módulos y la aplicación no cambian.
+2. **La aplicación depende de interfaces estándar.** La API solo conoce una imagen Docker, el protocolo de PostgreSQL, el protocolo de MongoDB, la API de S3 y su configuración por variables de entorno (factor III de *The Twelve-Factor App*). Esta es la condición que hace útil la IaC: sin ella, cambiar de proveedor obligaría a reescribir código.
+3. **Mismos módulos para cada ambiente.** *Staging* y producción se crean desde los mismos módulos, con distintos tamaños y nombres. *Staging* reproduce producción fielmente, lo que da validez a las pruebas de integración y rendimiento (8.4 y 8.5).
+4. **Cambios revisados como el código.** Cada PR que modifica `infra/` ejecuta en CI la validación de sintaxis, el análisis de configuración insegura con Trivy y un *plan*, que muestra qué recursos se crearán, modificarán o destruirán. Aplicar ese plan en producción requiere la misma aprobación manual de GitHub Environments que el despliegue de la API.
+5. **Estado remoto y cifrado.** El estado de OpenTofu registra los recursos creados y puede contener secretos. Por eso se guarda en un *bucket* privado compatible con S3 y se cifra del lado del cliente con el cifrado de estado nativo de OpenTofu. Ese *bucket* es el único recurso que se crea una vez de forma manual. Los tokens de los proveedores se guardan en los secretos de GitHub Environments, nunca en el repositorio (sección 7.5).
+
+**Tabla 4.3 — Módulos de infraestructura y proveedores intercambiables**
+
+| Módulo | Proveedor inicial | Alternativa en AWS | Alternativa en Google Cloud | Proveedor de OpenTofu inicial |
+|---|---|---|---|---|
+| Borde y DNS | Cloudflare DNS, proxy y WAF | Route 53 + CloudFront + AWS WAF | Cloud DNS + Cloud Load Balancing + Cloud Armor | `cloudflare/cloudflare` (oficial) |
+| Front-end (PWA estática) | Cloudflare Pages | S3 + CloudFront o Amplify Hosting | Firebase Hosting | `cloudflare/cloudflare` (oficial) |
+| Cómputo de la API (contenedor) | Render Web Service | ECS Fargate o Lightsail Containers | Cloud Run | `render-oss/render` (oficial) |
+| BD estructurada (PostgreSQL 16) | Neon | RDS for PostgreSQL | Cloud SQL for PostgreSQL | `kislerdm/neon` (comunitario, patrocinado por Neon) |
+| BD no estructurada (MongoDB 8) | MongoDB Atlas | MongoDB Atlas desplegado en AWS | MongoDB Atlas desplegado en Google Cloud | `mongodb/mongodbatlas` (oficial) |
+| Archivos (API S3) | Cloudflare R2 | Amazon S3 | Cloud Storage (API XML interoperable con S3) | `cloudflare/cloudflare` (oficial) |
+
+La base de datos no estructurada se mantiene en Atlas con cualquier nube, porque Atlas puede desplegarse sobre AWS, Google Cloud o Azure. Amazon DocumentDB se descartó como reemplazo porque es compatible con la API de MongoDB solo en parte, y el diseño de la sección 6.4 depende de los índices TTL y del *aggregation pipeline*.
+
+**Límites de la portabilidad.** La IaC hace reproducible la infraestructura, pero no traslada los datos ni iguala las diferencias entre servicios. Una migración real requiere además tres pasos. Primero, trasladar los datos con las herramientas nativas de respaldo de cada motor y copiar los objetos del *bucket*. Segundo, actualizar los registros DNS. Tercero, adaptar las funciones sin equivalente directo, como el *branching* de Neon o las reglas del WAF. Estos pasos se documentan como procedimiento de migración en el repositorio y se ensayan junto con la restauración de respaldos (AM-15). Además, el proveedor de Neon es comunitario y el de Render es reciente: si alguno dejara de mantenerse, se reemplaza solo su módulo.
 
 ---
 
@@ -1345,6 +1377,8 @@ La estrategia equilibra **automatización** para todo lo repetible y regresivo (
 
 ## 10. Referencias
 
+Aqua Security. (s.f.). *Trivy documentation*. https://trivy.dev/
+
 Brooke, J. (1996). SUS: A "quick and dirty" usability scale. En P. W. Jordan, B. Thomas, B. A. Weerdmeester & I. L. McClelland (Eds.), *Usability evaluation in industry* (pp. 189–194). Taylor & Francis.
 
 Biblioteca del Congreso Nacional de Chile. (1999). *Ley N.º 19.628 sobre protección de la vida privada*. https://www.bcn.cl/leychile/navegar?idNorma=141599
@@ -1381,6 +1415,8 @@ Lodderstedt, T., Bradley, J., Labunets, A., & Fett, D. (2025). *Best current pra
 
 MongoDB, Inc. (2025). *Schema validation*. MongoDB Manual. https://www.mongodb.com/docs/manual/core/schema-validation/
 
+Morris, K. (2020). *Infrastructure as code: Dynamic systems for the cloud age* (2.ª ed.). O'Reilly Media.
+
 National Institute of Standards and Technology. (2008). *Technical guide to information security testing and assessment* (NIST SP 800-115). https://doi.org/10.6028/NIST.SP.800-115
 
 National Institute of Standards and Technology. (2020). *NIST privacy framework: A tool for improving privacy through enterprise risk management* (versión 1.0). https://doi.org/10.6028/NIST.CSWP.01162020
@@ -1393,7 +1429,13 @@ National Institute of Standards and Technology. (2025). *Digital identity guidel
 
 National Institute of Standards and Technology. (2025). *Incident response recommendations and considerations for cybersecurity risk management* (NIST SP 800-61 Rev. 3). https://doi.org/10.6028/NIST.SP.800-61r3
 
+Neon. (s.f.). *Manage Neon with Terraform*. Neon documentation. https://neon.com/docs/reference/terraform
+
 Nielsen, J. (1994, actualizado 2024). *10 usability heuristics for user interface design*. Nielsen Norman Group. https://www.nngroup.com/articles/ten-usability-heuristics/
+
+OpenTofu. (s.f.). *OpenTofu documentation*. The Linux Foundation. https://opentofu.org/docs/
+
+OpenTofu. (s.f.). *State and plan encryption*. OpenTofu documentation. https://opentofu.org/docs/language/state/encryption/
 
 OWASP Foundation. (2021). *OWASP Top 10:2021*. https://owasp.org/Top10/
 
@@ -1402,6 +1444,8 @@ OWASP Foundation. (2021). *Application Security Verification Standard 4.0.3*. ht
 OWASP Foundation. (s.f.). *OWASP Cheat Sheet Series: Password storage, session management, cross-site request forgery prevention, file upload*. https://cheatsheetseries.owasp.org/
 
 PostgreSQL Global Development Group. (2024). *PostgreSQL 16 documentation*. https://www.postgresql.org/docs/16/
+
+Render. (s.f.). *Render Terraform provider*. Render documentation. https://render.com/docs/terraform-provider
 
 Richardson, C. (2018). *Microservices patterns: With examples in Java*. Manning.
 
@@ -1412,6 +1456,8 @@ Schwaber, K., & Sutherland, J. (2020). *The Scrum guide*. https://scrumguides.or
 Shostack, A. (2014). *Threat modeling: Designing for security*. Wiley.
 
 Sommerville, I. (2016). *Software engineering* (10.ª ed.). Pearson.
+
+Wiggins, A. (2011). *The twelve-factor app*. https://12factor.net/
 
 World Wide Web Consortium. (2023). *Web Content Accessibility Guidelines (WCAG) 2.2*. https://www.w3.org/TR/WCAG22/
 
