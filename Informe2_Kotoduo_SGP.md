@@ -641,26 +641,28 @@ El mapa de navegación es un árbol jerárquico de rutas. Cada nodo es una ruta 
 
 | Elemento | Información |
 |---|---|
-| Herramienta utilizada | Maqueta navegable en HTML5 + CSS3 con *design tokens* y JavaScript mínimo (solo navegación, diálogos y cambio de estado visual). Sin back-end; los datos son ficticios |
+| Herramienta utilizada | Maqueta navegable en HTML5 + CSS3 con *design tokens* y JavaScript mínimo (solo navegación por rol, diálogos y cambio de estado visual). Sin back-end; los datos y los nombres de clientes son ficticios, y la maqueta no menciona a la empresa para poder publicarse |
 | Ubicación | `anexos/prototipo/index.html` (Anexo D) |
-| Enlace al prototipo | Publicación en GitHub Pages: `https://<usuario>.github.io/sgp-kotoduo-prototipo/` [Completar al publicar] |
-| Credenciales | No aplica: la pantalla de login simula el acceso con un selector de rol |
-| Interacciones clave demostradas | IK-1 login y redirección por rol · IK-2 Mi Trabajo → detalle de OT · IK-3 Iniciar/Terminar etapa con cambio de estado y mensaje "Sigue: …" · IK-4 Reportar faltante (diálogo) · IK-5 Registrar OT con vista previa de etapas generadas · IK-6 Aprobar/Rechazar diseño con motivo obligatorio · IK-7 Panel con filtro de atrasadas · IK-8 Plantilla de proceso con etapas ordenadas · IK-9 Insumos con alerta y registro de ingreso |
+| Enlace al prototipo | Publicación en GitHub Pages: `https://<usuario>.github.io/sgp-prototipo/` [Completar al publicar] |
+| Credenciales | No aplica: la pantalla de login simula el acceso con un selector de rol. También se puede abrir una pantalla como un rol con `?rol=`, por ejemplo `panel.html?rol=ENCARGADA_PRODUCCION` |
+| Interacciones clave demostradas | IK-1 login, MFA para roles privilegiados y redirección por rol · IK-2 Mi Trabajo → detalle de OT · IK-3 Iniciar/Terminar etapa con cambio de estado y mensaje "Sigue: …"; Reportar problema deja la etapa Bloqueada con motivo obligatorio (Fig. 4.7) · IK-4 Reportar faltante (diálogo) · IK-5 Registrar OT con vista previa de etapas generadas · IK-6 Aprobar/Rechazar diseño con motivo obligatorio y segregación de funciones (R6) · IK-7 Panel con indicadores que filtran atrasadas, en riesgo y bloqueadas · IK-8 Plantilla de proceso con etapas ordenadas · IK-9 Insumos con ciclo de alerta (abierta → en gestión → cerrada) y registro de ingreso · IK-10 Navegación por rol (barra inferior en móvil, lateral en escritorio) y guarda "No tienes acceso" |
 
 **Pantallas del prototipo (Tabla 5.1):**
 
 | ID | Pantalla | Archivo | Perfil | HU / CU |
 |---|---|---|---|---|
-| P-01 | Inicio de sesión | `index.html` | Todos | HU-11 / CU-01 |
-| P-02 | Mi Trabajo | `mi-trabajo.html` | Operario, Diseñador | HU-01 / CU-05 |
-| P-03 | Detalle de orden y etapa | `detalle-orden.html` | Operario, Diseñador | HU-02, HU-03, HU-04 / CU-06, CU-09 |
-| P-04 | Nueva orden de trabajo | `ordenes-nueva.html` | Vendedor | HU-05 / CU-04 |
-| P-05 | Aprobación de diseño | `aprobacion-diseno.html` | Vendedor, Diseñador | HU-06 / CU-07 |
+| P-01 | Inicio de sesión y verificación MFA | `index.html`, `mfa.html` | Todos (MFA: Encargada, Administrador) | HU-11 / CU-01 |
+| P-02 | Mi Trabajo (incluye estados vacío, cargando y sin conexión) | `mi-trabajo.html` | Operario, Diseñador | HU-01 / CU-05 |
+| P-03 | Detalle de orden y etapa | `detalle-orden.html` | Operario y Diseñador (avanzan su etapa), Vendedor (solo lectura), Encargada y Administrador (asignan y omiten) | HU-02, HU-03, HU-04 / CU-06, CU-09 |
+| P-04 | Órdenes y nueva orden de trabajo | `ordenes.html`, `ordenes-nueva.html` | Vendedor, Encargada, Administrador | HU-05 / CU-04 |
+| P-05 | Aprobación de diseño | `aprobacion-diseno.html` | Vendedor (resuelve), Diseñador (sube versiones) | HU-06 / CU-07 |
 | P-06 | Panel de supervisión | `panel.html` | Encargada, Administrador | HU-10 / CU-10 |
-| P-07 | Plantilla de proceso | `plantillas.html` | Encargada | HU-07 / CU-03 |
-| P-08 | Insumos y alertas | `insumos.html` | Encargada | HU-09 / CU-08 |
-| P-09 | Usuarios y roles | (CRUD estándar, se construye en el Sprint 1 sobre los componentes del prototipo) | Administrador | HU-11 / CU-02 |
-| P-10 | Bitácora | (tabla filtrable, Sprint 4) | Administrador | HU-12 / CU-11 |
+| P-07 | Plantillas de proceso | `plantillas.html`, `plantilla.html` | Encargada, Administrador | HU-07 / CU-03 |
+| P-08 | Insumos y alertas | `insumos.html` | Encargada (gestiona); demás roles (consulta) | HU-09 / CU-08, CU-09 |
+| P-09 | Usuarios y roles | `usuarios.html` | Administrador | HU-11 / CU-02 |
+| P-10 | Bitácora | `bitacora.html` | Administrador | HU-12 / CU-11 |
+| P-11 | Avisos | `notificaciones.html` | Todos | HU-01 / CU-06 (notificar siguiente responsable) |
+| P-12 | Mi perfil | `perfil.html` | Todos | HU-11 / CU-01 |
 
 **Especificación de la interacción crítica IK-3 (P-03):** la tarjeta de la etapa muestra un **chip de estado** (Disponible → En curso → Terminada) y un único **botón primario** contextual ("Iniciar etapa" → "Terminar etapa"). Al terminar, aparece un diálogo para confirmar los consumos, prellenados con la cantidad requerida y editables. Al confirmar, se muestra una franja de éxito con el texto **"Listo. Sigue: Sublimado — área Sublimación (responsable: …)"**, que es la respuesta directa al problema "no sé qué sigue". Las acciones secundarias ("Reportar faltante", "Reportar problema", "Adjuntar foto") están agrupadas bajo el botón primario y separadas visualmente para evitar toques accidentales.
 
@@ -688,7 +690,7 @@ El color **nunca es el único portador de significado** (WCAG 1.4.1): cada estad
 | Tipografía y jerarquía | Fuente del sistema (`system-ui`: Roboto en Android, San Francisco en iOS, Segoe UI en Windows); no requiere descarga, es legible y familiar. Escala: H1 1,5 rem/700, H2 1,25 rem/600, cuerpo 1 rem (16 px mínimo, evita el zoom automático en iOS), metadatos 0,875 rem. Interlineado 1,5 | Todas las pantallas; `estilos.css` (`--fs-*`) |
 | Colores y contraste | Tabla 5.2; foco visible de 3 px con `--color-primario` (WCAG 2.4.7 / 2.4.11) | P-01 a P-08 |
 | Componentes y consistencia | Biblioteca única: botón (primario, secundario, peligro), chip de estado, tarjeta de OT, tabla, diálogo, campo con etiqueta visible y mensaje de error asociado (`aria-describedby`), franja de aviso. Mismo verbo, misma acción en todas las pantallas ("Terminar etapa") | `estilos.css` (`.btn`, `.chip`, `.card`, `dialog`) |
-| Estados del sistema | Vacío ("No tienes etapas pendientes 🎉"), cargando (esqueleto), error con acción ("Reintentar"), éxito (franja verde) | P-02, P-03 |
+| Estados del sistema | Vacío ("No tienes etapas pendientes"), cargando (esqueleto), error con acción ("Sin conexión" + "Reintentar"), éxito (franja verde) | P-02, P-03 |
 | Áreas táctiles | Objetivos de al menos 48×48 px (supera el mínimo de 24×24 px de WCAG 2.5.8); separación ≥ 8 px entre acciones | Botones de P-03 |
 | Diseño adaptable / responsive | *Mobile-first* con CSS Grid/Flexbox y tres *breakpoints*: **< 600 px** (1 columna, barra inferior, tablas como tarjetas), **600–1023 px** (2 columnas, tablet), **≥ 1024 px** (barra lateral + contenido de hasta 1200 px, tablas completas). Imágenes `max-width: 100%`; sin desplazamiento horizontal a 320 px (WCAG 1.4.10 *Reflow*) | Pruebas en 360×800 (Android típico), 390×844 (iPhone), 768×1024 y 1366×768; CP-34 |
 | Idioma y redacción | `lang="es-CL"`, tuteo, frases cortas, fechas `dd-mm-aaaa`, sin anglicismos técnicos | Todas |

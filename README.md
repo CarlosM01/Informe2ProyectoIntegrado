@@ -124,7 +124,7 @@ El script elimina y vuelve a crear las colecciones definidas, por lo que no debe
 
 ### Prototipo navegable
 
-Abrir `anexos/prototipo/index.html` en el navegador. No requiere servidor ni credenciales: el login simula el acceso con un selector de rol, y todos los datos son ficticios. El informe (sección 5.3) lista las pantallas y las interacciones que debe demostrar.
+Abrir `anexos/prototipo/index.html` en el navegador. No requiere servidor ni credenciales: el login simula el acceso con un selector de rol, y todos los datos son ficticios. Para abrir una pantalla directamente como un rol, agrega `?rol=` a la URL (`OPERARIO`, `DISENADOR`, `VENDEDOR`, `ENCARGADA_PRODUCCION` o `ADMINISTRADOR`), por ejemplo `detalle-orden.html?rol=ENCARGADA_PRODUCCION`. Es solo una maqueta visual: no tiene back-end ni lógica de negocio. El informe (sección 5.3) lista las pantallas y las interacciones que debe demostrar.
 
 ## Seguridad y privacidad
 
@@ -132,7 +132,7 @@ Abrir `anexos/prototipo/index.html` en el navegador. No requiere servidor ni cre
 
 - **Mantener privado.** Configurar el repositorio como privado en GitHub / plataforma de hosting.
 - **Acceso limitado.** Solo autores del proyecto e integrantes autorizados.
-- **No publicar en GitHub Pages.** Aunque el prototipo sea una maqueta, mantenerlo en el repo privado o en una URL protegida.
+- **Publicar solo el prototipo, nunca este repositorio.** `anexos/prototipo/` no menciona a la empresa y usa datos ficticios, así que puede publicarse en GitHub Pages copiándolo a un repositorio público aparte (por ejemplo `sgp-prototipo`). Antes de publicar, confirma que siga sin nombres reales: `grep -ri kotoduo anexos/prototipo` no debe devolver resultados.
 - **No subir datos reales de la contraparte:** nombres de clientes, datos productivos, cifras económicas, etc. Los ejemplos en `bd/` deben ser ficticios.
 - **No subir credenciales:** claves de API, contraseñas de BD, tokens. Usar variables de entorno o `.env` (no rastreado en Git).
 
