@@ -1,0 +1,77 @@
+@startuml
+' Figura 6.1 — Modelo entidad-relación: visión general (16 tablas, sin atributos).
+' El color indica el grupo; el detalle de atributos está en las figuras 6.2 a 6.5.
+!include ../_comun/estilo.iuml
+hide circle
+hide members
+hide stereotype
+left to right direction
+
+skinparam class<<seg>> {
+  BackgroundColor #DCE6F2
+}
+skinparam class<<cat>> {
+  BackgroundColor #FFF6E5
+}
+skinparam class<<prod>> {
+  BackgroundColor #EAF4EA
+}
+skinparam class<<ins>> {
+  BackgroundColor #F6E8F3
+}
+
+entity "rol" as rol <<seg>>
+entity "usuario" as usuario <<seg>>
+entity "usuario_rol" as usuario_rol <<seg>>
+entity "sesion_refresh" as sesion <<seg>>
+entity "outbox_evento" as ob <<seg>>
+
+entity "area" as area <<cat>>
+entity "tipo_trabajo" as tipo <<cat>>
+entity "plantilla_etapa" as pe <<cat>>
+entity "plantilla_insumo" as pi <<cat>>
+
+entity "orden_trabajo" as ot <<prod>>
+entity "etapa_orden" as eo <<prod>>
+entity "requerimiento_insumo" as ri <<prod>>
+entity "aprobacion_diseno" as ad <<prod>>
+
+entity "insumo" as insumo <<ins>>
+entity "movimiento_insumo" as mi <<ins>>
+entity "alerta_insumo" as ai <<ins>>
+
+usuario ||--o{ usuario_rol
+rol ||--o{ usuario_rol
+usuario ||--o{ sesion
+usuario |o--o{ ob
+area |o--o{ usuario
+
+tipo ||--|{ pe
+area ||--o{ pe
+pe ||--o{ pi
+insumo ||--o{ pi
+
+tipo ||--o{ ot
+usuario ||--o{ ot
+ot ||--|{ eo
+pe |o..o{ eo
+area ||--o{ eo
+usuario |o--o{ eo
+eo ||--o{ ri
+insumo ||--o{ ri
+ot ||--o{ ad
+usuario ||--o{ ad
+
+insumo ||--o{ mi
+eo |o--o{ mi
+usuario ||--o{ mi
+insumo ||--o{ ai
+eo |o--o{ ai
+
+legend bottom left
+  <back:#DCE6F2>   </back> Seguridad e integración (Fig. 6.2)
+  <back:#FFF6E5>   </back> Catálogos y plantillas (Fig. 6.3)
+  <back:#EAF4EA>   </back> Producción y diseño (Fig. 6.4)
+  <back:#F6E8F3>   </back> Insumos (Fig. 6.5)
+endlegend
+@enduml

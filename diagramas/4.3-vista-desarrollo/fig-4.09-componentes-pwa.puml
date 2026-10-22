@@ -1,0 +1,36 @@
+@startuml
+' Figura 4.9 — Componentes de la PWA (apps/web)
+!include ../_comun/estilo.iuml
+skinparam componentStyle uml2
+
+package "apps/web — PWA (React + TypeScript)" {
+  component "Shell PWA\n(enrutador, layout,\nguardas por rol)" as SHELL
+  component "Service Worker\n(Workbox: caché + push)" as SW
+
+  rectangle "Módulos de funcionalidad" as MODS {
+    component "auth" as W1
+    component "mi-trabajo" as W4
+    component "ordenes" as W3
+    component "plantillas" as W2
+    component "insumos" as W5
+    component "diseno" as W6
+    component "panel" as W7
+    component "admin" as W8
+  }
+
+  component "Cliente API\n(fetch + TanStack Query)" as APICLI
+}
+
+component "packages/shared\n(Zod + permisos)" as SH <<ref>>
+component "API REST\n(Fig. 4.10)" as API <<ref>>
+cloud "Cloudflare R2" as R2
+cloud "Servicio Web Push" as PUSH
+
+SHELL --> MODS : carga rutas
+SHELL ..> SH : oculta acciones\nno permitidas
+MODS ..> APICLI
+APICLI ..> SH : valida DTO
+APICLI --> API : JSON / HTTPS
+W6 --> R2 : PUT con URL\nprefirmada
+PUSH --> SW : avisos
+@enduml

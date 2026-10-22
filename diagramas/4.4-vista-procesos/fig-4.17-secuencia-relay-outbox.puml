@@ -1,0 +1,26 @@
+@startuml
+' Figura 4.17 — Secuencia del relay outbox: tramo asíncrono (cada 5 s)
+!include ../_comun/estilo.iuml
+autonumber
+hide footbox
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+participant "Relay outbox\n(proceso programado)" as RL
+database "PostgreSQL" as PG
+database "MongoDB" as MG
+participant "Servicio\nWeb Push" as WP
+actor "Siguiente responsable\n/ Encargada" as NX
+
+loop cada 5 segundos
+  RL -> PG : SELECT outbox_evento pendientes\nFOR UPDATE SKIP LOCKED
+  PG --> RL : eventos
+  loop por cada evento
+    RL -> MG : upsert en bitacora_eventos\n(idempotente por _id)
+    RL -> MG : insertar en notificaciones
+    RL -> WP : enviar aviso (VAPID)
+    WP -> NX : "OT-2026-0001:\nSublimado disponible"
+    RL -> PG : marcar evento procesado
+  end
+end
+@enduml

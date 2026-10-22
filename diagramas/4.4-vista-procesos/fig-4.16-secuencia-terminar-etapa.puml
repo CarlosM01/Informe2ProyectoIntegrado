@@ -1,0 +1,50 @@
+@startuml
+' Figura 4.16 — Secuencia CU-06 "Terminar etapa": tramo síncrono (una transacción)
+!include ../_comun/estilo.iuml
+autonumber
+hide footbox
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+actor "Operario" as OP
+participant "PWA\n(Mi Trabajo)" as PWA
+participant "API Express" as API
+participant "EtapaService" as ES
+database "PostgreSQL" as PG
+
+OP -> PWA : "Terminar etapa"\n+ consumos de insumo
+PWA -> API : POST /api/v1/etapas/{id}/terminar\n{version, consumos[]}
+API -> API : validar JWT, permiso\ny cuerpo (Zod)
+API -> ES : terminar(id, version,\nconsumos, actor)
+ES -> PG : BEGIN
+ES -> PG : SELECT etapa … FOR UPDATE
+PG --> ES : estado, responsable, versión
+
+alt el actor no es el responsable
+  ES --> API : ErrorAutorizacion
+  API --> PWA : 403 Forbidden
+else la versión no coincide
+  ES --> API : ErrorConflicto
+  API --> PWA : 409 Conflict
+else etapa EN_CURSO
+  ES -> PG : etapa → TERMINADA
+  loop por cada consumo
+    ES -> PG : INSERT movimiento_insumo
+  end
+  ES -> PG : siguiente etapa → DISPONIBLE
+  opt no quedan etapas
+    ES -> PG : orden → TERMINADA
+  end
+  ES -> PG : INSERT outbox_evento
+  ES -> PG : COMMIT
+  ES --> API : ResultadoAvance
+  API --> PWA : 200 OK
+  PWA --> OP : "Listo. Sigue: Sublimado"
+end
+
+note over PG
+  El trigger del movimiento actualiza el stock
+  y crea una alerta si queda bajo el mínimo.
+  El evento del outbox se publica después (Fig. 4.17).
+end note
+@enduml

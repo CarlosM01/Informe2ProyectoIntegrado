@@ -1,0 +1,30 @@
+@startuml
+' Figura 4.11 — Paquetes del monorepo sgp-kotoduo (nivel superior)
+!include ../_comun/estilo.iuml
+set separator none
+skinparam packageStyle folder
+
+package "sgp-kotoduo" {
+  package "apps/web" as WEB {
+    rectangle "src/app\nsrc/features\nsrc/ui\nsrc/lib" as WEBC
+  }
+  package "apps/api" as API {
+    rectangle "src/modules\nsrc/middleware\nsrc/jobs\nsrc/infra\nsrc/errors" as APIC
+  }
+  package "packages/shared" as SH {
+    rectangle "schemas (Zod)\npermisos\ndominio (enums)" as SHC
+  }
+  package "db" as DB {
+    rectangle "migrations (node-pg-migrate)\nmongo (validadores, índices)\nseeds" as DBC
+  }
+  package "tests" as T {
+    rectangle "unit (Vitest)\nintegration (Supertest +\nTestcontainers)\ne2e (Playwright)\nperf (k6)" as TC
+  }
+}
+
+WEB ..> SH : <<import>>
+API ..> SH : <<import>>
+T ..> API : <<access>>
+T ..> WEB : <<access>>
+T ..> DB : <<access>>
+@enduml

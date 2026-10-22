@@ -1,0 +1,96 @@
+' Estilo común de todas las figuras del informe.
+' Se incluye con: !include ../_comun/estilo.iuml
+skinparam dpi 140
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam defaultFontSize 13
+skinparam backgroundColor #FFFFFF
+skinparam ArrowColor #1F3A5F
+skinparam ArrowFontSize 11
+skinparam ArrowFontColor #333333
+skinparam nodesep 40
+skinparam ranksep 50
+
+skinparam class {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+  HeaderBackgroundColor #DCE6F2
+  AttributeIconSize 0
+}
+skinparam component {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+}
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #1F3A5F
+  FontStyle bold
+}
+skinparam rectangle {
+  BorderColor #1F3A5F
+}
+skinparam usecase {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+}
+skinparam actor {
+  BackgroundColor #DCE6F2
+  BorderColor #1F3A5F
+}
+skinparam node {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+}
+skinparam database {
+  BackgroundColor #EAF4EA
+  BorderColor #2E6B3A
+}
+skinparam cloud {
+  BackgroundColor #FFF6E5
+  BorderColor #A66A00
+}
+skinparam artifact {
+  BackgroundColor #FFFFFF
+  BorderColor #1F3A5F
+}
+skinparam state {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+}
+skinparam activity {
+  BackgroundColor #F3F6FB
+  BorderColor #1F3A5F
+  DiamondBackgroundColor #FFF6E5
+  DiamondBorderColor #A66A00
+}
+skinparam sequence {
+  ParticipantBackgroundColor #F3F6FB
+  ParticipantBorderColor #1F3A5F
+  LifeLineBorderColor #8899AA
+  GroupBorderColor #1F3A5F
+  GroupBackgroundColor #DCE6F2
+  BoxBorderColor #8899AA
+}
+skinparam note {
+  BackgroundColor #FFFBE6
+  BorderColor #B8A04A
+}
+skinparam legend {
+  BackgroundColor #FFFFFF
+  BorderColor #8899AA
+  FontSize 11
+}
+
+' Elementos detallados en otra figura: se muestran en gris y solo por nombre.
+skinparam class<<ref>> {
+  BackgroundColor #EEEEEE
+  BorderColor #888888
+  HeaderBackgroundColor #EEEEEE
+  FontColor #555555
+  StereotypeFontColor #777777
+}
+skinparam component<<ref>> {
+  BackgroundColor #EEEEEE
+  BorderColor #888888
+  FontColor #555555
+}

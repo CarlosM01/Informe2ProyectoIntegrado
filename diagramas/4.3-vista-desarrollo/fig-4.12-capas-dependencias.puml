@@ -1,0 +1,70 @@
+@startuml
+' Figura 4.12 — Regla de dependencias por capas (API y PWA)
+' Todas las flechas son <<import>>.
+!include ../_comun/estilo.iuml
+set separator none
+skinparam packageStyle folder
+
+package "apps/api/src" {
+  package "modules/<módulo>" {
+    package "routes" as R {
+    }
+    package "controller" as C {
+    }
+    package "service" as S {
+    }
+    package "repository" as REP {
+    }
+  }
+  package "middleware" as MW {
+  }
+  package "errors" as ERR {
+  }
+  package "jobs" as JOB {
+  }
+  package "infra" as INF {
+  }
+}
+
+package "packages/shared" {
+  package "schemas" as SHZ {
+  }
+  package "permisos" as SHP {
+  }
+  package "dominio" as SHD {
+  }
+}
+
+package "apps/web/src" {
+  package "app" as WAPP {
+  }
+  package "features" as WF {
+  }
+  package "ui" as WUI {
+  }
+  package "lib" as WLIB {
+  }
+}
+
+R ..> C
+C ..> S
+S ..> REP
+REP ..> INF
+R ..> MW
+S ..> ERR
+JOB ..> INF
+C ..> SHZ
+MW ..> SHP
+S ..> SHD
+
+WAPP ..> WF
+WF ..> WUI
+WF ..> WLIB
+WLIB ..> SHZ
+
+legend bottom left
+  Todas las flechas son dependencias <<import>> y apuntan "hacia abajo":
+  ningún paquete importa a una capa superior.
+  repository es la única capa que ejecuta SQL (consultas parametrizadas).
+endlegend
+@enduml

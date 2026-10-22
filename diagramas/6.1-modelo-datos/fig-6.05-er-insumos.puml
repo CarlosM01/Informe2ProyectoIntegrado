@@ -1,0 +1,50 @@
+@startuml
+' Figura 6.5 — ER: insumos, kardex y alertas (M5)
+!include ../_comun/estilo.iuml
+hide circle
+hide <<ref>> members
+skinparam linetype ortho
+
+entity "insumo" as insumo {
+  * id : SERIAL <<PK>>
+  --
+  * codigo : VARCHAR(20) <<UK>>
+  * nombre : VARCHAR(80)
+  * unidad_medida : VARCHAR(10)
+  * stock_actual : NUMERIC(12,2)
+  * stock_minimo : NUMERIC(12,2)
+}
+entity "movimiento_insumo" as mi {
+  * id : BIGSERIAL <<PK>>
+  --
+  * insumo_id : INTEGER <<FK>>
+  * tipo : VARCHAR(10)
+  * cantidad : NUMERIC(12,2)
+  etapa_orden_id : UUID <<FK>>
+  * usuario_id : UUID <<FK>>
+}
+entity "alerta_insumo" as ai {
+  * id : SERIAL <<PK>>
+  --
+  * insumo_id : INTEGER <<FK>>
+  etapa_orden_id : UUID <<FK>>
+  * origen : VARCHAR(10)
+  * estado : VARCHAR(12)
+  cantidad_faltante : NUMERIC(12,2)
+  reportada_por : UUID <<FK>>
+  cerrada_por : UUID <<FK>>
+}
+
+entity "etapa_orden" as eo <<ref>>
+entity "usuario" as usuario <<ref>>
+
+insumo ||--o{ mi : kardex
+insumo ||--o{ ai
+eo |o--o{ mi
+eo |o--o{ ai
+usuario ||--o{ mi
+
+legend bottom left
+  Gris: tabla detallada en otra figura (6.2 o 6.4).
+endlegend
+@enduml

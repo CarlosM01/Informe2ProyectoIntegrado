@@ -1,0 +1,40 @@
+@startuml
+' Figura 4.5 — Dominio: usuarios, roles y áreas
+!include ../_comun/estilo.iuml
+hide empty members
+left to right direction
+
+class Usuario {
+  - id : UUID
+  - nombreUsuario : String
+  - nombreCompleto : String
+  - passwordHash : String
+  - mfaHabilitado : Boolean
+  - activo : Boolean
+  - intentosFallidos : int
+  - bloqueadoHasta : DateTime
+  + estaBloqueado(ahora : DateTime) : Boolean
+  + tienePermiso(p : Permiso) : Boolean
+}
+class Rol {
+  - id : int
+  - codigo : CodigoRol
+  - nombre : String
+}
+class Area {
+  - id : int
+  - nombre : String
+  - activa : Boolean
+}
+enum CodigoRol {
+  ADMINISTRADOR
+  ENCARGADA_PRODUCCION
+  VENDEDOR
+  DISENADOR
+  OPERARIO
+}
+
+Usuario "*" -- "1..*" Rol : posee >
+Usuario "*" --> "0..1" Area : pertenece >
+Rol ..> CodigoRol
+@enduml

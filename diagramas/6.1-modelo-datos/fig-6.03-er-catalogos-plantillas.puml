@@ -1,0 +1,48 @@
+@startuml
+' Figura 6.3 — ER: catálogos y plantillas de proceso (M2)
+!include ../_comun/estilo.iuml
+hide circle
+hide <<ref>> members
+skinparam linetype ortho
+
+entity "area" as area {
+  * id : SMALLSERIAL <<PK>>
+  --
+  * nombre : VARCHAR(60) <<UK>>
+  * activa : BOOLEAN
+}
+entity "tipo_trabajo" as tipo {
+  * id : SMALLSERIAL <<PK>>
+  --
+  * nombre : VARCHAR(80) <<UK>>
+  * requiere_diseno : BOOLEAN
+  * version : INTEGER
+}
+entity "plantilla_etapa" as pe {
+  * id : SERIAL <<PK>>
+  --
+  * tipo_trabajo_id : SMALLINT <<FK>>
+  * secuencia : SMALLINT
+  * nombre : VARCHAR(80)
+  * area_id : SMALLINT <<FK>>
+  * instrucciones : TEXT
+  * duracion_estimada_horas : NUMERIC(5,1)
+  * es_etapa_diseno : BOOLEAN
+}
+entity "plantilla_insumo" as pi {
+  * plantilla_etapa_id : INTEGER <<PK,FK>>
+  * insumo_id : INTEGER <<PK,FK>>
+  --
+  * cantidad_por_unidad : NUMERIC(10,3)
+}
+entity "insumo" as insumo <<ref>>
+
+tipo ||--|{ pe
+area ||--o{ pe
+pe ||--o{ pi
+insumo ||--o{ pi
+
+legend bottom left
+  Gris: tabla detallada en la Fig. 6.5.
+endlegend
+@enduml

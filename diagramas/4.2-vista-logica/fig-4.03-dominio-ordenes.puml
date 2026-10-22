@@ -1,0 +1,97 @@
+@startuml
+' Figura 4.3 — Dominio: procesos y órdenes de trabajo
+!include ../_comun/estilo.iuml
+hide empty members
+hide <<ref>> members
+hide <<ref>> circle
+
+class TipoTrabajo {
+  - id : int
+  - nombre : String
+  - requiereDiseno : Boolean
+  - version : int
+}
+class PlantillaEtapa {
+  - secuencia : int
+  - nombre : String
+  - instrucciones : String
+  - duracionEstimadaHoras : Decimal
+  - esEtapaDiseno : Boolean
+}
+class OrdenTrabajo {
+  - id : UUID
+  - codigo : String
+  - titulo : String
+  - referenciaCliente : String
+  - cantidad : int
+  - especificaciones : JSON
+  - prioridad : Prioridad
+  - estado : EstadoOrden
+  - fechaCompromiso : Date
+  - fechaEstimadaTermino : Date
+  + generarEtapas(t : TipoTrabajo) : List<EtapaOrden>
+  + etapaActual() : EtapaOrden
+  + calcularFechaEstimada(jornadaHoras : int) : Date
+  + porcentajeAvance() : int
+}
+class EtapaOrden {
+  - id : UUID
+  - secuencia : int
+  - nombre : String
+  - instrucciones : String
+  - estado : EstadoEtapa
+  - motivoBloqueo : String
+  - iniciadaEn : DateTime
+  - terminadaEn : DateTime
+  - version : int
+  + iniciar(u : Usuario) : void
+  + terminar(u : Usuario) : void
+  + bloquear(motivo : String) : void
+  + puedeTransicionar(destino : EstadoEtapa) : Boolean
+}
+class AprobacionDiseno {
+  - version : int
+  - evidenciaRef : String
+  - estado : EstadoAprobacion
+  - comentario : String
+  + aprobar(u : Usuario) : void
+  + rechazar(u : Usuario, motivo : String) : void
+}
+
+enum EstadoOrden {
+  REGISTRADA
+  EN_DISENO
+  EN_PRODUCCION
+  DETENIDA
+  TERMINADA
+  ENTREGADA
+  ANULADA
+}
+enum EstadoEtapa {
+  PENDIENTE
+  DISPONIBLE
+  EN_CURSO
+  BLOQUEADA
+  TERMINADA
+  OMITIDA
+}
+
+class Usuario <<ref>>
+class Area <<ref>>
+
+TipoTrabajo "1" *-- "1..*" PlantillaEtapa : define >
+OrdenTrabajo "*" -up-> "1" TipoTrabajo : instancia >
+OrdenTrabajo "1" *-- "1..*" EtapaOrden : compuesta por >
+OrdenTrabajo "1" *-- "*" AprobacionDiseno : versiones >
+EtapaOrden "*" .up.> "0..1" PlantillaEtapa : origen >
+EtapaOrden "*" --> "0..1" Usuario : responsable >
+EtapaOrden "*" --> "1" Area
+PlantillaEtapa "*" --> "1" Area : se ejecuta en >
+OrdenTrabajo "*" --> "1" Usuario : creadoPor >
+OrdenTrabajo ..> EstadoOrden
+EtapaOrden ..> EstadoEtapa
+
+legend bottom left
+  Gris: clase detallada en otra figura.
+endlegend
+@enduml

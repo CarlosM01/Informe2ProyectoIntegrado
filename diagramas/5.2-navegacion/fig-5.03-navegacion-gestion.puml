@@ -1,0 +1,15 @@
+@startwbs
+' Figura 5.3 — Mapa de navegación: perfiles de gestión
+!include ../_comun/estilo.iuml
+* Inicio según rol
+**< Encargada de Producción\n/panel
+***< /ordenes\nListado y filtros
+****< /ordenes/:codigo\nAsignar responsables
+***< /plantillas\nTipos de trabajo
+****< /plantillas/:id\nEtapas e insumos
+***< /insumos\nStock y movimientos
+****< /insumos/alertas\nAlertas abiertas
+**> Administrador\n/panel (+ todo lo de Encargada)
+***> /admin/usuarios\nUsuarios y roles
+***> /admin/bitacora\nAuditoría
+@endwbs

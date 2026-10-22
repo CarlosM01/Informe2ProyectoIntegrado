@@ -1,0 +1,17 @@
+@startwbs
+' Figura 5.2 — Mapa de navegación: perfiles de taller y ventas
+!include ../_comun/estilo.iuml
+* Inicio según rol
+**< Operario / Diseñador\n/mi-trabajo
+***< /ordenes/:codigo\nDetalle de orden y etapa
+****< Iniciar / Terminar etapa
+****< Reportar problema (bloquear)
+****< Reportar faltante de insumo
+****< Adjuntar evidencia
+***< /ordenes/:codigo/diseno\n(Diseñador: subir versión)
+***< /notificaciones
+**> Vendedor\n/ordenes
+***> /ordenes/nueva\nRegistrar orden
+***> /ordenes/:codigo\nDetalle (solo lectura de etapas)
+***> /ordenes/:codigo/diseno\nRegistrar respuesta del cliente
+@endwbs

@@ -1,0 +1,37 @@
+@startuml
+' Figura 4.15 — Subproceso: ejecución de una etapa (se repite por cada etapa)
+!include ../_comun/estilo.iuml
+skinparam swimlaneWidth same
+
+|Operario|
+start
+:Consultar Mi Trabajo: etapa,
+instrucciones e insumos (CU-05);
+:Iniciar etapa;
+if (¿Insumos suficientes?) then (no)
+  :Reportar faltante (CU-09);
+  |Encargada de Producción|
+  :Gestionar reposición
+  y cerrar alerta;
+  |Operario|
+else (sí)
+endif
+:Ejecutar actividad;
+fork
+  :Registrar consumo
+  de insumos;
+fork again
+  :Adjuntar evidencia
+  (foto o nota, opcional);
+end fork
+:Terminar etapa (CU-06);
+|SGP-Kotoduo|
+fork
+  :Habilitar siguiente etapa
+  y notificar a su responsable;
+fork again
+  :Registrar evento
+  en la bitácora;
+end fork
+stop
+@enduml

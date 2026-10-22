@@ -1,0 +1,47 @@
+@startuml
+' Figura 4.10 — Componentes de la API REST (apps/api)
+!include ../_comun/estilo.iuml
+skinparam componentStyle uml2
+
+component "Cliente API\nde la PWA (Fig. 4.9)" as CLI <<ref>>
+
+package "apps/api — API REST (Node.js + Express)" {
+  portin "HTTPS /api/v1" as REST
+  component "Middleware de seguridad\n(helmet, cors, rate-limit,\nauthn JWT, requierePermiso)" as MW
+
+  rectangle "Módulos de negocio" as MODS {
+    component "M1 Autenticación\ny Usuarios" as M1
+    component "M2 Plantillas\nde Proceso" as M2
+    component "M3 Órdenes\nde Trabajo" as M3
+    component "M4 Mi Trabajo\n/ Etapas" as M4
+    component "M5 Insumos\ny Alertas" as M5
+    component "M6 Aprobación\nde Diseño" as M6
+    component "M7 Panel de\nSupervisión" as M7
+    component "M8 Bitácora\ny Auditoría" as M8
+  }
+
+  component "Relay outbox +\nplanificador de atrasos" as JOB
+  component "Infra: PgPool, MongoClient,\nR2Client, PushClient, Logger" as INFRA
+}
+
+component "packages/shared\n(Zod + permisos)" as SH <<ref>>
+database "PostgreSQL" as PG
+database "MongoDB" as MG
+cloud "Cloudflare R2" as R2
+cloud "Web Push" as PUSH
+
+CLI --> REST
+REST --> MW
+MW --> MODS : enruta
+MW ..> SH : permisos
+MODS ..> SH : esquemas
+M3 ..> M2 : usa plantilla
+M4 ..> M5 : registra consumo
+M6 ..> M4 : habilita producción
+MODS ..> INFRA
+JOB ..> INFRA
+INFRA --> PG : SQL / TLS
+INFRA --> MG : TLS
+INFRA --> R2 : API S3
+INFRA --> PUSH : VAPID
+@enduml

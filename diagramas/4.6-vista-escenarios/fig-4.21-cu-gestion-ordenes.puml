@@ -1,0 +1,32 @@
+@startuml
+' Figura 4.21 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión
+!include ../_comun/estilo.iuml
+skinparam actorStyle awesome
+left to right direction
+
+actor "Vendedor" as VE
+actor "Diseñador" as DI
+actor "Encargada de\nProducción" as EP
+actor "Planificador\n(proceso programado)" as SCH <<sistema>>
+
+rectangle "SGP-Kotoduo — Gestión" {
+  usecase "CU-04 Registrar\norden de trabajo" as CU04
+  usecase "Generar etapas\ndesde plantilla" as GEN
+  usecase "CU-07 Gestionar\naprobación de diseño" as CU07
+  usecase "Notificar siguiente\nresponsable" as NOT
+  usecase "CU-03 Gestionar\nplantillas de proceso" as CU03
+  usecase "CU-08 Gestionar\ninsumos y movimientos" as CU08
+  usecase "CU-10 Supervisar\nproducción" as CU10
+}
+
+VE --> CU04
+VE --> CU07
+DI --> CU07
+EP --> CU03
+EP --> CU08
+EP --> CU10
+SCH --> CU10 : detecta órdenes\nen riesgo
+
+CU04 ..> GEN : <<include>>
+CU07 ..> NOT : <<include>>
+@enduml

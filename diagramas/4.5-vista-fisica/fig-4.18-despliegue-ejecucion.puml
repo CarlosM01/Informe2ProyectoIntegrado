@@ -1,0 +1,49 @@
+@startuml
+' Figura 4.18 — Despliegue: topología de ejecución en producción
+!include ../_comun/estilo.iuml
+
+node "Smartphone del trabajador\n(Android 10+ / iOS 16.4+)" as MOV {
+  artifact "PWA instalada\n+ Service Worker" as PWA1
+}
+node "PC de oficina\n(Chrome / Edge / Firefox)" as PC {
+  artifact "PWA en navegador" as PWA2
+}
+
+cloud "Cloudflare (borde)" as CF {
+  node "DNS + Proxy\nTLS 1.3, WAF, rate limiting" as EDGE
+  node "Cloudflare Pages\n<<static hosting>>" as PAGES {
+    artifact "web dist/" as DIST
+  }
+}
+
+cloud "Cloudflare R2" as R2C {
+  node "<<object storage>>" as R2 {
+    artifact "bucket sgp-evidencias\n(privado)" as BKT
+  }
+}
+
+cloud "Render (us-east)" as RENDER {
+  node "Web Service\n<<contenedor Docker>>" as WS {
+    artifact "API Express\n+ relay + planificador\n(Node.js 24 LTS)" as APIC
+  }
+}
+
+cloud "Servicios push\n(FCM, APNs, Mozilla)" as PUSH
+
+cloud "Neon (AWS us-east-1)" as NEON {
+  database "PostgreSQL 16\n<<cifrado en reposo>>" as PGDB
+}
+cloud "MongoDB Atlas (AWS us-east-1)" as ATLAS {
+  database "MongoDB 8\n<<cifrado en reposo>>" as MGDB
+}
+
+MOV -- EDGE : HTTPS 443
+PC -- EDGE : HTTPS 443
+EDGE - PAGES : sgp.kotoduo.cl
+EDGE -- WS : api.sgp.kotoduo.cl
+MOV ..> BKT : PUT/GET con URL\nprefirmada (5 min)
+WS -left- R2 : firma URLs\n(API S3)
+WS -- PGDB : TLS 5432\nverify-full
+WS -- MGDB : TLS 27017\nIP allowlist
+WS -- PUSH : HTTPS (VAPID)
+@enduml

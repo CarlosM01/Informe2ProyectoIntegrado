@@ -1,0 +1,65 @@
+@startuml
+' Figura 6.2 — ER: seguridad e integración (M1, M8)
+!include ../_comun/estilo.iuml
+hide circle
+hide <<ref>> members
+skinparam linetype ortho
+
+entity "rol" as rol {
+  * id : SMALLSERIAL <<PK>>
+  --
+  * codigo : VARCHAR(30) <<UK>>
+  * nombre : VARCHAR(60)
+  descripcion : VARCHAR(255)
+}
+entity "usuario" as usuario {
+  * id : UUID <<PK>>
+  --
+  * nombre_usuario : VARCHAR(40) <<UK>>
+  * nombre_completo : VARCHAR(100)
+  correo : VARCHAR(120) <<UK>>
+  * password_hash : TEXT
+  * mfa_habilitado : BOOLEAN
+  mfa_secreto_cifrado : BYTEA
+  area_id : SMALLINT <<FK>>
+  * activo : BOOLEAN
+  * intentos_fallidos : SMALLINT
+  bloqueado_hasta : TIMESTAMPTZ
+}
+entity "usuario_rol" as usuario_rol {
+  * usuario_id : UUID <<PK,FK>>
+  * rol_id : SMALLINT <<PK,FK>>
+  --
+  asignado_por : UUID <<FK>>
+  * asignado_en : TIMESTAMPTZ
+}
+entity "sesion_refresh" as sesion {
+  * id : UUID <<PK>>
+  --
+  * usuario_id : UUID <<FK>>
+  * familia_id : UUID
+  * token_hash : CHAR(64) <<UK>>
+  * expira_en : TIMESTAMPTZ
+  revocado_en : TIMESTAMPTZ
+}
+entity "outbox_evento" as ob {
+  * id : BIGSERIAL <<PK>>
+  --
+  * tipo : VARCHAR(40)
+  * agregado / agregado_id : VARCHAR
+  actor_id : UUID <<FK>>
+  * payload : JSONB
+  procesado_en : TIMESTAMPTZ
+}
+entity "area" as area <<ref>>
+
+rol ||--o{ usuario_rol
+usuario ||--o{ usuario_rol
+usuario ||--o{ sesion
+usuario |o--o{ ob : actor
+area |o--o{ usuario
+
+legend bottom left
+  Gris: tabla detallada en la Fig. 6.3.
+endlegend
+@enduml

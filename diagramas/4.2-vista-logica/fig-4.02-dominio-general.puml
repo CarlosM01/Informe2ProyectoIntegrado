@@ -1,0 +1,48 @@
+@startuml
+' Figura 4.2 — Modelo de dominio: visión general (sin atributos).
+' El detalle de cada grupo está en las figuras 4.3, 4.4 y 4.5.
+!include ../_comun/estilo.iuml
+set separator none
+hide members
+hide circle
+
+package "Acceso (Fig. 4.5)" {
+  class Usuario
+  class Rol
+  class Area
+}
+
+package "Procesos y órdenes (Fig. 4.3)" {
+  class TipoTrabajo
+  class PlantillaEtapa
+  class OrdenTrabajo
+  class EtapaOrden
+  class AprobacionDiseno
+}
+
+package "Insumos (Fig. 4.4)" {
+  class Insumo
+  class PlantillaInsumo
+  class RequerimientoInsumo
+  class MovimientoInsumo
+  class AlertaInsumo
+}
+
+Usuario -- Rol
+Usuario --> Area
+
+TipoTrabajo *-- PlantillaEtapa
+OrdenTrabajo --> TipoTrabajo
+OrdenTrabajo *-- EtapaOrden
+OrdenTrabajo *-- AprobacionDiseno
+EtapaOrden ..> PlantillaEtapa
+EtapaOrden --> Usuario : responsable
+PlantillaEtapa --> Area
+
+PlantillaEtapa *-- PlantillaInsumo
+PlantillaInsumo --> Insumo
+EtapaOrden *-- RequerimientoInsumo
+RequerimientoInsumo --> Insumo
+Insumo o-- MovimientoInsumo
+Insumo o-- AlertaInsumo
+@enduml

@@ -1,0 +1,60 @@
+@startuml
+' Figura 4.6 — Servicios de aplicación y entidades que coordinan
+!include ../_comun/estilo.iuml
+hide empty members
+hide <<ref>> members
+hide <<ref>> circle
+left to right direction
+
+class AuthService {
+  + login(usuario, clave) : ResultadoLogin
+  + verificarMfa(desafio, codigo) : Tokens
+  + refrescar(refreshToken) : Tokens
+  + cerrarSesion(refreshToken) : void
+}
+class OrdenService {
+  + registrar(dto, actor) : OrdenTrabajo
+  + asignarResponsable(etapaId, usuarioId, actor) : void
+}
+class EtapaService {
+  + iniciar(etapaId, actor) : EtapaOrden
+  + terminar(etapaId, version, consumos, actor) : ResultadoAvance
+  + bloquear(etapaId, motivo, actor) : void
+}
+class InsumoService {
+  + registrarMovimiento(dto, actor) : MovimientoInsumo
+  + reportarFaltante(dto, actor) : AlertaInsumo
+  + faltantesProyectados() : List<FaltanteDTO>
+}
+class DisenoService {
+  + subirVersion(ordenId, evidencia, actor) : AprobacionDiseno
+  + resolver(aprobacionId, decision, actor) : void
+}
+class AuditoriaService {
+  + registrarEnOutbox(tx, evento) : void
+}
+class NotificacionService {
+  + notificar(destinatarios, aviso) : void
+}
+
+class Usuario <<ref>>
+class OrdenTrabajo <<ref>>
+class EtapaOrden <<ref>>
+class Insumo <<ref>>
+class AprobacionDiseno <<ref>>
+
+AuthService ..> Usuario
+OrdenService ..> OrdenTrabajo
+EtapaService ..> EtapaOrden
+InsumoService ..> Insumo
+DisenoService ..> AprobacionDiseno
+
+EtapaService ..> InsumoService : registra consumo
+OrdenService ..> AuditoriaService
+EtapaService ..> AuditoriaService
+AuditoriaService ..> NotificacionService : vía relay outbox
+
+legend bottom left
+  Gris: entidad de dominio detallada en las Fig. 4.3 a 4.5.
+endlegend
+@enduml

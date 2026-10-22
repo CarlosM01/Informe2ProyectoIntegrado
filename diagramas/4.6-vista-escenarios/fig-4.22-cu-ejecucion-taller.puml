@@ -1,0 +1,27 @@
+@startuml
+' Figura 4.22 — Casos de uso: ejecución en el taller (escenario crítico CU-06)
+!include ../_comun/estilo.iuml
+skinparam actorStyle awesome
+left to right direction
+
+actor "Operario" as OP
+actor "Diseñador" as DI
+
+rectangle "SGP-Kotoduo — Taller" {
+  usecase "CU-05 Consultar\nMi Trabajo" as CU05
+  usecase "CU-06 Actualizar\navance de etapa" as CU06
+  usecase "CU-09 Reportar faltante\n/ alerta de insumo" as CU09
+  usecase "Registrar evidencia" as EVI
+  usecase "Notificar siguiente\nresponsable" as NOT
+}
+
+OP --> CU05
+OP --> CU06
+OP --> CU09
+DI --> CU05
+DI --> CU06
+
+CU06 ..> NOT : <<include>>
+EVI ..> CU06 : <<extend>>\n[foto o nota]
+CU09 ..> CU06 : <<extend>>\n[insumo insuficiente]
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+' Figura 4.8 — Componentes: visión general (detalle en Fig. 4.9 y 4.10)
+!include ../_comun/estilo.iuml
+skinparam componentStyle uml2
+left to right direction
+
+package "apps/web — PWA" as WEB {
+  component "Módulos de UI\n(Fig. 4.9)" as UI
+  component "Cliente API" as CLI
+  component "Service Worker" as SW
+}
+
+package "packages/shared" as SH {
+  component "Esquemas Zod\n+ tipos DTO" as ZOD
+  component "Mapa de\npermisos RBAC" as PERM
+}
+
+package "apps/api — API REST" as API {
+  portin "HTTPS /api/v1" as REST
+  component "Módulos M1–M8\n(Fig. 4.10)" as MOD
+  component "Infra\n(clientes externos)" as INFRA
+}
+
+database "PostgreSQL" as PG
+database "MongoDB" as MG
+cloud "Cloudflare R2" as R2
+cloud "Web Push" as PUSH
+
+UI ..> CLI
+CLI --> REST : JSON / HTTPS
+REST --> MOD
+MOD ..> INFRA
+CLI ..> ZOD
+MOD ..> ZOD
+UI ..> PERM
+MOD ..> PERM
+INFRA --> PG
+INFRA --> MG
+INFRA --> R2
+INFRA --> PUSH
+UI --> R2 : PUT prefirmado
+PUSH --> SW : push
+@enduml

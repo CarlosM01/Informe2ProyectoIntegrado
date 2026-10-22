@@ -1,0 +1,34 @@
+@startuml
+' Figura 4.14 — Subproceso: registro de la orden y aprobación de diseño
+!include ../_comun/estilo.iuml
+skinparam swimlaneWidth same
+
+|Vendedor|
+start
+:Recibir solicitud del cliente
+(medidas, cantidades, referencia);
+:Registrar orden de trabajo
+con su tipo de trabajo (CU-04);
+|SGP-Kotoduo|
+:Generar etapas desde la plantilla
+y calcular insumos requeridos;
+:Calcular fecha estimada de término;
+if (¿Insumos proyectados\nbajo el mínimo?) then (sí)
+  :Crear alerta automática
+  y notificar a la Encargada;
+else (no)
+endif
+if (¿El tipo de trabajo\nrequiere diseño?) then (sí)
+  |Diseñador|
+  repeat
+    :Elaborar propuesta de diseño;
+    :Subir versión de diseño (CU-07);
+    |Vendedor|
+    :Presentar diseño al cliente
+    y registrar su respuesta;
+  repeat while (¿Cliente aprueba?) is (no: registrar motivo)
+  -> sí;
+else (no)
+endif
+stop
+@enduml

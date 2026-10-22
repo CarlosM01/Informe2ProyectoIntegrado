@@ -1,0 +1,77 @@
+@startuml
+' Figura 6.4 — ER: producción y diseño (M3, M4, M6)
+!include ../_comun/estilo.iuml
+hide circle
+hide <<ref>> members
+skinparam linetype ortho
+
+entity "orden_trabajo" as ot {
+  * id : UUID <<PK>>
+  --
+  * codigo : VARCHAR(20) <<UK>>
+  * tipo_trabajo_id : SMALLINT <<FK>>
+  * titulo : VARCHAR(120)
+  * referencia_cliente : VARCHAR(80)
+  * cantidad : INTEGER
+  * especificaciones : JSONB
+  * prioridad : VARCHAR(10)
+  * estado : VARCHAR(20)
+  * fecha_compromiso : DATE
+  fecha_estimada_termino : DATE
+  * creado_por : UUID <<FK>>
+}
+entity "etapa_orden" as eo {
+  * id : UUID <<PK>>
+  --
+  * orden_id : UUID <<FK>>
+  plantilla_etapa_id : INTEGER <<FK>>
+  * secuencia : SMALLINT
+  * nombre : VARCHAR(80)
+  * area_id : SMALLINT <<FK>>
+  responsable_id : UUID <<FK>>
+  * estado : VARCHAR(12)
+  motivo_bloqueo : VARCHAR(255)
+  iniciada_en / terminada_en : TIMESTAMPTZ
+  * version : INTEGER
+}
+entity "requerimiento_insumo" as ri {
+  * id : SERIAL <<PK>>
+  --
+  * etapa_orden_id : UUID <<FK>>
+  * insumo_id : INTEGER <<FK>>
+  * cantidad_requerida : NUMERIC(12,2)
+  * cantidad_consumida : NUMERIC(12,2)
+}
+entity "aprobacion_diseno" as ad {
+  * id : SERIAL <<PK>>
+  --
+  * orden_id : UUID <<FK>>
+  * version : SMALLINT
+  * evidencia_ref : CHAR(24)
+  * estado : VARCHAR(10)
+  * subido_por : UUID <<FK>>
+  resuelto_por : UUID <<FK>>
+  comentario : VARCHAR(500)
+}
+
+entity "tipo_trabajo" as tipo <<ref>>
+entity "plantilla_etapa" as pe <<ref>>
+entity "area" as area <<ref>>
+entity "usuario" as usuario <<ref>>
+entity "insumo" as insumo <<ref>>
+
+tipo ||--o{ ot
+ot ||--|{ eo
+ot ||--o{ ad
+eo ||--o{ ri
+pe |o..o{ eo : origen
+area ||--o{ eo
+usuario |o--o{ eo : responsable
+usuario ||--o{ ot : crea
+usuario ||--o{ ad : sube/resuelve
+insumo ||--o{ ri
+
+legend bottom left
+  Gris: tabla detallada en otra figura (6.2, 6.3 o 6.5).
+endlegend
+@enduml

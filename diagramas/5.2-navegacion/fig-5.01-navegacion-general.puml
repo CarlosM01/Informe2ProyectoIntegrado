@@ -1,0 +1,12 @@
+@startwbs
+' Figura 5.1 — Mapa de navegación: nivel superior (detalle por perfil en Fig. 5.2 y 5.3)
+!include ../_comun/estilo.iuml
+* SGP-Kotoduo\n/login
+** /login/mfa\n(Administrador, Encargada)
+** Inicio según rol
+*** Operario / Diseñador\n/mi-trabajo (Fig. 5.2)
+*** Vendedor\n/ordenes (Fig. 5.2)
+*** Encargada de Producción\n/panel (Fig. 5.3)
+*** Administrador\n/panel + /admin (Fig. 5.3)
+** /perfil\nCambiar clave, MFA,\ncerrar sesión
+@endwbs

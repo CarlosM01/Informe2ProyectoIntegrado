@@ -1,0 +1,51 @@
+@startuml
+' Figura 4.4 — Dominio: insumos, consumo y alertas
+!include ../_comun/estilo.iuml
+hide empty members
+hide <<ref>> members
+hide <<ref>> circle
+
+class Insumo {
+  - id : int
+  - codigo : String
+  - nombre : String
+  - unidadMedida : UnidadMedida
+  - stockActual : Decimal
+  - stockMinimo : Decimal
+  + estaBajoMinimo() : Boolean
+}
+class PlantillaInsumo {
+  - cantidadPorUnidad : Decimal
+}
+class RequerimientoInsumo {
+  - cantidadRequerida : Decimal
+  - cantidadConsumida : Decimal
+  + pendiente() : Decimal
+}
+class MovimientoInsumo {
+  - tipo : TipoMovimiento
+  - cantidad : Decimal
+  - creadoEn : DateTime
+}
+class AlertaInsumo {
+  - origen : OrigenAlerta
+  - estado : EstadoAlerta
+  - cantidadFaltante : Decimal
+  + cerrar(u : Usuario) : void
+}
+
+class PlantillaEtapa <<ref>>
+class EtapaOrden <<ref>>
+
+PlantillaEtapa "1" *-- "*" PlantillaInsumo
+PlantillaInsumo "*" --> "1" Insumo
+EtapaOrden "1" *-- "*" RequerimientoInsumo
+RequerimientoInsumo "*" --> "1" Insumo
+Insumo "1" o-- "*" MovimientoInsumo : kardex >
+Insumo "1" o-- "*" AlertaInsumo
+AlertaInsumo "*" --> "0..1" EtapaOrden : bloquea >
+
+legend bottom left
+  Gris: clase detallada en la Fig. 4.3.
+endlegend
+@enduml
