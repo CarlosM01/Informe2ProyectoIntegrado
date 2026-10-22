@@ -27,7 +27,7 @@
 | 2.1.4.9 | 6.3 a 6.5 | Principios de implementación en PostgreSQL y MongoDB con documentación de referencia, criterios de verificación e integración por outbox | 5 |
 | 2.1.5.10 | 7.1 a 7.3 | RBAC, política de autenticación y política de autorización | 10 |
 | 2.1.5.11 | 7.4 | Modelo de amenazas STRIDE/OWASP con mitigación y verificación | 10 |
-| 2.1.5.12 | 7.5 a 7.7 | Estándares OWASP/ASVS, extractos de código seguro y marco normativo chileno con ISO, CIS y NIST | 10 |
+| 2.1.5.12 | 7.5 a 7.7 | Estándares OWASP/ASVS, patrones de codificación segura con documentación de referencia y marco normativo chileno con ISO, CIS y NIST | 10 |
 | 2.1.6.13 | 8.1 a 8.8 | Plan de pruebas, trazabilidad RF→CU→CP y casos CP-01–CP-36 | 10 |
 | 2.1.6.14 | 8.9 | Matriz de herramientas manuales y automatizadas | 5 |
 | 2.1.6.15 | Preparación oral | Balotario de defensa con 5 preguntas y respuestas | 5 |
@@ -965,196 +965,36 @@ Los estándares se derivan de OWASP Top 10:2021, ASVS 4.0.3 y la OWASP Cheat She
 
 | Área | Estándar / regla definida | Aplicación en el proyecto | Control automático |
 |---|---|---|---|
-| Validación de entradas | Toda entrada (body, params, query, headers) se valida con un esquema Zod `.strict()` con listas blancas, longitudes máximas y tipos; se rechaza lo desconocido (A03) | Middleware `validar(esquema)` en cada ruta; los mismos esquemas en el formulario de la PWA | Prueba que verifica que cada ruta declare un esquema |
+| Validación de entradas | Toda entrada (body, params, query, headers) se valida con un esquema Zod `.strict()` con listas blancas, longitudes máximas y tipos; se rechaza lo desconocido (A03) | Middleware de validación en cada ruta; los mismos esquemas en el formulario de la PWA | Prueba que verifica que cada ruta declare un esquema |
 | Codificación de salida | Prohibido `innerHTML`/`dangerouslySetInnerHTML`; el texto de usuario se renderiza como texto; CSP sin `unsafe-inline` | React JSX; `helmet.contentSecurityPolicy` | ESLint `react/no-danger` = error |
-| Autenticación y autorización | Ver 7.2–7.3; denegación por defecto; verificación de propiedad en el servicio | `requierePermiso()`, `EtapaService` | Prueba de inventario de rutas; CP-27, CP-28 |
-| Gestión de errores | Manejador centralizado; respuesta genérica con `request_id`; el detalle va solo al log; nunca se exponen *stack traces*, SQL ni versiones | `errorHandler.ts` | CP-24 (sin fugas) |
+| Autenticación y autorización | Ver 7.2–7.3; denegación por defecto; verificación de propiedad en el servicio | Middleware de permisos y capa de servicio (patrón 3 de 7.6) | Prueba de inventario de rutas; CP-27, CP-28 |
+| Gestión de errores | Manejador centralizado; respuesta genérica con `request_id`; el detalle va solo al log; nunca se exponen *stack traces*, SQL ni versiones | Manejador de errores único de la API | CP-24 (sin fugas) |
 | Logging y auditoría | Logs JSON estructurados; sin contraseñas, tokens ni cuerpos completos (`redact`); eventos de seguridad en la bitácora | `pino` + outbox | Revisión de PR |
 | Protección / cifrado de información | TLS 1.2+ extremo a extremo (`sslmode=verify-full`); Argon2id para claves; AES-256-GCM para el secreto TOTP; SHA-256 para tokens de refresco y recuperación | `crypto` nativo de Node.js | Pruebas unitarias del módulo de cifrado |
-| Gestión de secretos y configuración | Secretos solo en variables de entorno del proveedor; configuración validada con Zod al arrancar (la app falla si falta un secreto); rotación semestral de las claves JWT (`kid`) | `config.ts` | GitHub *secret scanning* + *push protection* |
-| Acceso a datos | Solo consultas parametrizadas; la capa *repository* es la única con SQL; transacciones explícitas; usuario de BD con mínimo privilegio; `statement_timeout` | `pg` con `$1…$n` | Regla Semgrep `no-sql-string-concat` |
+| Gestión de secretos y configuración | Secretos solo en variables de entorno del proveedor; configuración validada con Zod al arrancar (la app falla si falta un secreto); rotación semestral de las claves JWT (`kid`) | Módulo de configuración validado al arranque | GitHub *secret scanning* + *push protection* |
+| Acceso a datos | Solo consultas parametrizadas; la capa *repository* es la única con SQL; transacciones explícitas; usuario de BD con mínimo privilegio; `statement_timeout` | Driver `pg` con parámetros posicionales | Regla Semgrep `no-sql-string-concat` |
 | Dependencias | Versiones fijadas con lockfile; auditoría en cada PR; Dependabot semanal; imágenes base oficiales *slim* | `package-lock.json`, `Dockerfile` | `npm audit`, Dependabot |
-| Archivos | Lista blanca de tipos y tamaños; *bucket* privado; URL prefirmadas de corta vida | `evidencias.service.ts` | CP-31 |
+| Archivos | Lista blanca de tipos y tamaños; *bucket* privado; URL prefirmadas de corta vida | Servicio de evidencias (patrón 8 de 7.6) | CP-31 |
 | Revisión de código | Todo cambio pasa por PR revisado por el otro integrante con la lista de cotejo de seguridad | Protección de rama `main` | Regla de GitHub |
 
 ### 7.6 Evidencia de aplicación de estándares seguros (2.1.5.12)
 
-Los siguientes extractos de código (TypeScript) son la implementación de referencia del diseño. Se construyen en los Sprints 1–2 (A12, A16, A18) y se mantienen como patrón obligatorio para el resto de los módulos.
+En esta etapa la evidencia es de **diseño**: para cada estándar de 7.5 se define el patrón obligatorio, la amenaza que mitiga, la documentación que el equipo seguirá para implementarlo y la prueba que demostrará que se aplicó. No se incluye código. Los patrones se implementan primero en los Sprints 1–2 (A12, A16, A18) y desde ahí se exigen en el resto de los módulos mediante la Definition of Done y la lista de cotejo del Anexo E.
 
-**(1) Consulta parametrizada con bloqueo de fila: prevención de SQLi y de condiciones de carrera** (`apps/api/src/modules/etapas/etapa.repository.ts`)
+**Tabla 7.3 — Patrones de codificación segura y su verificación**
 
-```typescript
-export async function bloquearEtapaParaActualizar(tx: PoolClient, etapaId: string) {
-  // $1 se envía separado del texto SQL: el valor nunca se interpreta como código.
-  const { rows } = await tx.query<EtapaFila>(
-    `SELECT id, orden_id, secuencia, estado, responsable_id, version
-       FROM sgp.etapa_orden
-      WHERE id = $1
-      FOR UPDATE`,
-    [etapaId],
-  );
-  return rows[0] ?? null;
-}
+| # | Patrón obligatorio | Amenaza que mitiga | Documentación de referencia | Verificación |
+|---|---|---|---|---|
+| 1 | **Consultas parametrizadas.** Los valores viajan separados del texto SQL y nunca se concatenan. Solo la capa *repository* accede a la base de datos. Las lecturas del operario filtran por responsable en la propia consulta | Inyección SQL (A03); IDOR (A01) | OWASP *Query Parameterization Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html; node-postgres, *Queries*: https://node-postgres.com/features/queries | Regla Semgrep contra la concatenación; CP-24 |
+| 2 | **Validación estricta de entradas.** Cada ruta declara un esquema de lista blanca (tipos, rangos y longitudes) que rechaza campos no declarados. El mismo esquema se comparte con los formularios de la PWA, y los controladores solo reciben datos ya validados | Inyección (A03); asignación masiva | OWASP *Input Validation Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html; *Mass Assignment Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html; Zod: https://zod.dev | Prueba de inventario: toda ruta declara un esquema; CP-06, CP-24 |
+| 3 | **Autorización en tres niveles.** (a) Permiso por rol desde un mapa único compartido por la API y la PWA, con denegación por defecto; (b) verificación de **propiedad** del recurso en el servicio, usando la identidad del token y nunca la del cuerpo de la solicitud; (c) validación del **estado** del recurso. Si el recurso no pertenece al actor, se responde 404 para no revelar su existencia | Control de acceso roto (A01); IDOR; escalada de privilegios | OWASP *Authorization Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html; *IDOR Prevention Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html | CP-27, CP-28 |
+| 4 | **Almacenamiento de contraseñas y login uniforme.** Hash Argon2id con los parámetros mínimos recomendados por OWASP. El login responde con el mismo mensaje y un tiempo similar exista o no el usuario, y aplica bloqueo progresivo tras intentos fallidos | Robo de credenciales; enumeración de usuarios; fuerza bruta (A07) | OWASP *Password Storage Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html; *Authentication Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html; NIST SP 800-63B-4 | CP-07, CP-29; revisión con Anexo E (ítems 1–3) |
+| 5 | **Sesión con dos tokens.** Token de acceso de vida corta guardado solo en memoria. Token de refresco opaco, aleatorio, almacenado con hash y enviado en una cookie `__Host-` con `HttpOnly`, `Secure` y `SameSite=Strict`. El refresco rota el token en cada uso y, si detecta la reutilización de uno ya rotado, revoca toda la familia | Secuestro de sesión; XSS que roba tokens; reutilización de tokens | OWASP *Session Management Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html; IETF *OAuth 2.0 Security Best Current Practice* (RFC 9700), sección sobre rotación de *refresh tokens*: https://www.rfc-editor.org/rfc/rfc9700 | CP-09, CP-30 |
+| 6 | **Cabeceras, CORS, CSRF y límites de tasa.** CSP restrictiva sin `unsafe-inline`, HSTS, `nosniff` y política de *referrer*; CORS limitado al dominio de la PWA; tamaño máximo del cuerpo; límites de tasa más estrictos en autenticación. El único endpoint que usa cookie exige un `Origin` válido y un encabezado personalizado | XSS (A03); CSRF; abuso y fuerza bruta; configuración insegura (A05) | OWASP *HTTP Headers Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html; *Content Security Policy Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html; *CSRF Prevention Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html; Helmet: https://helmetjs.github.io | CP-25, CP-26, CP-29, CP-32 |
+| 7 | **Manejo centralizado de errores.** Un único manejador traduce los errores esperados a respuestas tipadas y los inesperados a un mensaje genérico con un identificador de solicitud. El detalle técnico (traza, SQL, versiones) va solo al log, con redacción de datos sensibles | Fuga de información (A05, A09) | OWASP *Error Handling Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html; *Logging Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html | CP-24 (sin fugas); revisión de logs |
+| 8 | **Subida segura de archivos.** El cliente sube directamente al almacenamiento mediante una URL prefirmada de corta vida que emite la API tras verificar la propiedad de la etapa. Se valida una lista blanca de tipos y un tamaño máximo; el servidor genera el nombre del archivo; el *bucket* es privado | Archivos maliciosos; IDOR; agotamiento de almacenamiento | OWASP *File Upload Cheat Sheet*: https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html; Cloudflare R2, *Presigned URLs*: https://developers.cloudflare.com/r2/api/s3/presigned-urls/ | CP-31 |
 
-export async function listarMiTrabajo(db: Pool, usuarioId: string, limite = 50) {
-  // El filtro por responsable va en SQL: el operario nunca recibe filas ajenas (anti-IDOR).
-  const { rows } = await db.query(
-    `SELECT o.codigo, e.id, e.secuencia, e.nombre, e.estado, a.nombre AS area, e.instrucciones
-       FROM sgp.etapa_orden e
-       JOIN sgp.orden_trabajo o ON o.id = e.orden_id
-       JOIN sgp.area a          ON a.id = e.area_id
-      WHERE e.responsable_id = $1
-        AND e.estado IN ('DISPONIBLE','EN_CURSO','BLOQUEADA','PENDIENTE')
-      ORDER BY o.fecha_compromiso, e.secuencia
-      LIMIT $2`,
-    [usuarioId, Math.min(limite, 50)],
-  );
-  return rows;
-}
-```
-
-**(2) Validación estricta de entradas con esquemas compartidos** (`packages/shared/schemas/etapas.ts` y `apps/api/src/middleware/validar.ts`)
-
-```typescript
-export const TerminarEtapaSchema = z.object({
-  params: z.object({ id: z.string().uuid() }),
-  body: z.object({
-    version: z.number().int().positive(),
-    consumos: z.array(z.object({
-      insumoId: z.number().int().positive(),
-      cantidad: z.number().positive().max(10_000),
-    }).strict()).max(20),
-  }).strict(),                                   // rechaza campos no declarados (mass assignment)
-});
-
-export const validar = (schema: z.ZodTypeAny): RequestHandler => (req, _res, next) => {
-  const r = schema.safeParse({ params: req.params, body: req.body, query: req.query });
-  if (!r.success) return next(new ErrorValidacion(r.error.flatten()));
-  req.datos = r.data;                            // los controladores solo usan datos validados
-  next();
-};
-```
-
-**(3) Autorización: permiso por rol + propiedad + estado** (`apps/api/src/middleware/autorizar.ts` y `etapa.service.ts`)
-
-```typescript
-// packages/shared/permisos.ts — fuente única para la API y la PWA
-export const PERMISOS_POR_ROL: Record<CodigoRol, ReadonlySet<Permiso>> = {
-  OPERARIO: new Set(['ordenes.ver_asignadas', 'etapas.avanzar_propias', 'evidencias.adjuntar',
-                     'insumos.ver', 'insumos.reportar_faltante']),
-  // ... resto de roles según la Tabla 7.1
-};
-
-export const requierePermiso = (permiso: Permiso): RequestHandler => (req, _res, next) => {
-  const ok = req.actor?.roles.some((rol) => PERMISOS_POR_ROL[rol]?.has(permiso));
-  return ok ? next() : next(new ErrorProhibido());          // denegación por defecto
-};
-
-// etapa.service.ts
-async terminar(etapaId: string, version: number, consumos: Consumo[], actor: Actor) {
-  return this.uow.transaccion(async (tx) => {
-    const etapa = await repo.bloquearEtapaParaActualizar(tx, etapaId);
-    if (!etapa || etapa.responsable_id !== actor.id) throw new ErrorNoEncontrado();  // 404: no revela existencia
-    if (etapa.version !== version) throw new ErrorConflicto('La etapa fue actualizada por otro usuario');
-    if (!puedeTransicionar(etapa.estado, 'TERMINADA')) throw new ErrorEstadoInvalido(etapa.estado);
-    // ... actualizar etapa, registrar consumos, habilitar siguiente, escribir outbox (misma tx)
-  });
-}
-```
-
-**(4) Hash de contraseñas y login resistente a la enumeración** (`apps/api/src/modules/auth/auth.service.ts`)
-
-```typescript
-const ARGON2_OPC = { type: argon2.argon2id, memoryCost: 19_456, timeCost: 2, parallelism: 1 };
-const HASH_FICTICIO = await argon2.hash(crypto.randomUUID(), ARGON2_OPC);
-
-export async function login(nombreUsuario: string, clave: string, ctx: Contexto) {
-  const u = await usuarios.buscarPorNombre(nombreUsuario.toLowerCase());
-  // Se verifica siempre un hash (real o ficticio) para igualar tiempos de respuesta.
-  const valida = await argon2.verify(u?.password_hash ?? HASH_FICTICIO, clave);
-  if (!u || !u.activo || !valida || u.estaBloqueado(new Date())) {
-    if (u) await usuarios.registrarIntentoFallido(u.id);   // bloqueo progresivo tras 5 intentos
-    await auditoria.evento('LOGIN_FALLIDO', { nombreUsuario }, ctx);
-    throw new ErrorCredenciales('Usuario o contraseña incorrectos');   // mensaje genérico
-  }
-  await usuarios.reiniciarIntentos(u.id);
-  return u.requiereMfa() ? emitirDesafioMfa(u) : emitirSesion(u, ctx);
-}
-```
-
-**(5) Cookie de refresco, rotación y detección de reutilización** (`apps/api/src/modules/auth/sesion.service.ts`)
-
-```typescript
-export async function refrescar(tokenPlano: string, res: Response) {
-  const hash = sha256(tokenPlano);
-  const sesion = await sesiones.buscarPorHash(hash);
-  if (!sesion || sesion.expira_en < new Date()) throw new ErrorNoAutenticado();
-  if (sesion.revocado_en) {                       // token ya rotado reutilizado => posible robo
-    await sesiones.revocarFamilia(sesion.familia_id);
-    throw new ErrorNoAutenticado();
-  }
-  const nuevo = crypto.randomBytes(32).toString('base64url');
-  await sesiones.rotar(sesion.id, sha256(nuevo));  // revoca la anterior y crea la nueva (misma familia)
-  res.cookie('__Host-sgp_rt', nuevo, {
-    httpOnly: true, secure: true, sameSite: 'strict', path: '/', maxAge: 12 * 3600 * 1000,
-  });
-  return emitirAccessToken(sesion.usuario_id);    // JWT EdDSA, 10 minutos
-}
-```
-
-**(6) Cabeceras, CORS, CSRF y límites de tasa** (`apps/api/src/app.ts`)
-
-```typescript
-app.disable('x-powered-by');
-app.use(helmet({
-  contentSecurityPolicy: { directives: {
-    defaultSrc: ["'none'"], frameAncestors: ["'none'"], baseUri: ["'none'"] } },
-  hsts: { maxAge: 31_536_000, includeSubDomains: true, preload: true },
-  referrerPolicy: { policy: 'no-referrer' },
-}));
-app.use(cors({ origin: ['https://sgp.kotoduo.cl'], credentials: true }));
-app.use(express.json({ limit: '100kb' }));                        // evita cuerpos gigantes
-app.use('/api/v1/auth', rateLimit({ windowMs: 60_000, limit: 10, standardHeaders: 'draft-7' }));
-app.use('/api/v1', rateLimit({ windowMs: 60_000, limit: 300 }));
-
-// CSRF: el único endpoint con cookie exige origen válido y encabezado personalizado
-app.post('/api/v1/auth/refresh', verificarOrigen(['https://sgp.kotoduo.cl']),
-         exigirEncabezado('X-Requested-With', 'sgp-pwa'), refrescarHandler);
-```
-
-**(7) Manejo seguro de errores** (`apps/api/src/errors/errorHandler.ts`)
-
-```typescript
-export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
-  const requestId = req.id;                                        // también en el header X-Request-Id
-  if (err instanceof ErrorAplicacion) {                            // errores esperados y tipados
-    return res.status(err.status).json({ error: err.codigo, mensaje: err.mensajePublico, requestId });
-  }
-  if (err?.code === '23514' || err?.code === '23503') {            // CHECK / FK violados en PostgreSQL
-    logger.warn({ requestId, pgCode: err.code }, 'violación de integridad');
-    return res.status(409).json({ error: 'CONFLICTO', mensaje: 'La operación no es válida en el estado actual', requestId });
-  }
-  logger.error({ requestId, err }, 'error no controlado');         // stack solo en el log (con redacción)
-  return res.status(500).json({ error: 'ERROR_INTERNO', mensaje: 'Ocurrió un error. Código: ' + requestId, requestId });
-};
-```
-
-**(8) Subida segura de archivos con URL prefirmada** (`apps/api/src/modules/evidencias/evidencias.service.ts`)
-
-```typescript
-const TIPOS = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'application/pdf': 'pdf' } as const;
-const MAX_BYTES = 10 * 1024 * 1024;
-
-export async function solicitarSubida(etapaId: string, mime: string, bytes: number, actor: Actor) {
-  const etapa = await etapas.verificarPropiedad(etapaId, actor);       // anti-IDOR: 404 si no es suya
-  if (!(mime in TIPOS) || bytes <= 0 || bytes > MAX_BYTES) throw new ErrorValidacion('Archivo no permitido');
-  const key = `evidencias/${etapa.orden_id}/${crypto.randomUUID()}.${TIPOS[mime]}`;  // nombre generado por el servidor
-  const url = await getSignedUrl(r2, new PutObjectCommand({
-    Bucket: 'sgp-evidencias', Key: key, ContentType: mime, ContentLength: bytes,  // firmados: no se pueden cambiar
-  }), { expiresIn: 300 });
-  return { url, key };
-}
-```
+**Cómo se demostrará la aplicación.** Durante la construcción, la evidencia de cada patrón será: (1) el PR que lo implementa, revisado por el otro integrante con la lista de cotejo del Anexo E; (2) el resultado del control automático del pipeline (Semgrep, ESLint, `npm audit`, *secret scanning*); y (3) el reporte del caso de prueba asociado, que se adjunta en el Anexo F.
 
 ### 7.7 Marco normativo chileno y estándares de referencia
 
@@ -1162,12 +1002,12 @@ El SGP trata datos personales de los trabajadores de Kotoduo: identificación (n
 
 Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia el 1 de diciembre de 2026. El piloto (H2) operará bajo la ley modificada, por lo que el diseño se ajusta desde ya a ella y no solo al texto anterior. El contenido legal de esta sección es una interpretación técnica para orientar el diseño; Kotoduo debe validarla con asesoría jurídica antes del paso a producción.
 
-**Tabla 7.3 — Normativa chilena aplicable.**
+**Tabla 7.4 — Normativa chilena aplicable.**
 
 | Norma | Alcance en el SGP | Obligación relevante | Medida en el diseño | Evidencia |
 |---|---|---|---|---|
 | Constitución Política, art. 19 N.º 4 (reformado por la Ley N.º 21.096, 2018) | Todo dato personal tratado | Consagra el derecho a la protección de los datos personales | Fundamento del resto de las medidas | — |
-| Ley N.º 19.628 sobre protección de datos personales, modificada por la Ley N.º 21.719 (2024) | Datos de los trabajadores usuarios | Principios de licitud, finalidad, proporcionalidad, calidad, responsabilidad, seguridad, transparencia y confidencialidad; deber de información; derechos de acceso, rectificación, supresión, oposición, portabilidad y bloqueo; medidas de seguridad apropiadas al riesgo; notificación de vulneraciones a la Agencia de Protección de Datos Personales; reglas para encargados y transferencias internacionales. Las infracciones gravísimas se sancionan con multas de hasta 20.000 UTM | Minimización (RNF-09); finalidad declarada; controles de 7.1–7.5; aviso de privacidad; atención de derechos; retención definida; procedimiento de incidentes (decisiones D1–D7) | AM-16, CP-32, Tabla 7.5 |
+| Ley N.º 19.628 sobre protección de datos personales, modificada por la Ley N.º 21.719 (2024) | Datos de los trabajadores usuarios | Principios de licitud, finalidad, proporcionalidad, calidad, responsabilidad, seguridad, transparencia y confidencialidad; deber de información; derechos de acceso, rectificación, supresión, oposición, portabilidad y bloqueo; medidas de seguridad apropiadas al riesgo; notificación de vulneraciones a la Agencia de Protección de Datos Personales; reglas para encargados y transferencias internacionales. Las infracciones gravísimas se sancionan con multas de hasta 20.000 UTM | Minimización (RNF-09); finalidad declarada; controles de 7.1–7.5; aviso de privacidad; atención de derechos; retención definida; procedimiento de incidentes (decisiones D1–D7) | AM-16, CP-32, Tabla 7.6 |
 | Código del Trabajo, arts. 5, 153, 154 y 154 bis | Registro de actividad de los trabajadores (bitácora, tiempos de etapa, evidencias) | Las facultades del empleador tienen como límite los derechos fundamentales del trabajador, en especial su intimidad, vida privada y honra. Las medidas de control deben constar en el Reglamento Interno, ser generales, impersonales y respetuosas de la dignidad. El empleador debe mantener reserva de los datos privados del trabajador. Una vulneración puede reclamarse por el procedimiento de tutela laboral (art. 485) | El registro tiene por finalidad la trazabilidad de la OT, no la vigilancia; sin geolocalización, cámara permanente ni ranking de productividad individual; cada operario ve solo lo propio | D1, D8; guía rápida (A30) |
 | Ley N.º 21.459 (2022), delitos informáticos | Pruebas de seguridad y pentest (A27) | Sanciona el acceso a un sistema sin autorización o excediendo la autorización otorgada | Pentest solo con autorización escrita de Kotoduo, alcance definido y contra staging; se respetan las políticas de pruebas de los proveedores | D9; acta de autorización (A27) |
 | Ley N.º 21.663 (2024), Ley Marco de Ciberseguridad | Kotoduo no es prestador de servicios esenciales ni operador de importancia vital | No impone obligaciones directas al proyecto | Se adoptan voluntariamente sus principios de gestión de riesgos y reporte de incidentes, y las recomendaciones de la Agencia Nacional de Ciberseguridad (ANCI) | D6 |
@@ -1186,7 +1026,7 @@ Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia
 
 **Pertinencia de los estándares.** La Ley N.º 21.719 exige medidas de seguridad apropiadas según el riesgo, el estado de la técnica y el costo de aplicación, pero no prescribe un estándar. Los estándares internacionales permiten demostrar esa diligencia (principio de responsabilidad) y sirven de base para el modelo de prevención de infracciones que la ley contempla como voluntario. El INN adoptó la norma ISO/IEC 27001 en Chile como NCh-ISO 27001. No se busca una certificación, cuyo costo no se justifica para una pyme, sino usar estos estándares como catálogo de controles verificables.
 
-**Tabla 7.4 — Estándares de referencia y su relación con la normativa chilena.**
+**Tabla 7.5 — Estándares de referencia y su relación con la normativa chilena.**
 
 | Estándar | Uso en el proyecto | Relación con la normativa chilena | Aplicación en el SGP |
 |---|---|---|---|
@@ -1203,7 +1043,7 @@ Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia
 | NIST SP 800-115 | Metodología de pruebas técnicas y pentest | Pruebas autorizadas (Ley N.º 21.459) | Planificación, ejecución e informe de A27 |
 | NIST SP 800-61 Rev. 3 | Respuesta a incidentes alineada con CSF 2.0 | Notificación de vulneraciones | Procedimiento D6 |
 
-**Tabla 7.5 — Cumplimiento normativo en la planificación.** Las tareas normativas se integran en actividades existentes de la Tabla 3.2, sin agregar días al cronograma.
+**Tabla 7.6 — Cumplimiento normativo en la planificación.** Las tareas normativas se integran en actividades existentes de la Tabla 3.2, sin agregar días al cronograma.
 
 | Actividad | Tarea normativa | Entregable |
 |---|---|---|
@@ -1436,6 +1276,8 @@ Kotoduo. (2026). *Antecedentes complementarios para definición del proyecto Kot
 
 Kruchten, P. B. (1995). The 4+1 view model of architecture. *IEEE Software, 12*(6), 42–50. https://doi.org/10.1109/52.469759
 
+Lodderstedt, T., Bradley, J., Labunets, A., & Fett, D. (2025). *Best current practice for OAuth 2.0 security* (RFC 9700). Internet Engineering Task Force. https://www.rfc-editor.org/rfc/rfc9700
+
 MongoDB, Inc. (2025). *Schema validation*. MongoDB Manual. https://www.mongodb.com/docs/manual/core/schema-validation/
 
 National Institute of Standards and Technology. (2008). *Technical guide to information security testing and assessment* (NIST SP 800-115). https://doi.org/10.6028/NIST.SP.800-115
@@ -1488,10 +1330,10 @@ World Wide Web Consortium. (2023). *Web Content Accessibility Guidelines (WCAG) 
 | # | Control | Ref. ASVS | Cumple (S/N) | Evidencia |
 |---|---|---|---|---|
 | 1 | Las contraseñas tienen ≥ 12 caracteres, sin reglas de composición, y se comparan contra una lista de claves comprometidas | V2.1.1, V2.1.7 | [ ] | CP-07 |
-| 2 | Las contraseñas se almacenan con Argon2id con parámetros iguales o superiores a los de OWASP | V2.4.1 | [ ] | Revisión de `auth.service.ts` |
+| 2 | Las contraseñas se almacenan con Argon2id con parámetros iguales o superiores a los de OWASP | V2.4.1 | [ ] | Revisión del servicio de autenticación |
 | 3 | El bloqueo y la limitación de tasa protegen el login | V2.2.1 | [ ] | CP-29 |
 | 4 | Las cuentas privilegiadas exigen MFA | V2.8 / V4.3.1 | [ ] | CP-10 |
-| 5 | Los tokens de sesión se generan con ≥ 128 bits de entropía y se guardan con hash | V3.2.2 | [ ] | `sesion.service.ts` |
+| 5 | Los tokens de sesión se generan con ≥ 128 bits de entropía y se guardan con hash | V3.2.2 | [ ] | Revisión del servicio de sesiones |
 | 6 | Las cookies usan `__Host-`, `Secure`, `HttpOnly` y `SameSite` | V3.4.1–V3.4.5 | [ ] | CP-09 |
 | 7 | Las sesiones expiran por inactividad y tiempo absoluto, y se revocan al cerrar sesión | V3.3.1–V3.3.4 | [ ] | CP-30 |
 | 8 | El control de acceso deniega por defecto y se aplica en el servidor | V4.1.1, V4.1.5 | [ ] | CP-28 |
