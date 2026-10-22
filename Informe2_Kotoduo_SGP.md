@@ -151,6 +151,8 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 
 **Metodología.** Se adopta **Scrum** (Schwaber & Sutherland, 2020). Los requerimientos están parcialmente confirmados (sección 2.1) y la contraparte debe validar flujos, roles y alcance de insumos. Un enfoque iterativo con revisiones frecuentes reduce el riesgo de construir sobre supuestos erróneos. Kanban se descartó como marco principal porque el proyecto tiene hitos académicos fijos que requieren compromisos por iteración. El tablero Kanban se usa, en cambio, para visualizar cada Sprint Backlog.
 
+**Desarrollo asistido por IA y supuesto de capacidad.** La construcción dispone de aproximadamente un mes (20 días hábiles). El equipo usa asistentes de codificación basados en IA para generar código, migraciones, pruebas automatizadas y documentación técnica a partir del contrato OpenAPI, el DDL y las HU. Con estas herramientas, escribir código deja de ser la restricción del proyecto. El cuello de botella pasa a ser la **verificación**: revisión humana de cada PR, ejecución y análisis de pruebas, pruebas de seguridad, validación con el cliente y pruebas de usabilidad con trabajadores reales. Por eso, las duraciones de la Tabla 3.2 se estiman según el esfuerzo de verificación de cada actividad, no según el esfuerzo de escribir el código. Las actividades de prueba conservan una mayor proporción del tiempo de cada Sprint. El riesgo de que el código generado introduzca defectos se controla con la Definition of Done: ningún incremento se acepta sin revisión humana, pruebas en verde y análisis de seguridad.
+
 **Configuración del marco:**
 
 | Elemento Scrum | Definición en el proyecto |
@@ -158,12 +160,12 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 | Product Owner | Representante de Kotoduo (por validar: Koto o Bianca). **Integrante 2** actúa como PO proxy: mantiene y prioriza el backlog entre reuniones con el cliente |
 | Scrum Master | **Integrante 1**: facilita los eventos, gestiona impedimentos y vigila el burndown |
 | Equipo de desarrollo | Integrante 1 (back-end, datos, seguridad, infraestructura) y Integrante 2 (UX/UI, front-end, pruebas) |
-| Duración del Sprint | Sprint 0: 10 días hábiles (diseño). Sprints 1–4: 10 días hábiles cada uno |
-| Capacidad | ≈ 4 h/día por integrante; velocidad objetivo de 21–26 story points (SP) por Sprint |
-| Plazos | **Relativos, en días hábiles (D1…D50)** desde el inicio del proyecto; sin fechas calendario fijas |
-| Eventos | Planning (día 1 de cada Sprint, 2 h); Daily asíncrona (15 min, mensaje en canal del equipo); Review con el cliente y Retrospectiva (día 10 de cada Sprint) |
+| Duración del Sprint | Sprint 0: 10 días hábiles (diseño). Sprints 1–4: 5 días hábiles (1 semana) cada uno; la construcción completa dura 20 días hábiles (≈ 1 mes) |
+| Capacidad | ≈ 4 h/día por integrante, dedicadas principalmente a especificar, revisar y verificar el código generado con asistencia de IA; velocidad objetivo de 21–26 story points (SP) por Sprint semanal, limitada por la capacidad de verificación |
+| Plazos | **Relativos, en días hábiles (D1…D30)** desde el inicio del proyecto; sin fechas calendario fijas |
+| Eventos | Planning (día 1 de cada Sprint, 2 h); Daily asíncrona (15 min, mensaje en canal del equipo); Review con el cliente y Retrospectiva (día 5 de cada Sprint) |
 | Definition of Ready | HU con criterios de aceptación, maqueta asociada, dependencias resueltas y estimación en SP |
-| Definition of Done | Código revisado por el otro integrante (PR), pruebas unitarias e integración en verde en CI, sin hallazgos High en análisis de seguridad, desplegado en staging y validado por el PO proxy |
+| Definition of Done | Código (incluido el generado con asistencia de IA) revisado por el otro integrante (PR), pruebas unitarias e integración en verde en CI, sin hallazgos High en análisis de seguridad, desplegado en staging y validado por el PO proxy |
 
 **Asignación por capacidades.** Se asigna a cada integrante un responsable principal por actividad para no diluir la responsabilidad.
 
@@ -206,42 +208,42 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 | A07 | S0 – Diseño | Diseño de seguridad: RBAC, autenticación, amenazas, estándares | Cap. 7 | Integrante 1 | D8 | D9 | 2 d |
 | A08 | S0 – Diseño | Plan de pruebas y casos de prueba | Cap. 8 | Integrante 2 | D8 | D9 | 2 d |
 | A09 | S0 – Diseño | Consolidación del Informe N.º 2, Sprint Review y Retro | **Hito H1: Informe N.º 2** | Integrante 1 | D10 | D10 | 1 d |
-| A10 | S1 – Fundaciones | Monorepo, CI en GitHub Actions, Docker Compose, staging | Pipeline CI en verde | Integrante 1 | D11 | D12 | 2 d |
-| A11 | S1 – Fundaciones | Migraciones y datos semilla (roles, áreas, tipos de trabajo) | Esquema `sgp` en staging | Integrante 1 | D13 | D13 | 1 d |
-| A12 | S1 – Fundaciones | API M1: login, Argon2id, JWT/refresh, MFA, bloqueo, usuarios | Endpoints `/auth`, `/usuarios` + pruebas | Integrante 1 | D14 | D17 | 4 d |
-| A13 | S1 – Fundaciones | Shell PWA, componentes de UI, pantalla de login | PWA instalable en staging | Integrante 2 | D11 | D15 | 5 d |
-| A14 | S1 – Fundaciones | API M2: plantillas de proceso | Endpoints `/plantillas` + pruebas | Integrante 1 | D18 | D19 | 2 d |
-| A15 | S1 – Fundaciones | UI de plantillas y administración de usuarios | Pantallas P-07 y P-09 | Integrante 2 | D16 | D19 | 4 d |
-| A16 | S2 – Flujo central | API M3: registro de OT, generación de etapas, asignación | Endpoints `/ordenes` + pruebas | Integrante 1 | D21 | D24 | 4 d |
-| A17 | S2 – Flujo central | UI de registro de OT y asignación | Pantalla P-04 | Integrante 2 | D21 | D24 | 4 d |
-| A18 | S2 – Flujo central | API M4: avance de etapa transaccional, outbox, notificaciones | Endpoints `/etapas` + relay outbox | Integrante 1 | D25 | D29 | 5 d |
-| A19 | S2 – Flujo central | UI Mi Trabajo y Detalle de orden (*mobile-first*) | Pantallas P-02 y P-03 | Integrante 2 | D25 | D29 | 5 d |
-| A20 | S3 – Insumos y diseño | API M5: insumos, movimientos, alertas, faltantes proyectados | Endpoints `/insumos`, `/alertas` | Integrante 1 | D31 | D34 | 4 d |
-| A21 | S3 – Insumos y diseño | API M6 y evidencias: URL prefirmadas R2 + `evidencias_etapa` | Endpoints `/diseno`, `/evidencias` | Integrante 1 | D35 | D39 | 5 d |
-| A22 | S3 – Insumos y diseño | UI de insumos, faltante, aprobación de diseño y evidencia | Pantallas P-05 y P-08 + diálogos | Integrante 2 | D31 | D36 | 6 d |
-| A23 | S3 – Insumos y diseño | Suite de pruebas de integración (Supertest + Testcontainers) | CP-09 a CP-19 automatizados | Integrante 2 | D37 | D39 | 3 d |
-| A24 | S4 – Supervisión y piloto | API M7 (vista panel) y M8 (consulta de bitácora) | Endpoints `/panel`, `/bitacora` | Integrante 1 | D41 | D43 | 3 d |
-| A25 | S4 – Supervisión y piloto | UI de panel y bitácora | Pantallas P-06 y P-10 | Integrante 2 | D41 | D44 | 4 d |
-| A26 | S4 – Supervisión y piloto | Pruebas de rendimiento (k6) y ajuste de índices | Informe CP-20 a CP-23 | Integrante 1 | D44 | D45 | 2 d |
-| A27 | S4 – Supervisión y piloto | Pruebas de seguridad (ZAP, checklist ASVS) y correcciones | Informe CP-24 a CP-32 | Integrante 1 | D46 | D48 | 3 d |
-| A28 | S4 – Supervisión y piloto | Pruebas E2E (Playwright) y usabilidad con usuarios reales | Informe CP-33 a CP-36 | Integrante 2 | D45 | D48 | 4 d |
-| A29 | S4 – Supervisión y piloto | Despliegue en producción y carga inicial desde el Excel actual | Sistema en producción (piloto) | Integrante 1 | D49 | D49 | 1 d |
-| A30 | S4 – Supervisión y piloto | Capacitación a trabajadores y guía rápida de uso | Guía rápida + registro de asistencia | Integrante 2 | D49 | D49 | 1 d |
-| A31 | S4 – Supervisión y piloto | Sprint Review final con el cliente, retrospectiva y cierre | **Hito H2: piloto aceptado** | Integrante 2 | D50 | D50 | 1 d |
+| A10 | S1 – Fundaciones | Monorepo, CI en GitHub Actions, Docker Compose, staging | Pipeline CI en verde | Integrante 1 | D11 | D11 | 1 d |
+| A11 | S1 – Fundaciones | Migraciones y datos semilla (roles, áreas, tipos de trabajo) | Esquema `sgp` en staging | Integrante 1 | D12 | D12 | 0,5 d |
+| A12 | S1 – Fundaciones | API M1: login, Argon2id, JWT/refresh, MFA, bloqueo, usuarios | Endpoints `/auth`, `/usuarios` + pruebas | Integrante 1 | D12 | D13 | 1,5 d |
+| A13 | S1 – Fundaciones | Shell PWA, componentes de UI, pantalla de login | PWA instalable en staging | Integrante 2 | D11 | D12 | 2 d |
+| A14 | S1 – Fundaciones | API M2: plantillas de proceso | Endpoints `/plantillas` + pruebas | Integrante 1 | D14 | D14 | 1 d |
+| A15 | S1 – Fundaciones | UI de plantillas y administración de usuarios | Pantallas P-07 y P-09 | Integrante 2 | D13 | D14 | 2 d |
+| A16 | S2 – Flujo central | API M3: registro de OT, generación de etapas, asignación | Endpoints `/ordenes` + pruebas | Integrante 1 | D16 | D17 | 2 d |
+| A17 | S2 – Flujo central | UI de registro de OT y asignación | Pantalla P-04 | Integrante 2 | D16 | D17 | 2 d |
+| A18 | S2 – Flujo central | API M4: avance de etapa transaccional, outbox, notificaciones | Endpoints `/etapas` + relay outbox | Integrante 1 | D18 | D19 | 2 d |
+| A19 | S2 – Flujo central | UI Mi Trabajo y Detalle de orden (*mobile-first*) | Pantallas P-02 y P-03 | Integrante 2 | D18 | D19 | 2 d |
+| A20 | S3 – Insumos y diseño | API M5: insumos, movimientos, alertas, faltantes proyectados | Endpoints `/insumos`, `/alertas` | Integrante 1 | D21 | D22 | 2 d |
+| A21 | S3 – Insumos y diseño | API M6 y evidencias: URL prefirmadas R2 + `evidencias_etapa` | Endpoints `/diseno`, `/evidencias` | Integrante 1 | D23 | D24 | 2 d |
+| A22 | S3 – Insumos y diseño | UI de insumos, faltante, aprobación de diseño y evidencia | Pantallas P-05 y P-08 + diálogos | Integrante 2 | D21 | D22 | 2 d |
+| A23 | S3 – Insumos y diseño | Suite de pruebas de integración (Supertest + Testcontainers) | CP-09 a CP-19 automatizados | Integrante 2 | D23 | D24 | 2 d |
+| A24 | S4 – Supervisión y piloto | API M7 (vista panel) y M8 (consulta de bitácora) | Endpoints `/panel`, `/bitacora` | Integrante 1 | D26 | D26 | 1 d |
+| A25 | S4 – Supervisión y piloto | UI de panel y bitácora | Pantallas P-06 y P-10 | Integrante 2 | D26 | D26 | 1 d |
+| A26 | S4 – Supervisión y piloto | Pruebas de rendimiento (k6) y ajuste de índices | Informe CP-20 a CP-23 | Integrante 1 | D27 | D27 | 1 d |
+| A27 | S4 – Supervisión y piloto | Pruebas de seguridad (ZAP, checklist ASVS) y correcciones | Informe CP-24 a CP-32 | Integrante 1 | D28 | D29 | 2 d |
+| A28 | S4 – Supervisión y piloto | Pruebas E2E (Playwright) y usabilidad con usuarios reales | Informe CP-33 a CP-36 | Integrante 2 | D27 | D29 | 3 d |
+| A29 | S4 – Supervisión y piloto | Despliegue en producción y carga inicial desde el Excel actual | Sistema en producción (piloto) | Integrante 1 | D30 | D30 | 0,5 d |
+| A30 | S4 – Supervisión y piloto | Capacitación a trabajadores y guía rápida de uso | Guía rápida + registro de asistencia | Integrante 2 | D30 | D30 | 0,5 d |
+| A31 | S4 – Supervisión y piloto | Sprint Review final con el cliente, retrospectiva y cierre | **Hito H2: piloto aceptado** | Integrante 2 | D30 | D30 | 0,5 d |
 
-Los días D20, D30 y D40 se reservan para Sprint Review y Retrospectiva por la mañana y para **buffer de contingencia** por la tarde. Cada Sprint de construcción tiene así 9 días de trabajo planificado y una holgura explícita de 0,5–1 día. Los días 1 de cada Sprint (D11, D21, D31, D41) comienzan con la Sprint Planning de 2 h.
+Los días D15, D20 y D25 se reservan para Sprint Review y Retrospectiva por la mañana y para **buffer de contingencia** por la tarde. Cada Sprint de construcción tiene así 4 días de trabajo planificado y una holgura explícita de medio día. Los días 1 de cada Sprint (D11, D16, D21, D26) comienzan con la Sprint Planning de 2 h. En el Sprint 4, las actividades de prueba (A26–A28) ocupan la mayor parte del tiempo porque son el cuello de botella del proyecto. El día D30 concentra el despliegue y la capacitación por la mañana, y la Review final por la tarde.
 
 **Representación del cronograma: tablero de Sprints (Tabla 3.3).** Sustituye a la carta Gantt y muestra la secuencia de incrementos.
 
-| | Sprint 0 (D1–D10) | Sprint 1 (D11–D20) | Sprint 2 (D21–D30) | Sprint 3 (D31–D40) | Sprint 4 (D41–D50) |
+| | Sprint 0 (D1–D10) | Sprint 1 (D11–D15) | Sprint 2 (D16–D20) | Sprint 3 (D21–D25) | Sprint 4 (D26–D30) |
 |---|---|---|---|---|---|
 | **Objetivo** | Diseño validado de la solución | Acceso seguro y plantillas operativas | Una OT recorre todas sus etapas | Insumos anticipados y diseño aprobado | Supervisión, calidad y puesta en marcha |
 | **Ítems** | A00–A09 | TE-01, HU-11, HU-07 | HU-05, HU-08, HU-01, HU-02 | HU-09, HU-03, HU-06, HU-04 | HU-10, HU-12, TE-02 |
 | **SP comprometidos** | — | 21 | 26 | 21 | 21 |
 | **Incremento** | Informe N.º 2 + prototipo | Login + MFA + plantillas | Flujo productivo completo | Alertas, aprobación y evidencias | Piloto en producción |
-| **Review con cliente** | D10 | D20 | D30 | D40 | D50 |
+| **Review con cliente** | D10 | D15 | D20 | D25 | D30 |
 
-**Tablero del Sprint 2 (estado planificado al día D25; Tabla 3.4).**
+**Tablero del Sprint 2 (estado planificado al día D18; Tabla 3.4).**
 
 | Por hacer | En progreso | En revisión / QA | Hecho |
 |---|---|---|---|
@@ -253,10 +255,10 @@ Los días D20, D30 y D40 se reservan para Sprint Review y Retrospectiva por la m
 | Momento | SP restantes (ideal) | SP restantes (real) |
 |---|---|---|
 | Inicio S1 (D11) | 89 | [Completar] |
-| Fin S1 (D20) | 68 | [Completar] |
-| Fin S2 (D30) | 42 | [Completar] |
-| Fin S3 (D40) | 21 | [Completar] |
-| Fin S4 (D50) | 0 | [Completar] |
+| Fin S1 (D15) | 68 | [Completar] |
+| Fin S2 (D20) | 42 | [Completar] |
+| Fin S3 (D25) | 21 | [Completar] |
+| Fin S4 (D30) | 0 | [Completar] |
 
 El Sprint 2 concentra 26 SP, por encima de la velocidad media, porque contiene el flujo de valor central. La mitigación es que HU-08 (5 SP) puede pasar al Sprint 3 sin bloquear HU-01/HU-02, ya que la asignación puede hacerse temporalmente por datos semilla.
 
@@ -278,7 +280,7 @@ Tipos de dependencia: **FC** (fin-comienzo, la sucesora comienza al terminar la 
 | A09 | A02–A08 | FC | Alta | Consolida todos los artefactos | Retrasa la entrega del Informe N.º 2 |
 | A10 | A03 | FC | **Alta** | Sin CI ni ambientes no se cumple la DoD | Ruta crítica; bloquea A11 y A13 |
 | A11 | A05, A10 | FC | **Alta** | Las migraciones implementan el DDL sobre el ambiente creado | Ruta crítica; bloquea A12 |
-| A12 | A07, A11 | FC | **Alta** | Toda la API exige identidad y permisos | Ruta crítica: +2 d consume el buffer D20 y desplaza S2 en 1 d |
+| A12 | A07, A11 | FC | **Alta** | Toda la API exige identidad y permisos | Ruta crítica: +1 d consume el buffer D15 y desplaza S2 en medio día |
 | A13 | A06; A10 (CC) | FC/CC | Alta | Implementa el diseño v2; puede iniciar en paralelo con la creación del repositorio | Retrasa A15 y la demo del Sprint 1 |
 | A14 | A12 | FC | **Alta** | Los endpoints de plantillas ya requieren autorización por rol | Ruta crítica; bloquea A16 |
 | A15 | A13; A12 (CC) | FC/CC | Media | Usa el contrato OpenAPI, no la API terminada | Plantillas se cargan por script temporalmente |
@@ -300,9 +302,9 @@ Tipos de dependencia: **FC** (fin-comienzo, la sucesora comienza al terminar la 
 | A31 | A29, A30 | FC | Alta | Cierre formal con el cliente | Desplaza H2 |
 
 **Ruta crítica** (cadena del recurso back-end, 0 días de holgura salvo los buffers de Sprint):
-A00 (2 d) → A03 (3 d) → A05 (2 d) → A07 (2 d) → A09 (1 d) → A10 (2 d) → A11 (1 d) → A12 (4 d) → A14 (2 d) → [buffer D20] → A16 (4 d) → A18 (5 d) → [buffer D30] → A20 (4 d) → A21 (5 d) → [buffer D40] → A24 (3 d) → A26 (2 d) → A27 (3 d) → A29 (1 d) → A31 (1 d) = **50 días hábiles**.
+A00 (2 d) → A03 (3 d) → A05 (2 d) → A07 (2 d) → A09 (1 d) → A10 (1 d) → A11 (0,5 d) → A12 (1,5 d) → A14 (1 d) → [Review y buffer D15] → A16 (2 d) → A18 (2 d) → [Review y buffer D20] → A20 (2 d) → A21 (2 d) → [Review y buffer D25] → A24 (1 d) → A26 (1 d) → A27 (2 d) → A29 (0,5 d) → A31 (0,5 d) = **30 días hábiles** (10 de diseño + 20 de construcción).
 
-**Gestión de retrasos:** un retraso de hasta 1 día por Sprint se absorbe con el buffer del día 10. Si es mayor, el PO proxy reduce el alcance del Sprint y mueve al siguiente el ítem de menor prioridad (HU-04 y HU-08 son los candidatos definidos). Así se protegen los hitos H1 y H2 sin comprometer la DoD.
+**Gestión de retrasos:** un retraso de hasta medio día por Sprint se absorbe con el buffer del día 5. Si es mayor, el PO proxy reduce el alcance del Sprint y mueve al siguiente el ítem de menor prioridad (HU-04 y HU-08 son los candidatos definidos). Así se protegen los hitos H1 y H2 sin comprometer la DoD.
 
 ---
 
