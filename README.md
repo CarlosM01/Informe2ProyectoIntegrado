@@ -5,7 +5,7 @@ Repositorio del **Informe N.º 2** del Proyecto Integrado (Unidad 2, INACAP). Co
 **Proyecto:** SGP-Kotoduo, Sistema de Gestión y Seguimiento Productivo
 **Contraparte:** Kotoduo, agencia publicitaria y taller de confección (Temuco, La Araucanía)
 **Metodología:** Scrum (Sprint 0 de diseño y 4 sprints de construcción)
-**Integrantes:** Carlos y Javiera
+**Integrantes:** Integrante 1 y Integrante 2
 
 ## Estructura del repositorio
 

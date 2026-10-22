@@ -6,7 +6,7 @@
 |---|---|
 | Nombre del proyecto | SGP-Kotoduo: Sistema de Gestión y Seguimiento Productivo |
 | Empresa / contraparte | Kotoduo — agencia publicitaria y taller de confección, Temuco, La Araucanía (kotoduo.cl) |
-| Integrantes | Carlos — Javiera |
+| Integrantes | Integrante 1 — Integrante 2 |
 | Metodología | Scrum (Sprint 0 de diseño + 4 Sprints de construcción) |
 | Carrera / Sección / Sede | [Completar] |
 | Docente | [Completar] |
@@ -155,9 +155,9 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 
 | Elemento Scrum | Definición en el proyecto |
 |---|---|
-| Product Owner | Representante de Kotoduo (por validar: Koto o Bianca). **Javiera** actúa como PO proxy: mantiene y prioriza el backlog entre reuniones con el cliente |
-| Scrum Master | **Carlos**: facilita los eventos, gestiona impedimentos y vigila el burndown |
-| Equipo de desarrollo | Carlos (back-end, datos, seguridad, infraestructura) y Javiera (UX/UI, front-end, pruebas) |
+| Product Owner | Representante de Kotoduo (por validar: Koto o Bianca). **Integrante 2** actúa como PO proxy: mantiene y prioriza el backlog entre reuniones con el cliente |
+| Scrum Master | **Integrante 1**: facilita los eventos, gestiona impedimentos y vigila el burndown |
+| Equipo de desarrollo | Integrante 1 (back-end, datos, seguridad, infraestructura) y Integrante 2 (UX/UI, front-end, pruebas) |
 | Duración del Sprint | Sprint 0: 10 días hábiles (diseño). Sprints 1–4: 10 días hábiles cada uno |
 | Capacidad | ≈ 4 h/día por integrante; velocidad objetivo de 21–26 story points (SP) por Sprint |
 | Plazos | **Relativos, en días hábiles (D1…D50)** desde el inicio del proyecto; sin fechas calendario fijas |
@@ -169,8 +169,8 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 
 | Integrante | Rol | Capacidad considerada | Responsabilidad principal |
 |---|---|---|---|
-| Carlos | Scrum Master / Arquitecto / Back-end | Modelado de datos, programación de servicios, seguridad e infraestructura cloud | A00, A03, A05, A07, A09–A12, A14, A16, A18, A20, A21, A24, A26, A27, A29 |
-| Javiera | PO proxy / UX-UI / Front-end / QA | Levantamiento con usuarios, diseño de interfaces, desarrollo web y diseño de pruebas | A01, A02, A04, A06, A08, A13, A15, A17, A19, A22, A23, A25, A28, A30, A31 |
+| Integrante 1 | Scrum Master / Arquitecto / Back-end | Modelado de datos, programación de servicios, seguridad e infraestructura cloud | A00, A03, A05, A07, A09–A12, A14, A16, A18, A20, A21, A24, A26, A27, A29 |
+| Integrante 2 | PO proxy / UX-UI / Front-end / QA | Levantamiento con usuarios, diseño de interfaces, desarrollo web y diseño de pruebas | A01, A02, A04, A06, A08, A13, A15, A17, A19, A22, A23, A25, A28, A30, A31 |
 
 **Product Backlog priorizado (Tabla 3.1).**
 
@@ -196,38 +196,38 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 
 | ID | Fase / Sprint | Actividad | Entregable | Responsable | Inicio | Término | Duración |
 |---|---|---|---|---|---|---|---|
-| A00 | S0 – Diseño | *Spike* técnico: PWA en iOS/Android, límites de capas gratuitas | Nota técnica de factibilidad | Carlos | D1 | D2 | 2 d |
-| A01 | S0 – Diseño | Validar con Kotoduo la línea base RF/RNF/HU y los supuestos | Acta de validación + backlog v1 | Javiera | D1 | D1 | 1 d |
-| A02 | S0 – Diseño | Priorizar backlog, estimar SP, definir DoR/DoD | Product Backlog priorizado (Tabla 3.1) | Javiera | D2 | D2 | 1 d |
-| A03 | S0 – Diseño | Arquitectura 4+1, contrato OpenAPI y selección tecnológica | Cap. 4 + `openapi.yaml` v0 | Carlos | D3 | D5 | 3 d |
-| A04 | S0 – Diseño | Prototipo navegable v1 y guía de estilo | Prototipo v1 (Anexo D) + sección 5.4 | Javiera | D3 | D5 | 3 d |
-| A05 | S0 – Diseño | Modelo de datos: ER, diccionario, DDL y esquemas MongoDB | Cap. 6 + Anexos B y C | Carlos | D6 | D7 | 2 d |
-| A06 | S0 – Diseño | Prueba de usabilidad del prototipo con trabajadores y rediseño v2 | Registro de feedback (5.5) + prototipo v2 | Javiera | D6 | D7 | 2 d |
-| A07 | S0 – Diseño | Diseño de seguridad: RBAC, autenticación, amenazas, estándares | Cap. 7 | Carlos | D8 | D9 | 2 d |
-| A08 | S0 – Diseño | Plan de pruebas y casos de prueba | Cap. 8 | Javiera | D8 | D9 | 2 d |
-| A09 | S0 – Diseño | Consolidación del Informe N.º 2, Sprint Review y Retro | **Hito H1: Informe N.º 2** | Carlos | D10 | D10 | 1 d |
-| A10 | S1 – Fundaciones | Monorepo, CI en GitHub Actions, Docker Compose, staging | Pipeline CI en verde | Carlos | D11 | D12 | 2 d |
-| A11 | S1 – Fundaciones | Migraciones y datos semilla (roles, áreas, tipos de trabajo) | Esquema `sgp` en staging | Carlos | D13 | D13 | 1 d |
-| A12 | S1 – Fundaciones | API M1: login, Argon2id, JWT/refresh, MFA, bloqueo, usuarios | Endpoints `/auth`, `/usuarios` + pruebas | Carlos | D14 | D17 | 4 d |
-| A13 | S1 – Fundaciones | Shell PWA, componentes de UI, pantalla de login | PWA instalable en staging | Javiera | D11 | D15 | 5 d |
-| A14 | S1 – Fundaciones | API M2: plantillas de proceso | Endpoints `/plantillas` + pruebas | Carlos | D18 | D19 | 2 d |
-| A15 | S1 – Fundaciones | UI de plantillas y administración de usuarios | Pantallas P-07 y P-09 | Javiera | D16 | D19 | 4 d |
-| A16 | S2 – Flujo central | API M3: registro de OT, generación de etapas, asignación | Endpoints `/ordenes` + pruebas | Carlos | D21 | D24 | 4 d |
-| A17 | S2 – Flujo central | UI de registro de OT y asignación | Pantalla P-04 | Javiera | D21 | D24 | 4 d |
-| A18 | S2 – Flujo central | API M4: avance de etapa transaccional, outbox, notificaciones | Endpoints `/etapas` + relay outbox | Carlos | D25 | D29 | 5 d |
-| A19 | S2 – Flujo central | UI Mi Trabajo y Detalle de orden (*mobile-first*) | Pantallas P-02 y P-03 | Javiera | D25 | D29 | 5 d |
-| A20 | S3 – Insumos y diseño | API M5: insumos, movimientos, alertas, faltantes proyectados | Endpoints `/insumos`, `/alertas` | Carlos | D31 | D34 | 4 d |
-| A21 | S3 – Insumos y diseño | API M6 y evidencias: URL prefirmadas R2 + `evidencias_etapa` | Endpoints `/diseno`, `/evidencias` | Carlos | D35 | D39 | 5 d |
-| A22 | S3 – Insumos y diseño | UI de insumos, faltante, aprobación de diseño y evidencia | Pantallas P-05 y P-08 + diálogos | Javiera | D31 | D36 | 6 d |
-| A23 | S3 – Insumos y diseño | Suite de pruebas de integración (Supertest + Testcontainers) | CP-09 a CP-19 automatizados | Javiera | D37 | D39 | 3 d |
-| A24 | S4 – Supervisión y piloto | API M7 (vista panel) y M8 (consulta de bitácora) | Endpoints `/panel`, `/bitacora` | Carlos | D41 | D43 | 3 d |
-| A25 | S4 – Supervisión y piloto | UI de panel y bitácora | Pantallas P-06 y P-10 | Javiera | D41 | D44 | 4 d |
-| A26 | S4 – Supervisión y piloto | Pruebas de rendimiento (k6) y ajuste de índices | Informe CP-20 a CP-23 | Carlos | D44 | D45 | 2 d |
-| A27 | S4 – Supervisión y piloto | Pruebas de seguridad (ZAP, checklist ASVS) y correcciones | Informe CP-24 a CP-32 | Carlos | D46 | D48 | 3 d |
-| A28 | S4 – Supervisión y piloto | Pruebas E2E (Playwright) y usabilidad con usuarios reales | Informe CP-33 a CP-36 | Javiera | D45 | D48 | 4 d |
-| A29 | S4 – Supervisión y piloto | Despliegue en producción y carga inicial desde el Excel actual | Sistema en producción (piloto) | Carlos | D49 | D49 | 1 d |
-| A30 | S4 – Supervisión y piloto | Capacitación a trabajadores y guía rápida de uso | Guía rápida + registro de asistencia | Javiera | D49 | D49 | 1 d |
-| A31 | S4 – Supervisión y piloto | Sprint Review final con el cliente, retrospectiva y cierre | **Hito H2: piloto aceptado** | Javiera | D50 | D50 | 1 d |
+| A00 | S0 – Diseño | *Spike* técnico: PWA en iOS/Android, límites de capas gratuitas | Nota técnica de factibilidad | Integrante 1 | D1 | D2 | 2 d |
+| A01 | S0 – Diseño | Validar con Kotoduo la línea base RF/RNF/HU y los supuestos | Acta de validación + backlog v1 | Integrante 2 | D1 | D1 | 1 d |
+| A02 | S0 – Diseño | Priorizar backlog, estimar SP, definir DoR/DoD | Product Backlog priorizado (Tabla 3.1) | Integrante 2 | D2 | D2 | 1 d |
+| A03 | S0 – Diseño | Arquitectura 4+1, contrato OpenAPI y selección tecnológica | Cap. 4 + `openapi.yaml` v0 | Integrante 1 | D3 | D5 | 3 d |
+| A04 | S0 – Diseño | Prototipo navegable v1 y guía de estilo | Prototipo v1 (Anexo D) + sección 5.4 | Integrante 2 | D3 | D5 | 3 d |
+| A05 | S0 – Diseño | Modelo de datos: ER, diccionario, DDL y esquemas MongoDB | Cap. 6 + Anexos B y C | Integrante 1 | D6 | D7 | 2 d |
+| A06 | S0 – Diseño | Prueba de usabilidad del prototipo con trabajadores y rediseño v2 | Registro de feedback (5.5) + prototipo v2 | Integrante 2 | D6 | D7 | 2 d |
+| A07 | S0 – Diseño | Diseño de seguridad: RBAC, autenticación, amenazas, estándares | Cap. 7 | Integrante 1 | D8 | D9 | 2 d |
+| A08 | S0 – Diseño | Plan de pruebas y casos de prueba | Cap. 8 | Integrante 2 | D8 | D9 | 2 d |
+| A09 | S0 – Diseño | Consolidación del Informe N.º 2, Sprint Review y Retro | **Hito H1: Informe N.º 2** | Integrante 1 | D10 | D10 | 1 d |
+| A10 | S1 – Fundaciones | Monorepo, CI en GitHub Actions, Docker Compose, staging | Pipeline CI en verde | Integrante 1 | D11 | D12 | 2 d |
+| A11 | S1 – Fundaciones | Migraciones y datos semilla (roles, áreas, tipos de trabajo) | Esquema `sgp` en staging | Integrante 1 | D13 | D13 | 1 d |
+| A12 | S1 – Fundaciones | API M1: login, Argon2id, JWT/refresh, MFA, bloqueo, usuarios | Endpoints `/auth`, `/usuarios` + pruebas | Integrante 1 | D14 | D17 | 4 d |
+| A13 | S1 – Fundaciones | Shell PWA, componentes de UI, pantalla de login | PWA instalable en staging | Integrante 2 | D11 | D15 | 5 d |
+| A14 | S1 – Fundaciones | API M2: plantillas de proceso | Endpoints `/plantillas` + pruebas | Integrante 1 | D18 | D19 | 2 d |
+| A15 | S1 – Fundaciones | UI de plantillas y administración de usuarios | Pantallas P-07 y P-09 | Integrante 2 | D16 | D19 | 4 d |
+| A16 | S2 – Flujo central | API M3: registro de OT, generación de etapas, asignación | Endpoints `/ordenes` + pruebas | Integrante 1 | D21 | D24 | 4 d |
+| A17 | S2 – Flujo central | UI de registro de OT y asignación | Pantalla P-04 | Integrante 2 | D21 | D24 | 4 d |
+| A18 | S2 – Flujo central | API M4: avance de etapa transaccional, outbox, notificaciones | Endpoints `/etapas` + relay outbox | Integrante 1 | D25 | D29 | 5 d |
+| A19 | S2 – Flujo central | UI Mi Trabajo y Detalle de orden (*mobile-first*) | Pantallas P-02 y P-03 | Integrante 2 | D25 | D29 | 5 d |
+| A20 | S3 – Insumos y diseño | API M5: insumos, movimientos, alertas, faltantes proyectados | Endpoints `/insumos`, `/alertas` | Integrante 1 | D31 | D34 | 4 d |
+| A21 | S3 – Insumos y diseño | API M6 y evidencias: URL prefirmadas R2 + `evidencias_etapa` | Endpoints `/diseno`, `/evidencias` | Integrante 1 | D35 | D39 | 5 d |
+| A22 | S3 – Insumos y diseño | UI de insumos, faltante, aprobación de diseño y evidencia | Pantallas P-05 y P-08 + diálogos | Integrante 2 | D31 | D36 | 6 d |
+| A23 | S3 – Insumos y diseño | Suite de pruebas de integración (Supertest + Testcontainers) | CP-09 a CP-19 automatizados | Integrante 2 | D37 | D39 | 3 d |
+| A24 | S4 – Supervisión y piloto | API M7 (vista panel) y M8 (consulta de bitácora) | Endpoints `/panel`, `/bitacora` | Integrante 1 | D41 | D43 | 3 d |
+| A25 | S4 – Supervisión y piloto | UI de panel y bitácora | Pantallas P-06 y P-10 | Integrante 2 | D41 | D44 | 4 d |
+| A26 | S4 – Supervisión y piloto | Pruebas de rendimiento (k6) y ajuste de índices | Informe CP-20 a CP-23 | Integrante 1 | D44 | D45 | 2 d |
+| A27 | S4 – Supervisión y piloto | Pruebas de seguridad (ZAP, checklist ASVS) y correcciones | Informe CP-24 a CP-32 | Integrante 1 | D46 | D48 | 3 d |
+| A28 | S4 – Supervisión y piloto | Pruebas E2E (Playwright) y usabilidad con usuarios reales | Informe CP-33 a CP-36 | Integrante 2 | D45 | D48 | 4 d |
+| A29 | S4 – Supervisión y piloto | Despliegue en producción y carga inicial desde el Excel actual | Sistema en producción (piloto) | Integrante 1 | D49 | D49 | 1 d |
+| A30 | S4 – Supervisión y piloto | Capacitación a trabajadores y guía rápida de uso | Guía rápida + registro de asistencia | Integrante 2 | D49 | D49 | 1 d |
+| A31 | S4 – Supervisión y piloto | Sprint Review final con el cliente, retrospectiva y cierre | **Hito H2: piloto aceptado** | Integrante 2 | D50 | D50 | 1 d |
 
 Los días D20, D30 y D40 se reservan para Sprint Review y Retrospectiva por la mañana y para **buffer de contingencia** por la tarde. Cada Sprint de construcción tiene así 9 días de trabajo planificado y una holgura explícita de 0,5–1 día. Los días 1 de cada Sprint (D11, D21, D31, D41) comienzan con la Sprint Planning de 2 h.
 
@@ -1209,7 +1209,7 @@ export async function solicitarSubida(etapaId: string, mime: string, bytes: numb
 | Criterios de inicio | HU en estado "Hecho" según la DoD del Sprint; build en verde; staging desplegado con la migración vigente |
 | Criterios de término | 100 % de los CP ejecutados; 0 defectos críticos o altos abiertos; cobertura de líneas ≥ 70 % en `services`; umbrales de rendimiento cumplidos; ZAP sin alertas High/Medium; SUS ≥ 70 |
 | Gestión de defectos | Issue en GitHub con severidad (Crítica / Alta / Media / Baja), CP asociado y evidencia; un defecto Crítico o Alto bloquea el *merge* y el despliegue |
-| Responsables | Diseño y E2E/usabilidad: Javiera. Rendimiento y seguridad: Carlos. Unitarias: autor del código, revisadas por el otro integrante |
+| Responsables | Diseño y E2E/usabilidad: Integrante 2. Rendimiento y seguridad: Integrante 1. Unitarias: autor del código, revisadas por el otro integrante |
 
 ### 8.2 Trazabilidad entre requerimientos, casos de uso y casos de prueba (2.1.6.13)
 
