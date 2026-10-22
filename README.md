@@ -21,7 +21,8 @@ Repositorio del **Informe N.º 2** del Proyecto Integrado (Unidad 2, INACAP). Co
 │   ├── mongo_init.js            #   Script de inicialización de MongoDB
 │   └── docker/mongo-init.sh     #   Ejecuta mongo_init.js al iniciar el contenedor
 └── anexos/
-    └── prototipo/               # Anexo D: prototipo HTML/CSS (abrir index.html)
+    ├── prototipo/               # Anexo D: prototipo HTML/CSS (abrir index.html)
+    └── seguridad/               # Anexo G: fragmentos de código seguro de referencia
 ```
 
 ## Cómo está organizado el informe

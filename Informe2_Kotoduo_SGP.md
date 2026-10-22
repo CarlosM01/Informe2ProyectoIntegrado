@@ -979,7 +979,7 @@ Los estándares se derivan de OWASP Top 10:2021, ASVS 4.0.3 y la OWASP Cheat She
 
 ### 7.6 Evidencia de aplicación de estándares seguros (2.1.5.12)
 
-En esta etapa la evidencia es de **diseño**: para cada estándar de 7.5 se define el patrón obligatorio, la amenaza que mitiga, la documentación que el equipo seguirá para implementarlo y la prueba que demostrará que se aplicó. No se incluye código. Los patrones se implementan primero en los Sprints 1–2 (A12, A16, A18) y desde ahí se exigen en el resto de los módulos mediante la Definition of Done y la lista de cotejo del Anexo E.
+En esta etapa la evidencia es de **diseño**: para cada estándar de 7.5 se define el patrón obligatorio, la amenaza que mitiga, la documentación que el equipo seguirá para implementarlo y la prueba que demostrará que se aplicó. No se incluye código. Los patrones se implementan primero en los Sprints 1–2 (A12, A16, A18) y desde ahí se exigen en el resto de los módulos mediante la Definition of Done y la lista de cotejo del Anexo E. El **Anexo G** contiene un borrador referencial en TypeScript de cada patrón, que sirve como punto de partida para la construcción.
 
 **Tabla 7.3 — Patrones de codificación segura y su verificación**
 
@@ -1324,6 +1324,7 @@ World Wide Web Consortium. (2023). *Web Content Accessibility Guidelines (WCAG) 
 | D | Prototipo navegable (HTML/CSS) y capturas v1 → v2 | `anexos/prototipo/index.html` | 5.3–5.5 |
 | E | Lista de cotejo de seguridad para PR y pruebas (ASVS L2, extracto) | Este documento, abajo | 7.5, 8.6, 8.9 |
 | F | Reportes de ejecución de pruebas (Vitest, k6, ZAP, Lighthouse, Playwright) | [Adjuntar tras la ejecución] | 8.8 |
+| G | Borrador referencial: fragmentos de código de los patrones de codificación segura | `anexos/seguridad/codigo-seguro-referencia.md` | 7.6 |
 
 ### Anexo E — Lista de cotejo de seguridad (extracto ASVS 4.0.3 L2)
 
