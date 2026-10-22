@@ -13,7 +13,18 @@ Repositorio del **Informe N.º 2** del Proyecto Integrado (Unidad 2, INACAP). Co
 .
 ├── Informe2_Kotoduo_SGP.md      # Documento principal del informe
 ├── docker-compose.yml           # Levanta PostgreSQL y MongoDB con los anexos B y C
-├── diagramas/                   # Anexo A: fuentes PlantUML (01 a 10)
+├── diagramas/                   # Anexo A: fuentes PlantUML, una carpeta por vista
+│   ├── _comun/estilo.iuml       #   Estilo compartido por todas las figuras
+│   ├── render.sh                #   Regenera todas las imágenes en figuras/
+│   ├── 4.1-vista-general/       #   Fig. 4.1
+│   ├── 4.2-vista-logica/        #   Fig. 4.2–4.7 (4+1: lógica)
+│   ├── 4.3-vista-desarrollo/    #   Fig. 4.8–4.12 (4+1: desarrollo)
+│   ├── 4.4-vista-procesos/      #   Fig. 4.13–4.17 (4+1: procesos)
+│   ├── 4.5-vista-fisica/        #   Fig. 4.18–4.19 (4+1: física)
+│   ├── 4.6-vista-escenarios/    #   Fig. 4.20–4.22 (4+1: escenarios)
+│   ├── 5.2-navegacion/          #   Fig. 5.1–5.3
+│   └── 6.1-modelo-datos/        #   Fig. 6.1–6.5
+├── figuras/                     # Imágenes PNG renderizadas (mismas carpetas y nombres)
 ├── bd/                          # Anexos B y C: base de datos
 │   ├── ddl_postgresql.sql       #   Esquema relacional (PostgreSQL 16+)
 │   ├── consultas_ejemplo.sql    #   Datos y consultas de ejemplo
@@ -45,12 +56,12 @@ El informe se evalúa con una rúbrica. La tabla "Matriz de trazabilidad" al ini
 
 ### Diagramas (PlantUML)
 
-Cada archivo de `diagramas/` es la fuente de una figura del informe. Para renderizarlos:
+Cada archivo `diagramas/<carpeta>/fig-X.YY-*.puml` es la fuente de la Figura X.YY del informe, y su imagen está en `figuras/<carpeta>/` con el mismo nombre. Las carpetas siguen la sección del informe donde se usa la figura y, en el capítulo 4, las vistas del modelo 4+1.
 
-- **VS Code:** instalar la extensión PlantUML y pulsar `Alt+D` sobre el archivo.
-- **Terminal:** `java -jar plantuml.jar diagramas/*.puml` genera un PNG junto a cada fuente.
+- **Regenerar todas las imágenes:** `diagramas/render.sh`. Usa `plantuml` si está instalado; si no, la imagen Docker `plantuml/plantuml:1.2026.9`.
+- **Vista previa en VS Code:** instalar la extensión PlantUML y pulsar `Alt+D` sobre el archivo.
 
-Si modificas un diagrama, vuelve a generar la figura y revisa que el texto del informe que la describe siga siendo correcto.
+Si modificas un diagrama, vuelve a ejecutar `render.sh` y revisa que el texto del informe que lo describe siga siendo correcto. Para mantenerlos legibles, cada diagrama muestra un solo tema; si crece demasiado, divídelo en una visión general y acercamientos.
 
 ### Bases de datos con Docker Compose (recomendado)
 
@@ -127,7 +138,7 @@ Abrir `anexos/prototipo/index.html` en el navegador. No requiere servidor ni cre
 
 ## Convenciones de trabajo
 
-- **Mantener la coherencia entre artefactos.** Un cambio en el modelo de datos afecta al diagrama ER (`09-modelo-er.puml`), a `ddl_postgresql.sql`, al diccionario de datos del cap. 6 y, si corresponde, a los casos de prueba del cap. 8.
+- **Mantener la coherencia entre artefactos.** Un cambio en el modelo de datos afecta al diagrama ER (`diagramas/6.1-modelo-datos/`), a `ddl_postgresql.sql`, al diccionario de datos del cap. 6 y, si corresponde, a los casos de prueba del cap. 8.
 - **Respetar los identificadores.** El informe referencia requisitos y casos por ID (RF, HU, CU, CP, IK, P-xx). No los renumeres sin actualizar todas las referencias cruzadas.
 - **No romper las rutas.** El informe cita archivos como `diagramas/…`, `bd/…` y `anexos/prototipo/…`. Si mueves o renombras alguno, actualiza la sección 11 (Anexos) y las menciones en el texto.
 - **Un cambio por rama.** Trabaja en una rama propia (por ejemplo `feat/cap7-amenazas` o `fix/ddl-indices`) y abre un Pull Request para que la otra persona revise antes de fusionar a `main`.
