@@ -771,7 +771,7 @@ El modelo tiene **16 tablas** en el esquema `sgp`, agrupadas por módulo:
 
 ### 6.3 Bases de implementación de la base de datos estructurada (2.1.4.9)
 
-En esta etapa se fijan los **principios y buenas prácticas** con que se construirá el esquema `sgp` en PostgreSQL 16; no se incluye código. El script se escribe como migraciones versionadas en A11 (Sprint 1) y se completa en cada Sprint junto al módulo que lo usa. Para la sintaxis y los ejemplos concretos, el equipo seguirá la documentación oficial citada en cada fila.
+En esta etapa se fijan los **principios y buenas prácticas** con que se construirá el esquema `sgp` en PostgreSQL 16; no se incluye código. El script se escribe como migraciones versionadas en A11 (Sprint 1) y se completa en cada Sprint junto al módulo que lo usa. Para la sintaxis y los ejemplos concretos, el equipo seguirá la documentación oficial citada en cada fila. El **Anexo B** contiene un borrador referencial del esquema (DDL y consultas de ejemplo), que sirve como punto de partida para A11 y se ajustará en las migraciones.
 
 **Tabla 6.2 — Principios de implementación en PostgreSQL**
 
@@ -805,7 +805,7 @@ En esta etapa se fijan los **principios y buenas prácticas** con que se constru
 
 ### 6.4 Bases de implementación de la base de datos no estructurada (2.1.4.9)
 
-MongoDB (base `sgp_docs`) almacena la información **de esquema variable, alto volumen de escritura y sin necesidad de *joins***. Igual que en 6.3, aquí se definen las decisiones de modelado y las buenas prácticas; la sintaxis concreta se toma de la documentación oficial de MongoDB.
+MongoDB (base `sgp_docs`) almacena la información **de esquema variable, alto volumen de escritura y sin necesidad de *joins***. Igual que en 6.3, aquí se definen las decisiones de modelado y las buenas prácticas; la sintaxis concreta se toma de la documentación oficial de MongoDB. El **Anexo C** contiene un borrador referencial de los validadores, los índices y el script de inicialización.
 
 | Colección | Propósito | Clave / identificador | Índices | Retención |
 |---|---|---|---|---|
@@ -1319,8 +1319,8 @@ World Wide Web Consortium. (2023). *Web Content Accessibility Guidelines (WCAG) 
 | Anexo | Contenido | Ubicación | Referenciado en |
 |---|---|---|---|
 | A | Fuentes PlantUML de todas las figuras | `diagramas/01…10-*.puml` | Caps. 4, 5 y 6 |
-| B | Script DDL de PostgreSQL y consultas de ejemplo | `bd/ddl_postgresql.sql`, `bd/consultas_ejemplo.sql` | 6.1–6.3 |
-| C | Validadores, índices y documentos de MongoDB + script de inicialización | `bd/mongo_esquemas.json`, `bd/mongo_init.js` | 6.4–6.5 |
+| B | Borrador referencial: script DDL de PostgreSQL y consultas de ejemplo | `bd/ddl_postgresql.sql`, `bd/consultas_ejemplo.sql` | 6.1–6.3 |
+| C | Borrador referencial: validadores, índices y documentos de MongoDB + script de inicialización | `bd/mongo_esquemas.json`, `bd/mongo_init.js` | 6.4–6.5 |
 | D | Prototipo navegable (HTML/CSS) y capturas v1 → v2 | `anexos/prototipo/index.html` | 5.3–5.5 |
 | E | Lista de cotejo de seguridad para PR y pruebas (ASVS L2, extracto) | Este documento, abajo | 7.5, 8.6, 8.9 |
 | F | Reportes de ejecución de pruebas (Vitest, k6, ZAP, Lighthouse, Playwright) | [Adjuntar tras la ejecución] | 8.8 |
