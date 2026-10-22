@@ -24,7 +24,7 @@
 | 2.1.3.6 | 5.4 | Guía de estilo, contraste WCAG 2.2 AA y estrategia responsive | 5 |
 | 2.1.3.7 | 5.5 | Registro de retroalimentación y cambios v1 → v2 | 5 |
 | 2.1.4.8 | 6.1 y 6.2 | Modelo ER, diccionario de datos y reglas de integridad | 10 |
-| 2.1.4.9 | 6.3 a 6.5 | DDL PostgreSQL, validadores MongoDB e integración por outbox | 5 |
+| 2.1.4.9 | 6.3 a 6.5 | Principios de implementación en PostgreSQL y MongoDB con documentación de referencia, criterios de verificación e integración por outbox | 5 |
 | 2.1.5.10 | 7.1 a 7.3 | RBAC, política de autenticación y política de autorización | 10 |
 | 2.1.5.11 | 7.4 | Modelo de amenazas STRIDE/OWASP con mitigación y verificación | 10 |
 | 2.1.5.12 | 7.5 a 7.7 | Estándares OWASP/ASVS, extractos de código seguro y marco normativo chileno con ISO, CIS y NIST | 10 |
@@ -761,7 +761,7 @@ El modelo tiene **16 tablas** en el esquema `sgp`, agrupadas por módulo:
 | Regla | Mecanismo | Verificación |
 |---|---|---|
 | R1. `actualizado_en` siempre vigente | Trigger `fn_set_actualizado_en` | — |
-| R2. Solo transiciones de estado válidas en `etapa_orden`, con incremento de `version` | Trigger `trg_etapa_transicion` (lanza `check_violation`) | CP-02, consulta 5 del Anexo B |
+| R2. Solo transiciones de estado válidas en `etapa_orden`, con incremento de `version` | Trigger `trg_etapa_transicion` (lanza `check_violation`) | CP-02 |
 | R3. Cada movimiento actualiza el stock; si queda ≤ mínimo, se crea **una** alerta automática | Trigger `trg_movimiento_insumo` + índice único parcial + `ON CONFLICT DO NOTHING` | CP-14, consulta 6 |
 | R4. Stock nunca negativo | `CHECK (stock_actual >= 0)` aborta la transacción completa | CP-14 |
 | R5. Bloqueo con motivo; terminada con fecha | `ck_etapa_bloqueo`, `ck_etapa_terminada` | CP-01 |
@@ -769,107 +769,70 @@ El modelo tiene **16 tablas** en el esquema `sgp`, agrupadas por módulo:
 | R7. Registros inmutables (kardex, outbox) | `REVOKE UPDATE, DELETE` al rol `sgp_app` | CP-27 (revisión de privilegios) |
 | R8. Mínimo privilegio en la conexión | Roles `sgp_app` (DML) y `sgp_relay` (solo `procesado_en` del outbox); la aplicación no usa el superusuario | Checklist ASVS (CP-32) |
 
-### 6.3 Evidencia funcional de base de datos estructurada (2.1.4.9)
+### 6.3 Bases de implementación de la base de datos estructurada (2.1.4.9)
 
-El script completo está en el **Anexo B** (`bd/ddl_postgresql.sql`, 16 tablas, 3 funciones, 4 triggers, 1 vista, roles y datos semilla) junto con `bd/consultas_ejemplo.sql`. Se ejecutaron sobre PostgreSQL 16 en un contenedor Docker (`postgres:16-alpine`) con `psql -v ON_ERROR_STOP=1`, sin errores. Extracto central:
+En esta etapa se fijan los **principios y buenas prácticas** con que se construirá el esquema `sgp` en PostgreSQL 16; no se incluye código. El script se escribe como migraciones versionadas en A11 (Sprint 1) y se completa en cada Sprint junto al módulo que lo usa. Para la sintaxis y los ejemplos concretos, el equipo seguirá la documentación oficial citada en cada fila.
 
-```sql
-CREATE TABLE etapa_orden (
-    id                      UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
-    orden_id                UUID         NOT NULL REFERENCES orden_trabajo(id) ON DELETE CASCADE,
-    plantilla_etapa_id      INTEGER      REFERENCES plantilla_etapa(id) ON DELETE SET NULL,
-    secuencia               SMALLINT     NOT NULL CHECK (secuencia > 0),
-    area_id                 SMALLINT     NOT NULL REFERENCES area(id) ON DELETE RESTRICT,
-    responsable_id          UUID         REFERENCES usuario(id) ON DELETE SET NULL,
-    estado                  VARCHAR(12)  NOT NULL DEFAULT 'PENDIENTE'
-                            CHECK (estado IN ('PENDIENTE','DISPONIBLE','EN_CURSO','BLOQUEADA','TERMINADA','OMITIDA')),
-    motivo_bloqueo          VARCHAR(255),
-    version                 INTEGER      NOT NULL DEFAULT 1,
-    -- (columnas restantes en el Anexo B)
-    CONSTRAINT uq_etapa_secuencia UNIQUE (orden_id, secuencia),
-    CONSTRAINT ck_etapa_bloqueo  CHECK ((estado = 'BLOQUEADA') = (motivo_bloqueo IS NOT NULL))
-);
+**Tabla 6.2 — Principios de implementación en PostgreSQL**
 
-CREATE FUNCTION fn_aplicar_movimiento_insumo() RETURNS trigger LANGUAGE plpgsql AS $$
-DECLARE v_stock NUMERIC(12,2); v_minimo NUMERIC(12,2);
-BEGIN
-    UPDATE insumo SET stock_actual = stock_actual + NEW.cantidad
-     WHERE id = NEW.insumo_id
-    RETURNING stock_actual, stock_minimo INTO v_stock, v_minimo;
-    IF v_stock <= v_minimo THEN
-        INSERT INTO alerta_insumo (insumo_id, etapa_orden_id, origen, cantidad_faltante)
-        VALUES (NEW.insumo_id, NEW.etapa_orden_id, 'AUTOMATICA', GREATEST(v_minimo - v_stock, 0.01))
-        ON CONFLICT (insumo_id) WHERE origen = 'AUTOMATICA' AND estado <> 'CERRADA' DO NOTHING;
-    END IF;
-    RETURN NEW;
-END $$;
-```
+| Principio | Qué se establece | Reglas del modelo que lo aplican | Documentación de referencia |
+|---|---|---|---|
+| Integridad declarativa primero | Las reglas que se pueden expresar como restricción (`PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `CHECK`, `NOT NULL`) se declaran en el esquema y no solo en la aplicación. La base de datos rechaza un dato inválido venga de donde venga | R4, R5, R6 y las políticas `ON DELETE` (6.2) | PostgreSQL 16, *Constraints*: https://www.postgresql.org/docs/16/ddl-constraints.html |
+| Transacciones ACID por caso de uso | Cada caso de uso que modifica varias tablas (p. ej., terminar una etapa) se ejecuta en **una** transacción: o se aplican todos los cambios o ninguno. Se usa el nivel de aislamiento por defecto (*Read Committed*) más bloqueo explícito donde hay competencia | CU-06, outbox (6.5) | *Transaction Isolation*: https://www.postgresql.org/docs/16/transaction-iso.html |
+| Control de concurrencia | Bloqueo pesimista de fila (`SELECT … FOR UPDATE`) sobre la etapa que se modifica, combinado con concurrencia optimista mediante la columna `version`. Así, dos operarios que actúan a la vez producen una sola transición | R2, CP-19 | *Explicit Locking*: https://www.postgresql.org/docs/16/explicit-locking.html |
+| Triggers solo para invariantes críticas | Se reservan para reglas que deben cumplirse ante cualquier cliente y que una restricción no puede expresar: transiciones de estado, mantenimiento del stock derivado y fecha de actualización. La lógica de negocio general permanece en la capa de servicio | R1, R2, R3 | *Trigger Functions* (PL/pgSQL): https://www.postgresql.org/docs/16/plpgsql-trigger.html |
+| Operaciones idempotentes | Las inserciones que pueden repetirse (alerta automática de insumo) usan una restricción única y la cláusula `ON CONFLICT`, de modo que un reintento o una carrera no duplican el registro | R3 | *INSERT — ON CONFLICT*: https://www.postgresql.org/docs/16/sql-insert.html |
+| Índices diseñados por consulta | Cada índice se justifica por una consulta frecuente (Mi Trabajo, panel, kardex). Los índices **parciales** cubren solo el subconjunto relevante (alertas abiertas, outbox pendiente) y además garantizan unicidad condicional. Se verifican con `EXPLAIN` en A26 | Índices de 6.1 | *Partial Indexes*: https://www.postgresql.org/docs/16/indexes-partial.html; *Using EXPLAIN*: https://www.postgresql.org/docs/16/using-explain.html |
+| JSONB acotado | Solo los atributos variables por tipo de trabajo van en `JSONB`; todo atributo por el que se filtra o se relaciona es una columna tipada | `orden_trabajo.especificaciones` | *JSON Types*: https://www.postgresql.org/docs/16/datatype-json.html |
+| Mínimo privilegio | La aplicación se conecta con un rol sin privilegios de administración ni de DDL. Los registros históricos (kardex, outbox) no admiten `UPDATE` ni `DELETE` para ese rol | R7, R8 | *Privileges*: https://www.postgresql.org/docs/16/ddl-priv.html; *Database Roles*: https://www.postgresql.org/docs/16/user-manag.html |
+| Esquema versionado | Todo cambio de estructura es una migración revisada en PR y aplicada por el pipeline, nunca un cambio manual en producción. Cada migración se prueba primero en staging | A10, A11 | Documentación de `node-pg-migrate`: https://salsita.github.io/node-pg-migrate/ |
+| Respaldo y recuperación | Se usa la recuperación a un punto en el tiempo (PITR) del proveedor gestionado y se prueba una restauración antes del piloto | RNF-05, A29 | *Continuous Archiving and PITR*: https://www.postgresql.org/docs/16/continuous-archiving.html |
 
-**Resultados observados al ejecutar `consultas_ejemplo.sql`:**
+**Criterios de verificación planificados.** La evidencia funcional se genera durante la construcción, sobre la base de datos de staging, y se adjunta como captura (Figura 6.2) y como reporte de pruebas (Anexo F):
 
-| # | Operación | Resultado |
+| Comportamiento esperado | Regla | Caso de prueba |
 |---|---|---|
-| 2 | Registro de `OT-2026-0001` y generación de 6 etapas desde la plantilla "Uniforme deportivo sublimado" | 1 OT, 6 etapas, 3 requerimientos de insumo y 1 evento outbox insertados en una transacción |
-| 3 | Consulta "Mi Trabajo" del operario | 2 filas: "Impresión de transfer" y "Sublimado", con área e instrucciones |
-| 4 | Terminar la etapa 1 y habilitar la 2 con `FOR UPDATE` | Etapa 1 TERMINADA, etapa 2 DISPONIBLE, OT EN_PRODUCCION |
-| 5 | Transición inválida PENDIENTE → TERMINADA | `NOTICE: OK: transición inválida rechazada (Transición de etapa no permitida: PENDIENTE -> TERMINADA)` |
-| 6 | Dos consumos de papel de sublimación que dejan el stock en 1,00 (mínimo 2,00) | `alertas_abiertas = 1` (no se duplica la alerta) |
-| 7 | Eliminar un insumo con movimientos | `NOTICE: OK: eliminación bloqueada por integridad referencial` |
-| 8 | Vista `v_panel_ordenes` | OT-2026-0001, EN_PRODUCCION, etapa actual "Impresión de transfer", avance 17 %, no atrasada |
-| 9 | Faltantes proyectados | PAP-SUB-RL: stock 1,00, requerido pendiente 0,60, saldo 0,40 (bajo el mínimo) |
+| Una transición inválida (p. ej., PENDIENTE → TERMINADA) es rechazada por la base de datos | R2 | CP-02 |
+| Terminar una etapa actualiza la etapa, habilita la siguiente y registra el evento outbox en una sola transacción | Transacción por caso de uso | CP-01, CP-11 |
+| Un consumo que dejaría stock negativo aborta la transacción completa | R4 | CP-14 |
+| Varios consumos bajo el mínimo generan **una sola** alerta automática abierta | R3 | CP-14 |
+| No se puede eliminar un insumo con movimientos | `RESTRICT` | CP-14 |
+| Quien sube un diseño no puede aprobarlo | R6 | CP-16 |
+| Dos terminaciones simultáneas de la misma etapa producen una sola transición | Concurrencia | CP-19 |
+| El rol de la aplicación no puede modificar el kardex ni el outbox | R7, R8 | CP-27, CP-32 |
 
-> [Insertar captura de la terminal o de pgAdmin con estas salidas como Figura 6.2.]
+> [Insertar captura de la ejecución en staging como Figura 6.2, una vez completado A11.]
 
-### 6.4 Evidencia funcional de base de datos no estructurada (2.1.4.9)
+### 6.4 Bases de implementación de la base de datos no estructurada (2.1.4.9)
 
-MongoDB (base `sgp_docs`) almacena la información **de esquema variable, alto volumen de escritura y sin necesidad de *joins***. Cada colección tiene un validador `$jsonSchema` con `validationAction: "error"`, de modo que el esquema es flexible pero no anárquico. Las definiciones completas, los índices y los documentos de ejemplo están en el **Anexo C** (`bd/mongo_esquemas.json`). El script `bd/mongo_init.js` (mongosh) los aplica.
+MongoDB (base `sgp_docs`) almacena la información **de esquema variable, alto volumen de escritura y sin necesidad de *joins***. Igual que en 6.3, aquí se definen las decisiones de modelado y las buenas prácticas; la sintaxis concreta se toma de la documentación oficial de MongoDB.
 
 | Colección | Propósito | Clave / identificador | Índices | Retención |
 |---|---|---|---|---|
-| `bitacora_eventos` | Auditoría inmutable (RF-12) | `_id = "evt-<outbox_evento.id>"` (idempotente) | `{orden_id, ts}`, `{actor.usuario_id, ts}`, `{tipo, ts}` | TTL 24 meses (RNF-05) |
-| `evidencias_etapa` | Fotos, notas y versiones de diseño con metadatos libres por tipo de trabajo (RF-07, RF-08) | `ObjectId` (referenciado por `aprobacion_diseno.evidencia_ref`) | `{orden_id, creado_en}`, `{etapa_orden_id}`, `{archivo.sha256}` | Indefinida |
-| `notificaciones` | Bandeja in-app y estado del push | `"ntf-<outbox_id>-<destinatario>"` | `{destinatario_id, leida, creada_en}` | TTL 90 días |
+| `bitacora_eventos` | Auditoría inmutable (RF-12) | Identificador determinista derivado del `id` de `outbox_evento` (idempotente) | Por orden y fecha; por actor y fecha; por tipo y fecha | TTL 24 meses (RNF-05) |
+| `evidencias_etapa` | Fotos, notas y versiones de diseño con metadatos libres por tipo de trabajo (RF-07, RF-08) | `ObjectId` (referenciado por `aprobacion_diseno.evidencia_ref`) | Por orden y fecha; por etapa; por hash del archivo | Indefinida |
+| `notificaciones` | Bandeja in-app y estado del push | Identificador determinista por evento y destinatario | Por destinatario, estado de lectura y fecha | TTL 90 días |
 
-**Documento de ejemplo (`bitacora_eventos`):**
+**Tabla 6.3 — Principios de implementación en MongoDB**
 
-```json
-{
-  "_id": "evt-1842",
-  "ts": { "$date": "2026-11-24T14:32:10.120Z" },
-  "tipo": "ETAPA_TERMINADA",
-  "agregado": { "tipo": "etapa_orden", "id": "891b7e01-85bc-42ef-9c23-25b9396704f0" },
-  "orden_id": "10000000-0000-0000-0000-000000000001",
-  "actor": { "usuario_id": "00000000-0000-0000-0000-000000000002", "roles": ["OPERARIO"], "ip": "190.22.10.5" },
-  "payload": { "estado_anterior": "EN_CURSO", "estado_nuevo": "TERMINADA",
-               "siguiente_etapa": "Sublimado", "siguiente_area": "Sublimación" },
-  "request_id": "5f0c2a8e-7b1d-4c39-9a51-0d1e2f3a4b5c"
-}
-```
+| Principio | Qué se establece | Documentación de referencia |
+|---|---|---|
+| Modelar según los patrones de acceso | Se **incrusta** lo que se lee siempre junto (actor, estado anterior y nuevo dentro del evento) y se **referencia** lo que tiene ciclo de vida propio (la OT y la etapa, que viven en PostgreSQL). Cada documento se diseña para responder a una pantalla concreta sin *joins* | MongoDB Manual, *Data Modeling*: https://www.mongodb.com/docs/manual/data-modeling/ |
+| Esquema flexible, pero validado | Cada colección tiene un validador `$jsonSchema` en modo de rechazo: los campos obligatorios, los tipos y los valores permitidos se controlan en el servidor, mientras los metadatos variables quedan abiertos | *Schema Validation*: https://www.mongodb.com/docs/manual/core/schema-validation/ |
+| Índices por consulta | Cada índice compuesto responde a una consulta de la aplicación y sigue la guía *Equality-Sort-Range* (primero los campos de igualdad, luego el de orden y al final los de rango) | *Indexes*: https://www.mongodb.com/docs/manual/indexes/ |
+| Retención automática | La caducidad de la bitácora y de las notificaciones se implementa con índices TTL, sin procesos de limpieza manuales | *TTL Indexes*: https://www.mongodb.com/docs/manual/core/index-ttl/ |
+| Escrituras idempotentes | El relay escribe con *upsert* sobre un identificador determinista: reintentar el mismo evento no crea un duplicado | *updateOne* (opción `upsert`): https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/ |
+| Durabilidad confirmada | Las escrituras de auditoría usan *write concern* `majority`, para que el relay marque un evento como procesado solo cuando está replicado | *Write Concern*: https://www.mongodb.com/docs/manual/reference/write-concern/ |
+| Inmutabilidad de la auditoría | Solo el usuario de base de datos del relay tiene permiso de escritura sobre `bitacora_eventos`; el usuario de la API solo puede leerla. Ninguno tiene permiso de borrado | *Security Checklist*: https://www.mongodb.com/docs/manual/administration/security-checklist/ |
 
-**Operaciones de almacenamiento y consulta (extracto de `mongo_init.js`):**
+**Criterios de verificación planificados** (se ejecutan en A18 y A21, con captura como Figura 6.3):
 
-```javascript
-// Escritura idempotente del relay: reintentar el mismo evento no lo duplica
-db.bitacora_eventos.updateOne({ _id: evento._id }, { $setOnInsert: evento }, { upsert: true });
+- Las tres colecciones existen con su validador e índices.
+- Un documento que no cumple el validador (p. ej., un tipo de evento inexistente) es rechazado.
+- Reintentar la publicación de un evento ya procesado no crea un segundo documento (prueba de integración del relay, A23).
+- Las consultas de la bandeja y del historial de una orden usan su índice, verificado con `explain`.
 
-// Historial de una orden para la vista "Detalle de orden"
-db.bitacora_eventos.find({ orden_id: ordenId }).sort({ ts: -1 });
-
-// Resumen de evidencias por tipo
-db.evidencias_etapa.aggregate([
-  { $match: { orden_id: ordenId } },
-  { $group: { _id: "$tipo", total: { $sum: 1 }, bytes: { $sum: "$archivo.bytes" } } }
-]);
-```
-
-**Resultados observados** (contenedor Docker con MongoDB; se usó la imagen 9.0 porque la imagen 8.0 no arranca en el kernel Linux del equipo de desarrollo, y la API utilizada es la misma):
-
-- Las 3 colecciones se crearon con validador, índices y documento de ejemplo.
-- El reintento de `evt-1842` insertó 0 documentos (idempotencia).
-- Un evento con tipo inexistente fue **rechazado por el validador** (código 121, *DocumentValidationFailure*).
-- La consulta de la bandeja se resolvió con el índice `ix_bandeja`.
-
-> [Insertar captura de la terminal o de MongoDB Compass como Figura 6.3.]
+> [Insertar captura de la ejecución en staging como Figura 6.3, una vez completados A18 y A21.]
 
 ### 6.5 Integración entre datos estructurados y no estructurados (2.1.4.9)
 
@@ -885,7 +848,7 @@ db.evidencias_etapa.aggregate([
 | Versiones de diseño | `aprobacion_diseno` (estado, versión, quién aprueba) | `evidencias_etapa` (tipo DISENO) + archivo en R2 | `aprobacion_diseno.evidencia_ref` = `ObjectId` del documento; el documento guarda `object_key` y `sha256` del archivo |
 | Evidencias de etapa | `etapa_orden.id` | `evidencias_etapa.etapa_orden_id` | Referencia lógica por UUID; la API valida que la etapa exista y pertenezca al actor antes de emitir la URL prefirmada |
 | Notificaciones | Evento outbox (ETAPA_TERMINADA, ALERTA_INSUMO_CREADA) | `notificaciones` | El relay resuelve los destinatarios (responsable de la siguiente etapa o usuarios con rol Encargada) y crea un documento por destinatario |
-| Vista "Detalle de orden" | OT, etapas y requerimientos (consulta SQL) | Historial y evidencias (consulta Mongo por `orden_id`) | Composición en la capa de servicio (*API composition*): dos consultas en paralelo con `Promise.all` |
+| Vista "Detalle de orden" | OT, etapas y requerimientos (consulta SQL) | Historial y evidencias (consulta Mongo por `orden_id`) | Composición en la capa de servicio (*API composition*): dos consultas ejecutadas en paralelo |
 | Analítica futura de tiempos | `etapa_orden.iniciada_en / terminada_en` | `bitacora_eventos` (eventos ETAPA_*) | Agregaciones en Mongo sin cargar la BD transaccional |
 
 **Regla de propiedad del dato:** PostgreSQL es la **fuente de verdad** de todo estado de negocio. MongoDB nunca se usa para decidir una transición; solo registra lo ocurrido y almacena contenido variable. Por eso la eventual demora del relay (≤ 5 s) no afecta la consistencia operativa.
@@ -1566,7 +1529,7 @@ Los nombres de módulos, entidades y roles son idénticos en todas las vistas.
 
 **Pregunta 2 (Base de datos). Usan PostgreSQL y MongoDB. ¿Cómo garantizan la consistencia si no pueden hacer una transacción que abarque ambas? ¿Qué pasa si MongoDB está caído cuando un operario termina una etapa?**
 
-*Respuesta:* Se aplica el patrón **outbox transaccional**. El cambio de negocio (etapa terminada, consumo, siguiente etapa disponible) y el evento de auditoría se escriben en la **misma transacción ACID de PostgreSQL**, en la tabla `outbox_evento`: o se guardan ambos o ninguno. El relay publica luego en MongoDB con un `_id` determinista (`evt-<id>`) mediante un *upsert*. Esto da entrega **al menos una vez** y efecto **exactamente una vez**, como se observó en la evidencia de 6.4, donde el reintento insertó 0 documentos.
+*Respuesta:* Se aplica el patrón **outbox transaccional**. El cambio de negocio (etapa terminada, consumo, siguiente etapa disponible) y el evento de auditoría se escriben en la **misma transacción ACID de PostgreSQL**, en la tabla `outbox_evento`: o se guardan ambos o ninguno. El relay publica luego en MongoDB con un `_id` determinista (`evt-<id>`) mediante un *upsert*. Esto da entrega **al menos una vez** y efecto **exactamente una vez**. Esto se verificará con la prueba de reintento definida en 6.4: publicar dos veces el mismo evento debe dejar un solo documento.
 
 Si MongoDB está caído, la operación del operario **no falla**: el evento queda pendiente (`procesado_en IS NULL`) y se reintenta. Tras 10 intentos fallidos se alerta en Sentry. Esto es aceptable porque PostgreSQL es la única fuente de verdad del estado de negocio y MongoDB nunca decide transiciones; solo registra lo ocurrido.
 
@@ -1576,7 +1539,7 @@ Se descartó la doble escritura desde la API porque una caída entre ambas escri
 
 *Respuesta:* Es **defensa en profundidad** sobre las reglas cuya violación tendría más impacto en el negocio. La aplicación valida primero (`puedeTransicionar`) para dar mensajes claros al usuario. La base de datos garantiza la regla **ante cualquier cliente**: un error en una versión futura, un script de migración, una carga desde el Excel o una consulta manual de soporte.
 
-- El trigger `trg_etapa_transicion` rechaza, por ejemplo, PENDIENTE→TERMINADA (consulta 5 del Anexo B).
+- El trigger `trg_etapa_transicion` rechaza, por ejemplo, PENDIENTE→TERMINADA (CP-02).
 - `CHECK (stock_actual >= 0)` aborta la transacción **completa** si un consumo deja stock negativo, de modo que no queda una etapa terminada con el kardex inconsistente (CP-14).
 - El índice único parcial `ux_alerta_auto_abierta` con `ON CONFLICT DO NOTHING` garantiza **una** alerta automática abierta por insumo aun con consumos concurrentes, algo que la aplicación no puede asegurar sin bloqueos adicionales.
 
