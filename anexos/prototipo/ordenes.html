@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Órdenes · SGP</title>
+<link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
+</head>
+<body class="app" data-nav="ordenes" data-roles="VENDEDOR ENCARGADA_PRODUCCION ADMINISTRADOR" data-titulo="Órdenes">
+<main>
+  <header class="cabecera fila">
+    <div><h1>Órdenes de trabajo</h1><p class="meta">6 órdenes activas o por entregar</p></div>
+    <a class="btn" href="ordenes-nueva.html"><span data-i="mas"></span>Nueva orden</a>
+  </header>
+
+  <div class="aviso info" data-rol="VENDEDOR"><span data-i="campana"></span><div><p>Tienes un diseño listo para presentar al cliente.</p><p class="meta">OT-2026-0003 · Letrero publicitario · versión 2. <a href="aprobacion-diseno.html">Registrar respuesta</a></p></div></div>
+
+  <form class="filtros" role="search" onsubmit="return false">
+    <div><label for="q">Buscar</label><input id="q" type="search" placeholder="Código de OT o cliente"></div>
+    <div><label for="est">Estado</label><select id="est"><option>Todas las activas</option><option>Registrada</option><option>En diseño</option><option>En producción</option><option>Detenida</option><option>Terminada</option><option>Entregada</option></select></div>
+  </form>
+
+  <div class="tabla">
+    <table class="responsive">
+      <thead><tr><th>OT</th><th>Trabajo</th><th>Cliente</th><th>Compromiso</th><th>Estado</th><th><span class="sr">Acción</span></th></tr></thead>
+      <tbody>
+        <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0003</a></td><td data-label="Trabajo">Letrero publicitario ×1</td><td data-label="Cliente">Junta de Vecinos Villa Sur</td><td data-label="Compromiso">03-12-2026</td><td data-label="Estado"><span class="chip t-adv"><span data-i="reloj"></span>Diseño por responder</span></td><td class="acc"><a class="btn chico" href="aprobacion-diseno.html">Registrar respuesta</a></td></tr>
+        <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0006</a></td><td data-label="Trabajo">Lienzo publicitario ×2</td><td data-label="Cliente">Feria Costumbrista Comunal</td><td data-label="Compromiso">21-11-2026</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Terminada</span></td><td class="acc"><button class="btn secundario chico" type="button"><span data-i="camion"></span>Marcar entregada</button></td></tr>
+        <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0001</a></td><td data-label="Trabajo">Camisetas sublimadas ×30</td><td data-label="Cliente">Club Deportivo Los Aromos</td><td data-label="Compromiso">26-11-2026</td><td data-label="Estado"><span class="chip t-info"><span data-i="flecha"></span>En producción</span></td><td class="acc"><a class="btn texto chico" href="detalle-orden.html">Ver</a></td></tr>
+        <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0002</a></td><td data-label="Trabajo">Polerones de generación ×42</td><td data-label="Cliente">Colegio San Esteban</td><td data-label="Compromiso">14-11-2026</td><td data-label="Estado"><span class="chips"><span class="chip t-info"><span data-i="flecha"></span>En producción</span><span class="chip t-peligro"><span data-i="reloj"></span>Atrasada</span></span></td><td class="acc"><a class="btn texto chico" href="detalle-orden.html">Ver</a></td></tr>
+        <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0004</a></td><td data-label="Trabajo">Uniformes sublimados ×18</td><td data-label="Cliente">Escuela de Fútbol Los Pinos</td><td data-label="Compromiso">15-11-2026</td><td data-label="Estado"><span class="chips"><span class="chip t-adv"><span data-i="alerta"></span>Detenida</span><span class="chip t-peligro"><span data-i="reloj"></span>Atrasada</span></span></td><td class="acc"><a class="btn texto chico" href="detalle-orden.html">Ver</a></td></tr>
+        <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0005</a></td><td data-label="Trabajo">Poleras estampadas ×50</td><td data-label="Cliente">Fundación Raíces</td><td data-label="Compromiso">25-11-2026</td><td data-label="Estado"><span class="chips"><span class="chip t-acento"><span data-i="sube"></span>Urgente</span><span class="chip"><span data-i="lapiz"></span>En diseño</span></span></td><td class="acc"><a class="btn texto chico" href="detalle-orden.html">Ver</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <aside class="proto"><strong>Solo prototipo.</strong> P-04a · ruta <code>/ordenes</code> · Fig. 5.2 (inicio del Vendedor) y 5.3 · Los filtros son visuales. Estados de la OT según el modelo de datos (REGISTRADA, EN_DISENO, EN_PRODUCCION, DETENIDA, TERMINADA, ENTREGADA).</aside>
+</main>
+</body>
+</html>

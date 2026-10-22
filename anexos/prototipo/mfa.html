@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verificación en dos pasos · SGP</title>
+<link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
+</head>
+<body class="acceso">
+<main class="acceso-caja" style="padding:0">
+  <div class="marca"><span data-i="capas"></span>SGP · Gestión productiva</div>
+  <form class="card" action="panel.html">
+    <div class="fila" style="justify-content:flex-start"><span data-i="escudo"></span><h1 style="margin:0">Verificación en dos pasos</h1></div>
+    <p class="meta" style="margin-top:8px">Tu rol requiere un segundo factor. Abre tu app de autenticación e ingresa el código de 6 dígitos.</p>
+    <label for="codigo">Código de verificación</label>
+    <input id="codigo" class="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="6" value="482913" aria-describedby="codigo-ayuda">
+    <p id="codigo-ayuda" class="ayuda">El código cambia cada 30 segundos.</p>
+    <div class="acciones una"><button class="btn bloque grande" type="submit">Verificar</button></div>
+    <p class="ayuda">¿No tienes tu teléfono? <a href="panel.html">Usar un código de respaldo</a></p>
+  </form>
+  <aside class="proto">P-01b · ruta <code>/login/mfa</code> · Fig. 5.1 · Solo Encargada de Producción y Administrador (sección 7.2).</aside>
+</main>
+</body>
+</html>

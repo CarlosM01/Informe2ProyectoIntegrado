@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avisos · SGP</title>
+<link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
+</head>
+<body class="app" data-nav="avisos" data-titulo="Avisos">
+<main>
+  <header class="cabecera fila">
+    <div><h1>Avisos</h1><p class="meta">2 sin leer</p></div>
+    <button class="btn texto chico" type="button">Marcar todo como leído</button>
+  </header>
+
+  <div data-rol="OPERARIO">
+    <article class="card enlace destacada">
+      <div class="fila"><h2 class="h3"><a class="cubre" href="detalle-orden.html">Te toca: Impresión de transfer</a></h2><span class="meta">08:10</span></div>
+      <p class="meta" style="margin-top:4px">OT-2026-0001 · Diseño aprobado, la etapa quedó disponible para ti.</p>
+    </article>
+    <article class="card enlace destacada">
+      <div class="fila"><h2 class="h3"><a class="cubre" href="insumos.html">Llegó papel de sublimación</a></h2><span class="meta">Ayer 17:45</span></div>
+      <p class="meta" style="margin-top:4px">La Encargada registró 4 rollos. Tu aviso de faltante quedó cerrado.</p>
+    </article>
+    <article class="card">
+      <div class="fila"><h2 class="h3">Etapa terminada por Ana</h2><span class="meta">Ayer 12:02</span></div>
+      <p class="meta" style="margin-top:4px">OT-2026-0002 · Sublimado terminado; sigue Bordado (Rosa).</p>
+    </article>
+  </div>
+
+  <div data-rol="DISENADOR">
+    <article class="card enlace destacada">
+      <div class="fila"><h2 class="h3"><a class="cubre" href="mi-trabajo.html">Nueva etapa de diseño: OT-2026-0005</a></h2><span class="meta">09:40</span></div>
+      <p class="meta" style="margin-top:4px">Poleras estampadas · Urgente · compromiso 25-11-2026.</p>
+    </article>
+    <article class="card enlace destacada">
+      <div class="fila"><h2 class="h3"><a class="cubre" href="aprobacion-diseno.html">El cliente pidió cambios: OT-2026-0003</a></h2><span class="meta">18-11</span></div>
+      <p class="meta" style="margin-top:4px">«El logo debe ir arriba a la izquierda y la fecha más grande».</p>
+    </article>
+  </div>
+
+  <div data-rol="VENDEDOR ENCARGADA_PRODUCCION ADMINISTRADOR">
+    <article class="card enlace destacada">
+      <div class="fila"><h2 class="h3"><a class="cubre" href="aprobacion-diseno.html">Diseño listo para presentar: OT-2026-0003</a></h2><span class="meta">Ayer 18:05</span></div>
+      <p class="meta" style="margin-top:4px">Camila subió la versión 2. Muéstrala al cliente y registra su respuesta.</p>
+    </article>
+    <article class="card enlace destacada">
+      <div class="fila"><h2 class="h3"><a class="cubre" href="ordenes.html">Orden terminada: OT-2026-0006</a></h2><span class="meta">Ayer 15:30</span></div>
+      <p class="meta" style="margin-top:4px">Lienzo publicitario · lista para entregar al cliente.</p>
+    </article>
+  </div>
+
+  <aside class="proto"><strong>Solo prototipo.</strong> P-11 · ruta <code>/notificaciones</code> · Fig. 5.2 · «Notificar siguiente responsable» (Fig. 4.21 y 4.22). Los avisos sin leer tienen borde destacado.</aside>
+</main>
+</body>
+</html>

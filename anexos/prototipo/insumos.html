@@ -3,55 +3,76 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SGP-Kotoduo · Insumos</title>
+<title>Insumos · SGP</title>
 <link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
 </head>
-<body>
-<header class="topbar"><span class="marca">SGP-Kotoduo</span><a href="index.html">Salir</a></header>
-<nav class="nav" aria-label="Principal">
-  <a href="panel.html"><span class="ico">📊</span>Panel</a>
-  <a href="plantillas.html"><span class="ico">🧩</span>Plantillas</a>
-  <a href="insumos.html" aria-current="page"><span class="ico">📦</span>Insumos</a>
-  <a href="ordenes-nueva.html"><span class="ico">➕</span>Nueva OT</a>
-</nav>
+<body class="app" data-nav="insumos" data-titulo="Insumos">
 <main>
-  <h1>Insumos y alertas</h1>
-  <p class="meta">P-08 · Encargada de Producción (los operarios ven el stock en modo lectura)</p>
+  <header class="cabecera">
+    <h1>Insumos</h1>
+    <p class="meta" data-rol="OPERARIO DISENADOR VENDEDOR">Consulta de stock. Para avisar que algo se acabó, usa «Reportar faltante» dentro de tu etapa.</p>
+    <p class="meta" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR">Stock, movimientos y alertas. Cerrar una alerta exige registrar el ingreso o un ajuste.</p>
+  </header>
 
-  <h2>Alertas abiertas</h2>
-  <article class="card" id="alerta">
-    <div class="fila"><strong>Papel sublimación rollo 1,6 m</strong><span class="chip bloqueada">⚠ Automática</span></div>
-    <p>Stock 1,00 rollo · mínimo 2,00 · requerido por OT activas: 0,60 · <strong>saldo proyectado 0,40</strong></p>
-    <p class="meta">Afecta: OT-2026-0001 (Impresión de transfer) · creada hoy 14:32</p>
-    <div class="acciones"><button class="btn" onclick="document.getElementById('dlgIngreso').showModal()">Registrar ingreso</button><button class="btn secundario">Marcar en gestión</button></div>
-  </article>
-  <div id="ok" class="aviso exito" role="status" hidden>✔ Ingreso registrado: stock 5,00 rollos. Alerta cerrada.</div>
+  <section id="alertas" aria-labelledby="t-alertas" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR">
+    <div class="seccion-titulo"><h2 id="t-alertas" style="margin-top:0">Alertas abiertas</h2><span class="meta">2</span></div>
+    <div class="dos-col">
+      <article class="card" id="alerta1">
+        <div class="fila"><h3>Papel sublimación rollo 1,6 m</h3><span id="chip1" class="chip t-peligro"><span data-i="alerta"></span>Abierta</span></div>
+        <p style="margin-top:6px">Stock 1,00 rollo · mínimo 2,00 · requerido por órdenes activas 0,60</p>
+        <p><strong>Saldo proyectado: 0,40 rollo</strong></p>
+        <p class="meta">Automática · afecta a OT-2026-0001 (Impresión de transfer) · hoy 09:32</p>
+        <div class="acciones"><button class="btn" type="button" onclick="document.getElementById('dlgIngreso').showModal()">Registrar ingreso</button><button class="btn secundario" type="button" id="gestion1">Marcar en gestión</button></div>
+      </article>
+      <article class="card">
+        <div class="fila"><h3>Hilo poliéster blanco</h3><span class="chip t-adv"><span data-i="reloj"></span>En gestión</span></div>
+        <p style="margin-top:6px">Reportada por Luis (Confección): «Falta hilo blanco para las costuras»</p>
+        <p class="meta">Manual · bloquea OT-2026-0004 (Confección) · ayer 16:10 · compra solicitada</p>
+        <div class="acciones"><button class="btn" type="button" onclick="document.getElementById('dlgIngreso').showModal()">Registrar ingreso</button></div>
+      </article>
+    </div>
+    <div id="ok" class="aviso exito" role="status" hidden><span data-i="check"></span><div><p>Ingreso registrado: stock 5,00 rollos. Alerta cerrada.</p><p class="meta">Avisamos a Pedro que ya hay papel para OT-2026-0001.</p></div></div>
+  </section>
 
-  <h2>Stock</h2>
-  <table class="responsive">
-    <thead><tr><th>Código</th><th>Insumo</th><th>Stock</th><th>Mínimo</th><th>Estado</th></tr></thead>
-    <tbody>
-      <tr><td data-label="Código">PAP-SUB-RL</td><td data-label="Insumo">Papel sublimación rollo 1,6 m</td><td data-label="Stock" id="stock">1,00 rollo</td><td data-label="Mínimo">2,00</td><td data-label="Estado"><span id="est" class="chip bloqueada">⚠ Bajo mínimo</span></td></tr>
-      <tr><td data-label="Código">TIN-PLT-K</td><td data-label="Insumo">Tinta plotter negro</td><td data-label="Stock">2,00 L</td><td data-label="Mínimo">1,00</td><td data-label="Estado"><span class="chip terminada">✔ OK</span></td></tr>
-      <tr><td data-label="Código">TIN-SUB-CY</td><td data-label="Insumo">Tinta sublimación cian</td><td data-label="Stock">3,00 L</td><td data-label="Mínimo">1,00</td><td data-label="Estado"><span class="chip terminada">✔ OK</span></td></tr>
-      <tr><td data-label="Código">TEL-DRY-BL</td><td data-label="Insumo">Tela dry-fit blanca</td><td data-label="Stock">120 m</td><td data-label="Mínimo">40</td><td data-label="Estado"><span class="chip terminada">✔ OK</span></td></tr>
-      <tr><td data-label="Código">LON-13OZ</td><td data-label="Insumo">Lona front 13 oz</td><td data-label="Stock">60 m²</td><td data-label="Mínimo">20</td><td data-label="Estado"><span class="chip terminada">✔ OK</span></td></tr>
-    </tbody>
-  </table>
+  <div class="seccion-titulo"><h2>Stock</h2><button class="btn texto chico" type="button" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR"><span data-i="mas"></span>Nuevo insumo</button></div>
+  <div class="tabla">
+    <table class="responsive">
+      <thead><tr><th>Código</th><th>Insumo</th><th>Stock</th><th>Mínimo</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Código">PAP-SUB-RL</td><td data-label="Insumo">Papel sublimación rollo 1,6 m</td><td data-label="Stock" id="stock">1,00 rollo</td><td data-label="Mínimo">2,00 rollo</td><td data-label="Estado"><span id="est" class="chip t-adv"><span data-i="alerta"></span>Bajo mínimo</span></td></tr>
+        <tr><td data-label="Código">HIL-POL-BL</td><td data-label="Insumo">Hilo poliéster blanco</td><td data-label="Stock">0,00 cono</td><td data-label="Mínimo">4,00 cono</td><td data-label="Estado"><span class="chip t-peligro"><span data-i="x"></span>Sin stock</span></td></tr>
+        <tr><td data-label="Código">TIN-SUB-CY</td><td data-label="Insumo">Tinta sublimación cian</td><td data-label="Stock">3,00 L</td><td data-label="Mínimo">1,00 L</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Suficiente</span></td></tr>
+        <tr><td data-label="Código">TIN-PLT-K</td><td data-label="Insumo">Tinta plotter negro</td><td data-label="Stock">2,00 L</td><td data-label="Mínimo">1,00 L</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Suficiente</span></td></tr>
+        <tr><td data-label="Código">TEL-DRY-BL</td><td data-label="Insumo">Tela dry-fit blanca</td><td data-label="Stock">120,00 m</td><td data-label="Mínimo">40,00 m</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Suficiente</span></td></tr>
+        <tr><td data-label="Código">LON-13OZ</td><td data-label="Insumo">Lona front 13 oz</td><td data-label="Stock">60,00 m²</td><td data-label="Mínimo">20,00 m²</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Suficiente</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <aside class="proto"><strong>Solo prototipo.</strong> P-08 · rutas <code>/insumos</code> y <code>/insumos/alertas</code> · Fig. 5.3 y 4.15 · HU-09 / CU-08, CU-09 · IK-9. Entra como Encargada para gestionar alertas; los demás roles ven solo el stock.</aside>
 </main>
 <dialog id="dlgIngreso" aria-labelledby="ti">
-  <h2 id="ti" style="margin-top:0">Registrar ingreso</h2>
-  <label for="cant">Cantidad recibida (rollos)</label><input id="cant" inputmode="decimal" value="4">
-  <label for="com">Comentario</label><input id="com" value="Compra proveedor habitual">
-  <div class="acciones"><button class="btn secundario" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn" onclick="ingresar()">Registrar</button></div>
+  <form method="dialog">
+    <h2 id="ti">Registrar ingreso</h2>
+    <p class="meta">Papel sublimación rollo 1,6 m · stock actual 1,00 rollo</p>
+    <label for="cant">Cantidad recibida (rollos)</label><input id="cant" inputmode="decimal" value="4,00">
+    <label for="com">Comentario</label><input id="com" value="Compra a proveedor habitual">
+    <div class="acciones"><button class="btn secundario" value="cancelar" formnovalidate>Cancelar</button><button class="btn" value="ok">Registrar y cerrar alerta</button></div>
+  </form>
 </dialog>
 <script>
-  function ingresar() {
-    document.getElementById('dlgIngreso').close();
-    document.getElementById('alerta').hidden = true; document.getElementById('ok').hidden = false;
-    document.getElementById('stock').textContent = '5,00 rollos';
-    var e = document.getElementById('est'); e.className = 'chip terminada'; e.textContent = '✔ OK';
-  }
+  // Solo cambio visual del ciclo de la alerta (ABIERTA → EN_GESTION → CERRADA)
+  var icono = function (n) { return '<svg class="i" aria-hidden="true"><use href="#i-' + n + '"/></svg>'; };
+  document.getElementById('gestion1').addEventListener('click', function () {
+    var c = document.getElementById('chip1'); c.className = 'chip t-adv'; c.innerHTML = icono('reloj') + 'En gestión'; this.hidden = true;
+  });
+  document.getElementById('dlgIngreso').addEventListener('close', function () {
+    if (this.returnValue !== 'ok') return;
+    document.getElementById('alerta1').hidden = true; document.getElementById('ok').hidden = false;
+    document.getElementById('stock').textContent = '5,00 rollo';
+    var e = document.getElementById('est'); e.className = 'chip t-ok'; e.innerHTML = icono('check') + 'Suficiente';
+  });
 </script>
 </body>
 </html>

@@ -3,43 +3,105 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SGP-Kotoduo · Mi Trabajo</title>
+<title>Mi Trabajo · SGP</title>
 <link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
 </head>
-<body>
-<header class="topbar"><span class="marca">SGP-Kotoduo</span><a href="index.html">Salir</a></header>
-<nav class="nav" aria-label="Principal">
-  <a href="mi-trabajo.html" aria-current="page"><span class="ico">🧰</span>Mi Trabajo</a>
-  <a href="insumos.html"><span class="ico">📦</span>Insumos</a>
-  <a href="#"><span class="ico">🔔</span>Avisos (2)</a>
-</nav>
+<body class="app" data-nav="mi-trabajo" data-roles="OPERARIO DISENADOR" data-titulo="Mi Trabajo">
 <main>
-  <h1>Hola, Pedro 👋</h1>
-  <p class="meta">Operario · Área Impresión gran formato · P-02</p>
+  <!-- Operario -->
+  <div data-rol="OPERARIO">
+    <header class="cabecera">
+      <h1>Hola, Pedro</h1>
+      <p class="meta">Área Impresión gran formato · viernes 20-11-2026</p>
+    </header>
 
-  <h2>Ahora te toca</h2>
-  <article class="card">
-    <a class="cubre" href="detalle-orden.html">
-      <div class="fila"><strong>OT-2026-0001 · Impresión de transfer</strong><span class="chip disponible">● Disponible</span></div>
-      <p>Camisetas sublimadas Club Deportivo · 30 unidades</p>
-      <p class="meta">Entrega comprometida: 26-11-2026 · Prioridad normal</p>
-      <p class="meta">Después: <strong>Sublimado</strong> en área Sublimación</p>
-    </a>
-  </article>
+    <div data-vista="normal">
+      <h2>Ahora te toca</h2>
+      <article class="card enlace destacada">
+        <div class="fila"><h3><a class="cubre" href="detalle-orden.html">Impresión de transfer</a></h3><span class="chip t-info"><span data-i="disponible"></span>Disponible</span></div>
+        <p style="margin-top:6px">OT-2026-0001 · Camisetas sublimadas · 30 unidades</p>
+        <p class="meta">Entrega comprometida 26-11-2026 · Estimado 3&nbsp;h</p>
+        <p class="aviso info" style="margin-bottom:0"><span data-i="flecha"></span><span>Después sigue <strong>Sublimado</strong> en área Sublimación (Ana)</span></p>
+      </article>
 
-  <h2>Próximas</h2>
-  <article class="card">
-    <a class="cubre" href="detalle-orden.html">
-      <div class="fila"><strong>OT-2026-0003 · Impresión</strong><span class="chip pendiente">○ Pendiente</span></div>
-      <p>Letrero publicitario Municipalidad · 1 unidad</p>
-      <p class="meta">Esperando: Diseño y aprobación (área Diseño)</p>
-    </a>
-  </article>
-  <article class="card">
-    <div class="fila"><strong>OT-2026-0005 · Impresión de transfer</strong><span class="chip urgente">▲ Urgente</span></div>
-    <p>Poleras Fundación · 50 unidades</p>
-    <p class="meta">Esperando: Diseño y aprobación</p>
-  </article>
+      <h2>Próximas</h2>
+      <article class="card enlace">
+        <div class="fila"><h3><a class="cubre" href="detalle-orden.html">Impresión de letrero</a></h3><span class="chip"><span data-i="circulo"></span>Pendiente</span></div>
+        <p style="margin-top:6px">OT-2026-0003 · Letrero publicitario · 1 unidad</p>
+        <p class="meta">Espera: aprobación del diseño (área Diseño)</p>
+      </article>
+      <article class="card enlace">
+        <div class="fila"><h3><a class="cubre" href="detalle-orden.html">Impresión de transfer</a></h3><span class="chips"><span class="chip t-acento"><span data-i="sube"></span>Urgente</span><span class="chip"><span data-i="circulo"></span>Pendiente</span></span></div>
+        <p style="margin-top:6px">OT-2026-0005 · Poleras estampadas · 50 unidades</p>
+        <p class="meta">Espera: diseño en elaboración (área Diseño)</p>
+      </article>
+    </div>
+  </div>
+
+  <!-- Diseñadora -->
+  <div data-rol="DISENADOR">
+    <header class="cabecera">
+      <h1>Hola, Camila</h1>
+      <p class="meta">Área Diseño · viernes 20-11-2026</p>
+    </header>
+
+    <div data-vista="normal">
+      <h2>Ahora te toca</h2>
+      <article class="card enlace destacada">
+        <div class="fila"><h3><a class="cubre" href="aprobacion-diseno.html">Diseño y aprobación</a></h3><span class="chip t-adv"><span data-i="reloj"></span>Respuesta pendiente</span></div>
+        <p style="margin-top:6px">OT-2026-0003 · Letrero publicitario · 1 unidad</p>
+        <p class="meta">Versión 2 enviada el 19-11-2026 · Si el cliente pide cambios, aquí subes la versión 3</p>
+      </article>
+
+      <h2>Próximas</h2>
+      <article class="card">
+        <div class="fila"><h3>Diseño y aprobación</h3><span class="chips"><span class="chip t-acento"><span data-i="sube"></span>Urgente</span><span class="chip t-info"><span data-i="disponible"></span>Disponible</span></span></div>
+        <p style="margin-top:6px">OT-2026-0005 · Poleras estampadas · 50 unidades</p>
+        <p class="meta">Entrega comprometida 25-11-2026 · Aún no hay versiones subidas</p>
+        <p class="aviso adv" style="margin-bottom:0"><span data-i="alerta"></span><span>En riesgo: si el diseño no se aprueba el lunes, la orden no alcanza el compromiso</span></p>
+      </article>
+    </div>
+  </div>
+
+  <!-- Estados del sistema (sección 5.4) -->
+  <div data-vista="vacio" hidden>
+    <div class="estado-vacio card">
+      <span data-i="check" class="grande ok"></span>
+      <strong>No tienes etapas pendientes</strong>
+      <p>Cuando te asignen una etapa te llegará un aviso.</p>
+    </div>
+  </div>
+  <div data-vista="cargando" hidden aria-busy="true" aria-label="Cargando tu trabajo">
+    <div class="esqueleto linea corta"></div>
+    <div class="esqueleto tarjeta"></div>
+    <div class="esqueleto tarjeta"></div>
+  </div>
+  <div data-vista="error" hidden>
+    <div class="aviso alerta" role="alert"><span data-i="sinred"></span><div><p>Sin conexión. No pudimos actualizar tu trabajo.</p><p class="meta">Mostramos lo último guardado (hoy 08:42). Tus avances se enviarán al volver la señal.</p></div></div>
+    <button class="btn secundario bloque" type="button"><span data-i="reintentar"></span>Reintentar</button>
+  </div>
+
+  <aside class="proto">
+    <strong>Solo prototipo.</strong> P-02 · ruta <code>/mi-trabajo</code> · Fig. 5.2 · HU-01 / CU-05. Ver estado de la pantalla:
+    <div class="segmentos" role="group" aria-label="Estado de la pantalla">
+      <button type="button" aria-pressed="true" data-ver="normal">Con trabajo</button>
+      <button type="button" aria-pressed="false" data-ver="vacio">Sin pendientes</button>
+      <button type="button" aria-pressed="false" data-ver="cargando">Cargando</button>
+      <button type="button" aria-pressed="false" data-ver="error">Sin conexión</button>
+    </div>
+  </aside>
 </main>
+<script>
+  // Solo cambia la vista mostrada (sin datos reales)
+  document.querySelectorAll('[data-ver]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('[data-ver]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      document.querySelectorAll('[data-vista]').forEach(function (v) {
+        v.hidden = v.dataset.vista !== b.dataset.ver;
+      });
+    });
+  });
+</script>
 </body>
 </html>

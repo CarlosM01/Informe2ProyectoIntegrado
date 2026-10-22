@@ -3,51 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SGP-Kotoduo · Aprobación de diseño</title>
+<title>Diseño OT-2026-0003 · SGP</title>
 <link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
 </head>
-<body>
-<header class="topbar"><span class="marca">SGP-Kotoduo</span><a href="index.html">Salir</a></header>
-<nav class="nav" aria-label="Principal">
-  <a href="ordenes-nueva.html"><span class="ico">➕</span>Nueva orden</a>
-  <a href="panel.html"><span class="ico">📋</span>Órdenes</a>
-  <a href="aprobacion-diseno.html" aria-current="page"><span class="ico">🎨</span>Diseños</a>
-</nav>
+<body class="app" data-nav="ordenes" data-roles="VENDEDOR DISENADOR ENCARGADA_PRODUCCION ADMINISTRADOR" data-titulo="Diseño · OT-2026-0003" data-volver="inicio">
 <main>
-  <h1>Diseño · OT-2026-0001</h1>
-  <p class="meta">P-05 · Camisetas sublimadas Club Deportivo</p>
-  <div class="dos-col">
-    <section class="card">
-      <div class="fila"><strong>Versión 2</strong><span id="chip" class="chip encurso">◐ Pendiente de respuesta</span></div>
-      <div style="aspect-ratio:3/2;background:linear-gradient(135deg,#1E40AF,#93C5FD);border-radius:10px;display:grid;place-items:center;color:#fff;margin:12px 0" role="img" aria-label="Vista previa del diseño versión 2">Vista previa v2</div>
-      <p class="meta">Subido por Camila (Diseñadora) · 23-11-2026 18:05</p>
-      <p>"Se ajusta el escudo según la observación del cliente."</p>
-      <div id="res" class="aviso exito" role="status" hidden>✔ Diseño aprobado. Producción habilitada: Impresión de transfer quedó disponible.</div>
-      <div id="botones" class="acciones">
-        <button class="btn" onclick="aprobar()">✔ Cliente aprueba</button>
-        <button class="btn secundario" onclick="document.getElementById('dlgRechazo').showModal()">✖ Cliente pide cambios</button>
+  <header class="cabecera">
+    <h1>Letrero publicitario · Diseño</h1>
+    <p class="meta">OT-2026-0003 · Junta de Vecinos Villa Sur · 1 unidad · 2,0 × 1,0 m · Entrega comprometida 03-12-2026</p>
+  </header>
+
+  <div class="tres-col">
+    <section class="card" aria-labelledby="t-version">
+      <div class="fila"><h2 id="t-version" style="margin:0">Versión 2</h2><span id="chip" class="chip t-adv"><span data-i="reloj"></span>Respuesta pendiente</span></div>
+      <div class="preview" role="img" aria-label="Vista previa del diseño, versión 2: letrero con el logo arriba a la izquierda, el nombre de la junta de vecinos y una franja naranja con la fecha del evento">
+        <span class="logo" aria-hidden="true">JV</span>
+        <div><span class="meta" style="color:#CBD5E1">Junta de Vecinos</span><strong>VILLA SUR</strong><span class="franja">Feria vecinal · 12 de diciembre</span></div>
       </div>
-      <p class="ayuda">Quien sube un diseño no puede registrar su aprobación.</p>
+      <p class="meta">Subida por Camila (Diseñadora) · 19-11-2026 18:05</p>
+      <p>«Logo arriba a la izquierda, como pidió el cliente. Se agrandó la fecha.»</p>
+
+      <!-- Vendedor registra la respuesta del cliente (diseno.resolver) -->
+      <div data-rol="VENDEDOR ENCARGADA_PRODUCCION ADMINISTRADOR">
+        <div id="res-ok" class="aviso exito" role="status" hidden><span data-i="check"></span><div><p>Diseño aprobado. Producción habilitada.</p><p class="meta">«Impresión de letrero» quedó disponible y avisamos a Pedro.</p></div></div>
+        <div id="res-no" class="aviso info" role="status" hidden><span data-i="flecha"></span><div><p>Cambios enviados a Diseño.</p><p class="meta">Avisamos a Camila. Verás la versión 3 cuando la suba.</p></div></div>
+        <div id="botones" class="acciones">
+          <button class="btn" type="button" id="aprobar"><span data-i="check"></span>El cliente aprueba</button>
+          <button class="btn secundario" type="button" onclick="document.getElementById('dlgRechazo').showModal()"><span data-i="x"></span>El cliente pide cambios</button>
+        </div>
+      </div>
+
+      <!-- Diseñadora: sube versiones, pero no puede resolverlas (R6) -->
+      <div data-rol="DISENADOR">
+        <p class="aviso info"><span data-i="candado"></span><span>Esperando la respuesta del cliente. Quien sube un diseño no puede registrar su aprobación.</span></p>
+        <div class="acciones una"><button class="btn secundario bloque" type="button" onclick="document.getElementById('dlgSubir').showModal()"><span data-i="subir"></span>Subir nueva versión</button></div>
+      </div>
     </section>
-    <section class="card">
-      <h2 style="margin-top:0">Historial</h2>
+
+    <section class="card" aria-labelledby="t-hist">
+      <h2 id="t-hist" style="margin-top:0">Historial de versiones</h2>
       <ol class="pasos">
-        <li><span class="num">1</span><div>Versión 1 · <span class="chip bloqueada">✖ Rechazada</span><br><span class="meta">"El escudo debe ir a la izquierda" — Vendedor, 22-11</span></div></li>
-        <li class="actual"><span class="num">2</span><div>Versión 2 · pendiente</div></li>
+        <li><span class="num">1</span><div class="cuerpo">
+          <div class="fila"><span class="nombre">Versión 1</span><span class="chip t-peligro"><span data-i="x"></span>Rechazada</span></div>
+          <span class="meta">«El logo debe ir arriba a la izquierda y la fecha más grande» — Jorge (Vendedor), 18-11-2026</span></div></li>
+        <li class="actual"><span class="num">2</span><div class="cuerpo">
+          <div class="fila"><strong class="nombre">Versión 2</strong><span id="chip-h" class="chip t-adv"><span data-i="reloj"></span>Respuesta pendiente</span></div>
+          <span class="meta">Camila, 19-11-2026</span></div></li>
       </ol>
     </section>
   </div>
+
+  <aside class="proto"><strong>Solo prototipo.</strong> P-05 · ruta <code>/ordenes/:codigo/diseno</code> · Fig. 5.2 y 4.14 · HU-06 / CU-07. Entra como Vendedor para aprobar o rechazar, o como Diseñadora para subir una versión.</aside>
 </main>
+
 <dialog id="dlgRechazo" aria-labelledby="tr">
-  <h2 id="tr" style="margin-top:0">Cambios solicitados</h2>
-  <label for="mot">¿Qué pidió el cliente? (obligatorio)</label><textarea id="mot" rows="3" required></textarea>
-  <div class="acciones"><button class="btn secundario" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn" onclick="this.closest('dialog').close()">Enviar a Diseño</button></div>
+  <form method="dialog">
+    <h2 id="tr">Cambios que pidió el cliente</h2>
+    <label for="mot">¿Qué hay que cambiar? (obligatorio)</label>
+    <textarea id="mot" rows="3" required aria-describedby="mot-ayuda" placeholder="Ej.: usar el azul del escudo en el fondo"></textarea>
+    <p id="mot-ayuda" class="ayuda">Camila verá este texto tal cual en su próxima versión.</p>
+    <div class="acciones"><button class="btn secundario" value="cancelar" formnovalidate>Cancelar</button><button class="btn" value="ok">Enviar a Diseño</button></div>
+  </form>
 </dialog>
+<dialog id="dlgSubir" aria-labelledby="ts">
+  <form method="dialog">
+    <h2 id="ts">Subir versión 3</h2>
+    <label for="arch">Archivo de diseño</label><input id="arch" type="file" accept="image/png,image/jpeg,application/pdf" aria-describedby="arch-ayuda">
+    <p id="arch-ayuda" class="ayuda">PNG, JPG o PDF · máximo 20 MB</p>
+    <label for="com">Comentario para el vendedor</label><textarea id="com" rows="2"></textarea>
+    <div class="acciones"><button class="btn secundario" value="cancelar" formnovalidate>Cancelar</button><button class="btn" value="ok"><span data-i="subir"></span>Subir</button></div>
+  </form>
+</dialog>
+
 <script>
-  function aprobar() {
-    var c = document.getElementById('chip'); c.className = 'chip terminada'; c.textContent = '✔ Aprobado';
-    document.getElementById('botones').hidden = true; document.getElementById('res').hidden = false;
+  // Solo cambio visual del estado del diseño (PENDIENTE → APROBADO / RECHAZADO)
+  function resolver(tono, ico, texto, aviso) {
+    var html = '<svg class="i" aria-hidden="true"><use href="#i-' + ico + '"/></svg>' + texto;
+    ['chip', 'chip-h'].forEach(function (id) { var c = document.getElementById(id); c.className = 'chip ' + tono; c.innerHTML = html; });
+    document.getElementById('botones').hidden = true; document.getElementById(aviso).hidden = false;
   }
+  document.getElementById('aprobar').addEventListener('click', function () { resolver('t-ok', 'check', 'Aprobado', 'res-ok'); });
+  document.getElementById('dlgRechazo').addEventListener('close', function () {
+    if (this.returnValue === 'ok') resolver('t-peligro', 'x', 'Rechazado', 'res-no');
+  });
 </script>
 </body>
 </html>

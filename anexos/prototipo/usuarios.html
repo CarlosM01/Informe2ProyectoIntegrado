@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Usuarios y roles · SGP</title>
+<link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
+</head>
+<body class="app" data-nav="usuarios" data-roles="ADMINISTRADOR" data-titulo="Usuarios">
+<main>
+  <header class="cabecera fila">
+    <div><h1>Usuarios y roles</h1><p class="meta">6 cuentas activas · 1 bloqueada</p></div>
+    <button class="btn" type="button" onclick="document.getElementById('dlgNuevo').showModal()"><span data-i="mas"></span>Nuevo usuario</button>
+  </header>
+
+  <div class="tabla">
+    <table class="responsive">
+      <thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Verificación</th><th>Estado</th><th><span class="sr">Acciones</span></th></tr></thead>
+      <tbody>
+        <tr><td data-label="Usuario">andres.fuentes</td><td data-label="Nombre">Andrés Fuentes</td><td data-label="Rol">Administrador</td><td data-label="Verificación">Activa</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Activo</span></td><td class="acc"><button class="btn texto chico" type="button">Editar</button></td></tr>
+        <tr><td data-label="Usuario">marcela.vidal</td><td data-label="Nombre">Marcela Vidal</td><td data-label="Rol">Encargada de Producción</td><td data-label="Verificación">Activa</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Activo</span></td><td class="acc"><button class="btn texto chico" type="button">Editar</button></td></tr>
+        <tr><td data-label="Usuario">jorge.munoz</td><td data-label="Nombre">Jorge Muñoz</td><td data-label="Rol">Vendedor</td><td data-label="Verificación">—</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Activo</span></td><td class="acc"><button class="btn texto chico" type="button">Editar</button></td></tr>
+        <tr><td data-label="Usuario">camila.rojas</td><td data-label="Nombre">Camila Rojas</td><td data-label="Rol">Diseñadora</td><td data-label="Verificación">—</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Activo</span></td><td class="acc"><button class="btn texto chico" type="button">Editar</button></td></tr>
+        <tr><td data-label="Usuario">pedro.soto</td><td data-label="Nombre">Pedro Soto</td><td data-label="Rol">Operario · Impresión</td><td data-label="Verificación">—</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Activo</span></td><td class="acc"><button class="btn texto chico" type="button">Editar</button></td></tr>
+        <tr><td data-label="Usuario">luis.perez</td><td data-label="Nombre">Luis Pérez</td><td data-label="Rol">Operario · Confección</td><td data-label="Verificación">—</td><td data-label="Estado"><span class="chip t-peligro"><span data-i="candado"></span>Bloqueado 15 min</span></td><td class="acc"><button class="btn secundario chico" type="button" onclick="document.getElementById('dlgClave').showModal()"><span data-i="llave"></span>Clave temporal</button></td></tr>
+        <tr><td data-label="Usuario">ana.morales</td><td data-label="Nombre">Ana Morales</td><td data-label="Rol">Operario · Sublimación</td><td data-label="Verificación">—</td><td data-label="Estado"><span class="chip t-ok"><span data-i="check"></span>Activo</span></td><td class="acc"><button class="btn texto chico" type="button">Editar</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <aside class="proto"><strong>Solo prototipo.</strong> P-09 · ruta <code>/admin/usuarios</code> · Fig. 5.3 · HU-11 / CU-02 · Sección 7.1 a 7.3.</aside>
+</main>
+
+<dialog id="dlgNuevo" aria-labelledby="tn">
+  <form method="dialog">
+    <h2 id="tn">Nuevo usuario</h2>
+    <label for="nom">Nombre completo</label><input id="nom">
+    <label for="usr">Nombre de usuario</label><input id="usr" autocapitalize="none" aria-describedby="usr-ayuda" placeholder="nombre.apellido">
+    <p id="usr-ayuda" class="ayuda">Minúsculas, números, punto o guion. Los operarios pueden no tener correo.</p>
+    <label for="rolN">Rol</label><select id="rolN"><option>Operario</option><option>Diseñador</option><option>Vendedor</option><option>Encargada de Producción</option><option>Administrador</option></select>
+    <p class="ayuda">Se genera una clave temporal de un solo uso; deberá cambiarla al primer ingreso.</p>
+    <div class="acciones"><button class="btn secundario" value="cancelar" formnovalidate>Cancelar</button><button class="btn" value="ok">Crear usuario</button></div>
+  </form>
+</dialog>
+<dialog id="dlgClave" aria-labelledby="tc">
+  <form method="dialog">
+    <h2 id="tc">Clave temporal para Luis Pérez</h2>
+    <p>Entrégasela en persona. Sirve una sola vez durante 24 horas y desbloquea la cuenta.</p>
+    <p class="codigo" style="font-size:1.25rem;letter-spacing:.12em;background:var(--color-neutro-suave);padding:12px;border-radius:var(--radio)">mesa-tinta-41-rojo</p>
+    <div class="acciones una"><button class="btn" value="ok">Listo, ya la entregué</button></div>
+  </form>
+</dialog>
+</body>
+</html>

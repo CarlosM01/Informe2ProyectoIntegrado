@@ -3,46 +3,58 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SGP-Kotoduo · Panel de supervisión</title>
+<title>Panel de producción · SGP</title>
 <link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
 </head>
-<body>
-<header class="topbar"><span class="marca">SGP-Kotoduo</span><a href="index.html">Salir</a></header>
-<nav class="nav" aria-label="Principal">
-  <a href="panel.html" aria-current="page"><span class="ico">📊</span>Panel</a>
-  <a href="plantillas.html"><span class="ico">🧩</span>Plantillas</a>
-  <a href="insumos.html"><span class="ico">📦</span>Insumos</a>
-  <a href="ordenes-nueva.html"><span class="ico">➕</span>Nueva OT</a>
-</nav>
+<body class="app" data-nav="panel" data-roles="ENCARGADA_PRODUCCION ADMINISTRADOR VENDEDOR" data-titulo="Panel">
 <main>
-  <h1>Panel de producción</h1>
-  <p class="meta">P-06 · Encargada de Producción / Administrador</p>
-  <div class="kpis">
-    <div class="kpi"><span class="meta">En producción</span><b>12</b></div>
-    <div class="kpi"><span class="meta">Atrasadas</span><b style="color:var(--color-peligro)">2</b></div>
-    <div class="kpi"><span class="meta">Bloqueadas</span><b style="color:var(--color-advertencia)">1</b></div>
-    <div class="kpi"><span class="meta">Alertas de insumo</span><b style="color:var(--color-peligro)">1</b></div>
-  </div>
-  <div class="aviso alerta" style="margin-top:16px">⚠ Papel sublimación bajo el mínimo (1 de 2 rollos). <a href="insumos.html">Gestionar</a></div>
+  <header class="cabecera">
+    <h1>Panel de producción</h1>
+    <p class="meta">Actualizado hoy 10:15 · 5 órdenes en curso</p>
+  </header>
 
-  <div class="fila" style="margin:16px 0 8px">
-    <h2 style="margin:0">Órdenes</h2>
-    <label style="margin:0;font-weight:400"><input type="checkbox" id="soloAtr" style="width:auto;min-height:auto"> Solo atrasadas</label>
+  <div class="kpis" role="group" aria-label="Filtrar órdenes">
+    <button class="kpi" type="button" data-filtro="todas" aria-pressed="true"><span><span data-i="lista" class="chico"></span>En curso</span><b>5</b></button>
+    <button class="kpi peligro" type="button" data-filtro="atrasada" aria-pressed="false"><span><span data-i="reloj" class="chico"></span>Atrasadas</span><b>2</b></button>
+    <button class="kpi adv" type="button" data-filtro="riesgo" aria-pressed="false"><span><span data-i="alerta" class="chico"></span>En riesgo</span><b>1</b></button>
+    <button class="kpi adv" type="button" data-filtro="bloqueada" aria-pressed="false"><span><span data-i="candado" class="chico"></span>Con etapa bloqueada</span><b>1</b></button>
   </div>
-  <table class="responsive">
-    <thead><tr><th>OT</th><th>Trabajo</th><th>Etapa actual</th><th>Responsable</th><th>Avance</th><th>Compromiso</th><th>Estado</th></tr></thead>
-    <tbody>
-      <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0001</a></td><td data-label="Trabajo">Uniforme sublimado ×30</td><td data-label="Etapa actual">Impresión de transfer</td><td data-label="Responsable">Pedro</td><td data-label="Avance">17 %</td><td data-label="Compromiso">26-11</td><td data-label="Estado"><span class="chip disponible">En producción</span></td></tr>
-      <tr class="atr"><td data-label="OT"><a href="detalle-orden.html">OT-2026-0002</a></td><td data-label="Trabajo">Polerón generación ×42</td><td data-label="Etapa actual">Bordado</td><td data-label="Responsable">Rosa</td><td data-label="Avance">60 %</td><td data-label="Compromiso">14-11</td><td data-label="Estado"><span class="chip atrasada">● Atrasada</span></td></tr>
-      <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0003</a></td><td data-label="Trabajo">Letrero municipal ×1</td><td data-label="Etapa actual">Diseño y aprobación</td><td data-label="Responsable">Camila</td><td data-label="Avance">0 %</td><td data-label="Compromiso">03-12</td><td data-label="Estado"><span class="chip encurso">En diseño</span></td></tr>
-      <tr class="atr"><td data-label="OT"><a href="detalle-orden.html">OT-2026-0004</a></td><td data-label="Trabajo">Uniforme sublimado ×18</td><td data-label="Etapa actual">Confección</td><td data-label="Responsable">Luis</td><td data-label="Avance">67 %</td><td data-label="Compromiso">15-11</td><td data-label="Estado"><span class="chip bloqueada">⚠ Bloqueada</span></td></tr>
-    </tbody>
-  </table>
+
+  <div class="aviso alerta"><span data-i="caja"></span><div><p>Papel sublimación bajo el mínimo: quedan 1,00 de 2,00 rollos.</p><p class="meta">Afecta a OT-2026-0001. <a href="insumos.html">Gestionar alerta</a></p></div></div>
+  <div class="aviso adv"><span data-i="alerta"></span><div><p>OT-2026-0004 tiene la etapa Confección bloqueada.</p><p class="meta">Luis: «Falta hilo blanco para las costuras». <a href="detalle-orden.html">Revisar y desbloquear</a></p></div></div>
+
+  <div class="seccion-titulo"><h2>Órdenes en curso</h2><a href="ordenes.html" class="meta">Ver todas</a></div>
+  <div class="tabla">
+    <table class="responsive">
+      <thead><tr><th>OT</th><th>Trabajo</th><th>Etapa actual</th><th>Responsable</th><th>Avance</th><th>Compromiso</th><th>Situación</th></tr></thead>
+      <tbody>
+        <tr data-grupo="atrasada"><td data-label="OT"><a href="detalle-orden.html">OT-2026-0002</a></td><td data-label="Trabajo">Polerones de generación ×42</td><td data-label="Etapa actual">Bordado</td><td data-label="Responsable">Rosa</td><td data-label="Avance">3 de 5</td><td data-label="Compromiso">14-11</td><td data-label="Situación"><span class="chip t-peligro"><span data-i="reloj"></span>Atrasada 6 días</span></td></tr>
+        <tr data-grupo="atrasada bloqueada"><td data-label="OT"><a href="detalle-orden.html">OT-2026-0004</a></td><td data-label="Trabajo">Uniformes sublimados ×18</td><td data-label="Etapa actual">Confección</td><td data-label="Responsable">Luis</td><td data-label="Avance">4 de 6</td><td data-label="Compromiso">15-11</td><td data-label="Situación"><span class="chips"><span class="chip t-peligro"><span data-i="reloj"></span>Atrasada 5 días</span><span class="chip t-adv"><span data-i="alerta"></span>Bloqueada</span></span></td></tr>
+        <tr data-grupo="riesgo"><td data-label="OT"><a href="detalle-orden.html">OT-2026-0005</a></td><td data-label="Trabajo">Poleras estampadas ×50</td><td data-label="Etapa actual">Diseño y aprobación</td><td data-label="Responsable">Camila</td><td data-label="Avance">0 de 5</td><td data-label="Compromiso">25-11</td><td data-label="Situación"><span class="chips"><span class="chip t-acento"><span data-i="sube"></span>Urgente</span><span class="chip t-adv"><span data-i="alerta"></span>En riesgo</span></span></td></tr>
+        <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0001</a></td><td data-label="Trabajo">Camisetas sublimadas ×30</td><td data-label="Etapa actual">Impresión de transfer</td><td data-label="Responsable">Pedro</td><td data-label="Avance">1 de 6</td><td data-label="Compromiso">26-11</td><td data-label="Situación"><span class="chip t-ok"><span data-i="check"></span>A tiempo</span></td></tr>
+        <tr><td data-label="OT"><a href="detalle-orden.html">OT-2026-0003</a></td><td data-label="Trabajo">Letrero publicitario ×1</td><td data-label="Etapa actual">Diseño y aprobación</td><td data-label="Responsable">Camila</td><td data-label="Avance">0 de 5</td><td data-label="Compromiso">03-12</td><td data-label="Situación"><span class="chip t-ok"><span data-i="check"></span>A tiempo</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav data-rol="ADMINISTRADOR" aria-label="Gestión" class="acciones linea" style="margin-top:24px">
+    <a class="btn secundario" href="plantillas.html"><span data-i="capas"></span>Plantillas</a>
+    <a class="btn secundario" href="insumos.html"><span data-i="caja"></span>Insumos</a>
+  </nav>
+
+  <aside class="proto"><strong>Solo prototipo.</strong> P-06 · ruta <code>/panel</code> · Fig. 5.3 · HU-10 / CU-10. Toca un indicador para filtrar (IK-7). «En riesgo» lo marca el planificador programado (Fig. 4.21).</aside>
 </main>
 <script>
-  document.getElementById('soloAtr').addEventListener('change', function () {
-    var solo = this.checked;
-    document.querySelectorAll('tbody tr').forEach(function (tr) { tr.hidden = solo && !tr.classList.contains('atr'); });
+  // Solo filtro visual de filas
+  document.querySelectorAll('[data-filtro]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.dataset.filtro;
+      document.querySelectorAll('[data-filtro]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      document.querySelectorAll('tbody tr').forEach(function (tr) {
+        tr.hidden = f !== 'todas' && (tr.dataset.grupo || '').split(' ').indexOf(f) === -1;
+      });
+    });
   });
 </script>
 </body>

@@ -3,36 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SGP-Kotoduo · Ingresar</title>
+<title>Ingresar · SGP</title>
 <link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
 </head>
-<body style="display:block">
-<header class="topbar"><span class="marca">SGP-Kotoduo</span><span class="meta" style="color:#fff">Prototipo v2 · P-01</span></header>
-<main style="max-width:420px">
-  <h1>Ingresar</h1>
-  <p class="meta">Sistema de Gestión y Seguimiento Productivo</p>
-  <form id="login">
+<body class="acceso">
+<main class="acceso-caja" style="padding:0">
+  <div class="marca"><span data-i="capas"></span>SGP · Gestión productiva</div>
+  <form id="login" class="card">
+    <h1>Ingresar</h1>
+    <p class="meta">Usa la cuenta que te entregó tu encargada o el administrador.</p>
     <label for="usuario">Usuario</label>
-    <input id="usuario" autocomplete="username" value="operario.sub">
+    <input id="usuario" autocomplete="username" autocapitalize="none" value="pedro.soto">
     <label for="clave">Contraseña</label>
-    <input id="clave" type="password" autocomplete="current-password" value="••••••••••••">
-    <label for="rol">Simular rol (solo prototipo)</label>
-    <select id="rol">
-      <option value="mi-trabajo.html">Operario</option>
-      <option value="mi-trabajo.html">Diseñador</option>
-      <option value="ordenes-nueva.html">Vendedor</option>
-      <option value="panel.html">Encargada de Producción</option>
-      <option value="panel.html">Administrador</option>
-    </select>
-    <p class="ayuda">En el sistema real, la pantalla de inicio depende del rol de la cuenta. La Encargada y el Administrador ingresan además un código MFA.</p>
-    <div class="acciones" style="grid-template-columns:1fr"><button class="btn bloque" type="submit">Ingresar</button></div>
-    <p class="ayuda">¿Olvidaste tu contraseña? Pide a la Encargada de Producción una clave temporal.</p>
+    <input id="clave" type="password" autocomplete="current-password" value="clave-de-ejemplo">
+    <div class="acciones una"><button class="btn bloque grande" type="submit">Ingresar</button></div>
+    <p class="ayuda">¿Olvidaste tu contraseña? Pide una clave temporal a la Encargada de Producción o al Administrador.</p>
   </form>
+
+  <aside class="proto">
+    <label for="rol" style="margin-top:0">Simular rol (solo prototipo)</label>
+    <select id="rol">
+      <option value="OPERARIO">Operario → Mi Trabajo</option>
+      <option value="DISENADOR">Diseñadora → Mi Trabajo</option>
+      <option value="VENDEDOR">Vendedor → Órdenes</option>
+      <option value="ENCARGADA_PRODUCCION">Encargada de Producción → MFA → Panel</option>
+      <option value="ADMINISTRADOR">Administrador → MFA → Panel</option>
+    </select>
+    <p class="ayuda">P-01 · ruta <code>/login</code> · Fig. 5.1. Cada rol entra a su propia pantalla de inicio. Prueba abrir una pantalla de otro rol para ver la guarda "No tienes acceso".</p>
+  </aside>
 </main>
 <script>
+  // Solo navegación: guarda el rol simulado y redirige a su inicio (Fig. 5.1)
+  var INICIO = { OPERARIO: 'mi-trabajo.html', DISENADOR: 'mi-trabajo.html', VENDEDOR: 'ordenes.html',
+                 ENCARGADA_PRODUCCION: 'mfa.html', ADMINISTRADOR: 'mfa.html' };
   document.getElementById('login').addEventListener('submit', function (e) {
     e.preventDefault();
-    location.href = document.getElementById('rol').value;
+    var rol = document.getElementById('rol').value;
+    try { sessionStorage.setItem('rol', rol); } catch (err) { /* prototipo sin almacenamiento */ }
+    location.href = INICIO[rol];
   });
 </script>
 </body>

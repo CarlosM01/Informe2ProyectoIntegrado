@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi perfil · SGP</title>
+<link rel="stylesheet" href="estilos.css">
+<script src="app.js" defer></script>
+</head>
+<body class="app" data-titulo="Mi perfil" data-volver="inicio">
+<main style="max-width:640px">
+  <h1>Mi perfil</h1>
+
+  <section class="card" aria-labelledby="t-clave">
+    <h2 id="t-clave" style="margin-top:0">Cambiar contraseña</h2>
+    <form onsubmit="return false">
+      <label for="actual">Contraseña actual</label><input id="actual" type="password" autocomplete="current-password">
+      <label for="nueva">Nueva contraseña</label><input id="nueva" type="password" autocomplete="new-password" minlength="12" aria-describedby="nueva-ayuda">
+      <p id="nueva-ayuda" class="ayuda">Mínimo 12 caracteres. Puedes usar una frase con espacios, por ejemplo «tres camisetas azules al sol».</p>
+      <div class="acciones linea"><button class="btn" type="submit">Guardar contraseña</button></div>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="t-mfa">
+    <div class="fila"><h2 id="t-mfa" style="margin:0">Verificación en dos pasos</h2>
+      <span class="chip t-ok" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR"><span data-i="escudo"></span>Activa · obligatoria</span>
+      <span class="chip" data-rol="OPERARIO DISENADOR VENDEDOR"><span data-i="escudo"></span>Opcional</span>
+    </div>
+    <p class="meta" style="margin-top:8px" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR">Tu rol la requiere. Te quedan 8 de 10 códigos de respaldo.</p>
+    <p class="meta" style="margin-top:8px" data-rol="OPERARIO DISENADOR VENDEDOR">Agrega un código desde tu teléfono al ingresar para proteger tu cuenta.</p>
+    <div class="acciones linea">
+      <button class="btn secundario" type="button" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR">Generar nuevos códigos de respaldo</button>
+      <button class="btn secundario" type="button" data-rol="OPERARIO DISENADOR VENDEDOR">Activar verificación</button>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="t-sesion">
+    <h2 id="t-sesion" style="margin-top:0">Sesión</h2>
+    <p class="meta">Tu sesión se cierra sola tras un tiempo sin uso.</p>
+    <div class="acciones linea"><a class="btn peligro" href="index.html" onclick="try{sessionStorage.removeItem('rol')}catch(e){}"><span data-i="salir"></span>Cerrar sesión</a></div>
+  </section>
+
+  <aside class="proto"><strong>Solo prototipo.</strong> P-12 · ruta <code>/perfil</code> · Fig. 5.1 · Política de autenticación (sección 7.2).</aside>
+</main>
+</body>
+</html>
