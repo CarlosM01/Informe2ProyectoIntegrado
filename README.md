@@ -12,12 +12,14 @@ Repositorio del **Informe N.º 2** del Proyecto Integrado (Unidad 2, INACAP). Co
 ```
 .
 ├── Informe2_Kotoduo_SGP.md      # Documento principal del informe
+├── docker-compose.yml           # Levanta PostgreSQL y MongoDB con los anexos B y C
 ├── diagramas/                   # Anexo A: fuentes PlantUML (01 a 10)
 ├── bd/                          # Anexos B y C: base de datos
 │   ├── ddl_postgresql.sql       #   Esquema relacional (PostgreSQL 16+)
 │   ├── consultas_ejemplo.sql    #   Datos y consultas de ejemplo
 │   ├── mongo_esquemas.json      #   Validadores e índices (MongoDB 8)
-│   └── mongo_init.js            #   Script de inicialización de MongoDB
+│   ├── mongo_init.js            #   Script de inicialización de MongoDB
+│   └── docker/mongo-init.sh     #   Ejecuta mongo_init.js al iniciar el contenedor
 └── anexos/
     └── prototipo/               # Anexo D: prototipo HTML/CSS (abrir index.html)
 ```
@@ -49,7 +51,45 @@ Cada archivo de `diagramas/` es la fuente de una figura del informe. Para render
 
 Si modificas un diagrama, vuelve a generar la figura y revisa que el texto del informe que la describe siga siendo correcto.
 
-### Base de datos estructurada (PostgreSQL 16+)
+### Bases de datos con Docker Compose (recomendado)
+
+Requiere Docker con el plugin Compose. Desde la raíz del repositorio:
+
+```bash
+docker compose up -d --wait
+```
+
+En el primer arranque, con los volúmenes vacíos:
+
+- PostgreSQL 16 crea la base `sgp_kotoduo` y ejecuta `bd/ddl_postgresql.sql`.
+- MongoDB crea la base `sgp_docs` y ejecuta `bd/mongo_init.js`. Su salida queda en `docker compose logs mongo`.
+
+Las consultas de ejemplo son opcionales:
+
+```bash
+docker compose exec postgres psql -U sgp -d sgp_kotoduo -f /bd/consultas_ejemplo.sql
+```
+
+Para abrir una consola:
+
+- PostgreSQL: `docker compose exec postgres psql -U sgp -d sgp_kotoduo`
+- MongoDB: `docker compose exec mongo mongosh sgp_docs`
+
+Para volver al estado inicial (borra los datos y reejecuta los scripts en el próximo arranque):
+
+```bash
+docker compose down -v
+```
+
+| Variable | Valor por defecto | Uso |
+|---|---|---|
+| `POSTGRES_PORT` / `MONGO_PORT` | `5432` / `27017` | Puerto local, si ya hay otra base usando el puerto |
+| `POSTGRES_USER` / `POSTGRES_PASSWORD` | `sgp` / `sgp_local` | Credenciales locales de demostración |
+| `MONGO_IMAGE` | `mongo:9.0` | MongoDB 8.0 no arranca en kernels Linux 6.19 o superiores ([SERVER-121912](https://jira.mongodb.org/browse/SERVER-121912)). La 9.0 tiene la misma API; en otros equipos se puede usar `MONGO_IMAGE=mongo:8` |
+
+Los puertos se publican solo en `127.0.0.1` y las credenciales son de demostración: este compose no está pensado para un servidor.
+
+### Base de datos estructurada (PostgreSQL 16+), sin Docker
 
 ```bash
 createdb sgp_kotoduo
@@ -59,7 +99,7 @@ psql -d sgp_kotoduo -f bd/consultas_ejemplo.sql   # opcional: datos y consultas 
 
 El DDL crea el esquema `sgp`. Debe ejecutarse sobre una base vacía.
 
-### Base de datos no estructurada (MongoDB 8)
+### Base de datos no estructurada (MongoDB 8), sin Docker
 
 Ejecutar desde la carpeta `bd/`, porque el script lee `mongo_esquemas.json` con una ruta relativa:
 

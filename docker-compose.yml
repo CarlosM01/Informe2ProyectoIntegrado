@@ -1,0 +1,49 @@
+# SGP-Kotoduo — local databases for annexes B (PostgreSQL) and C (MongoDB).
+# Usage: docker compose up -d   ·   reset: docker compose down -v
+# Local demo only: ports are bound to 127.0.0.1 and credentials are not secrets.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sgp-postgres
+    environment:
+      POSTGRES_DB: sgp_kotoduo
+      POSTGRES_USER: ${POSTGRES_USER:-sgp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sgp_local}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # Runs only on first start (empty volume), with ON_ERROR_STOP.
+      - ./bd/ddl_postgresql.sql:/docker-entrypoint-initdb.d/01_ddl.sql:ro
+      # Sample queries stay optional: see README.
+      - ./bd:/bd:ro
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d sgp_kotoduo"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mongo:
+    # MongoDB 8.0 refuses to start on Linux kernel >= 6.19 (SERVER-121912).
+    # 9.0 exposes the same API; override with MONGO_IMAGE=mongo:8 on older kernels.
+    image: ${MONGO_IMAGE:-mongo:9.0}
+    container_name: sgp-mongo
+    environment:
+      MONGO_INITDB_DATABASE: sgp_docs
+    ports:
+      - "127.0.0.1:${MONGO_PORT:-27017}:27017"
+    volumes:
+      # Runs only on first start (empty volume).
+      - ./bd/docker/mongo-init.sh:/docker-entrypoint-initdb.d/10_mongo_init.sh:ro
+      - ./bd:/bd:ro
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pg_data:
+  mongo_data:
