@@ -27,7 +27,7 @@
 | 2.1.4.9 | 6.3 a 6.5 | DDL PostgreSQL, validadores MongoDB e integración por outbox | 5 |
 | 2.1.5.10 | 7.1 a 7.3 | RBAC, política de autenticación y política de autorización | 10 |
 | 2.1.5.11 | 7.4 | Modelo de amenazas STRIDE/OWASP con mitigación y verificación | 10 |
-| 2.1.5.12 | 7.5 y 7.6 | Estándares OWASP/ASVS y extractos de código seguro | 10 |
+| 2.1.5.12 | 7.5 a 7.7 | Estándares OWASP/ASVS, extractos de código seguro y marco normativo chileno con ISO, CIS y NIST | 10 |
 | 2.1.6.13 | 8.1 a 8.8 | Plan de pruebas, trazabilidad RF→CU→CP y casos CP-01–CP-36 | 10 |
 | 2.1.6.14 | 8.9 | Matriz de herramientas manuales y automatizadas | 5 |
 | 2.1.6.15 | Preparación oral | Balotario de defensa con 5 preguntas y respuestas | 5 |
@@ -205,7 +205,7 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 | A04 | S0 – Diseño | Prototipo navegable v1 y guía de estilo | Prototipo v1 (Anexo D) + sección 5.4 | Integrante 2 | D3 | D5 | 3 d |
 | A05 | S0 – Diseño | Modelo de datos: ER, diccionario, DDL y esquemas MongoDB | Cap. 6 + Anexos B y C | Integrante 1 | D6 | D7 | 2 d |
 | A06 | S0 – Diseño | Prueba de usabilidad del prototipo con trabajadores y rediseño v2 | Registro de feedback (5.5) + prototipo v2 | Integrante 2 | D6 | D7 | 2 d |
-| A07 | S0 – Diseño | Diseño de seguridad: RBAC, autenticación, amenazas, estándares | Cap. 7 | Integrante 1 | D8 | D9 | 2 d |
+| A07 | S0 – Diseño | Diseño de seguridad: RBAC, autenticación, amenazas, estándares y marco normativo chileno | Cap. 7 (incluye matriz normativa 7.7) | Integrante 1 | D8 | D9 | 2 d |
 | A08 | S0 – Diseño | Plan de pruebas y casos de prueba | Cap. 8 | Integrante 2 | D8 | D9 | 2 d |
 | A09 | S0 – Diseño | Consolidación del Informe N.º 2, Sprint Review y Retro | **Hito H1: Informe N.º 2** | Integrante 1 | D10 | D10 | 1 d |
 | A10 | S1 – Fundaciones | Monorepo, CI en GitHub Actions, Docker Compose, staging | Pipeline CI en verde | Integrante 1 | D11 | D11 | 1 d |
@@ -894,7 +894,7 @@ db.evidencias_etapa.aggregate([
 
 ## 7. Seguridad y estándares de programación segura
 
-El sistema gestiona principalmente información operativa, pero su indisponibilidad o manipulación detendría la producción, el mismo problema que se busca resolver. Además, guarda datos personales de trabajadores (nombre, usuario, actividad), sujetos a la Ley N.º 19.628 y a la Ley N.º 21.719, que la reemplaza progresivamente. Los controles se alinean con OWASP ASVS 4.0.3 nivel 2 en autenticación (V2), sesión (V3) y control de acceso (V4), y con OWASP Top 10:2021.
+El sistema gestiona principalmente información operativa, pero su indisponibilidad o manipulación detendría la producción, el mismo problema que se busca resolver. Además, guarda datos personales de trabajadores (nombre, usuario, actividad), sujetos a la Ley N.º 19.628 modificada por la Ley N.º 21.719 y al Código del Trabajo (sección 7.7). Los controles técnicos se alinean con OWASP ASVS 4.0.3 nivel 2 en autenticación (V2), sesión (V3) y control de acceso (V4), y con OWASP Top 10:2021. En el plano de gestión, se alinean con ISO/IEC 27001/27002, CIS Controls v8.1 y NIST CSF 2.0.
 
 ### 7.1 Roles y perfiles de acceso (2.1.5.10)
 
@@ -1193,6 +1193,66 @@ export async function solicitarSubida(etapaId: string, mime: string, bytes: numb
 }
 ```
 
+### 7.7 Marco normativo chileno y estándares de referencia
+
+El SGP trata datos personales de los trabajadores de Kotoduo: identificación (nombre, usuario, correo), credenciales, área, asignaciones y registro de actividad (inicio y término de etapas, bitácora y fotografías de evidencia). No trata datos sensibles (salud, biometría, afiliación sindical) ni datos de contacto de clientes (RNF-09). **Kotoduo es el responsable del tratamiento.** El equipo de desarrollo, durante el proyecto, y los proveedores cloud actúan como **encargados** que tratan los datos por cuenta de Kotoduo.
+
+Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia el 1 de diciembre de 2026. El piloto (H2) operará bajo la ley modificada, por lo que el diseño se ajusta desde ya a ella y no solo al texto anterior. El contenido legal de esta sección es una interpretación técnica para orientar el diseño; Kotoduo debe validarla con asesoría jurídica antes del paso a producción.
+
+**Tabla 7.3 — Normativa chilena aplicable.**
+
+| Norma | Alcance en el SGP | Obligación relevante | Medida en el diseño | Evidencia |
+|---|---|---|---|---|
+| Constitución Política, art. 19 N.º 4 (reformado por la Ley N.º 21.096, 2018) | Todo dato personal tratado | Consagra el derecho a la protección de los datos personales | Fundamento del resto de las medidas | — |
+| Ley N.º 19.628 sobre protección de datos personales, modificada por la Ley N.º 21.719 (2024) | Datos de los trabajadores usuarios | Principios de licitud, finalidad, proporcionalidad, calidad, responsabilidad, seguridad, transparencia y confidencialidad; deber de información; derechos de acceso, rectificación, supresión, oposición, portabilidad y bloqueo; medidas de seguridad apropiadas al riesgo; notificación de vulneraciones a la Agencia de Protección de Datos Personales; reglas para encargados y transferencias internacionales. Las infracciones gravísimas se sancionan con multas de hasta 20.000 UTM | Minimización (RNF-09); finalidad declarada; controles de 7.1–7.5; aviso de privacidad; atención de derechos; retención definida; procedimiento de incidentes (decisiones D1–D7) | AM-16, CP-32, Tabla 7.5 |
+| Código del Trabajo, arts. 5, 153, 154 y 154 bis | Registro de actividad de los trabajadores (bitácora, tiempos de etapa, evidencias) | Las facultades del empleador tienen como límite los derechos fundamentales del trabajador, en especial su intimidad, vida privada y honra. Las medidas de control deben constar en el Reglamento Interno, ser generales, impersonales y respetuosas de la dignidad. El empleador debe mantener reserva de los datos privados del trabajador. Una vulneración puede reclamarse por el procedimiento de tutela laboral (art. 485) | El registro tiene por finalidad la trazabilidad de la OT, no la vigilancia; sin geolocalización, cámara permanente ni ranking de productividad individual; cada operario ve solo lo propio | D1, D8; guía rápida (A30) |
+| Ley N.º 21.459 (2022), delitos informáticos | Pruebas de seguridad y pentest (A27) | Sanciona el acceso a un sistema sin autorización o excediendo la autorización otorgada | Pentest solo con autorización escrita de Kotoduo, alcance definido y contra staging; se respetan las políticas de pruebas de los proveedores | D9; acta de autorización (A27) |
+| Ley N.º 21.663 (2024), Ley Marco de Ciberseguridad | Kotoduo no es prestador de servicios esenciales ni operador de importancia vital | No impone obligaciones directas al proyecto | Se adoptan voluntariamente sus principios de gestión de riesgos y reporte de incidentes, y las recomendaciones de la Agencia Nacional de Ciberseguridad (ANCI) | D6 |
+
+**Decisiones de diseño derivadas de la normativa:**
+
+1. **D1. Finalidad y proporcionalidad del registro de actividad.** La bitácora y los tiempos de etapa existen para la trazabilidad de la OT (RF-12) y el análisis agregado por tipo de trabajo. El panel agrega por OT, no por trabajador, y el sistema no genera rankings ni reportes de productividad individual. Si Kotoduo decide usar estos registros como medida de control laboral, debe incorporarlos a su Reglamento Interno e informarlo a los trabajadores (art. 154).
+2. **D2. Deber de información.** Un aviso de privacidad, accesible desde el login y el perfil, indica qué datos se tratan, con qué finalidad, por cuánto tiempo, quién es el responsable y cómo ejercer los derechos. Se construye junto con HU-11.
+3. **D3. Derechos de los titulares.** Se atienden con funciones existentes: el perfil permite la rectificación; la consulta de bitácora filtrada por usuario (HU-12) permite entregar al titular el registro de su actividad (acceso y portabilidad); la baja lógica de la cuenta implementa la supresión o el bloqueo. Los registros de auditoría se conservan durante su periodo de retención porque su integridad es necesaria para la trazabilidad.
+4. **D4. Retención.** Bitácora: 24 meses (RNF-05, TTL). Notificaciones: 90 días (TTL). Al vencer la retención, los datos identificatorios de usuarios desactivados se seudonimizan; durante el piloto es un procedimiento manual del Administrador y su automatización queda para una versión posterior.
+5. **D5. Encargados y transferencia internacional.** Render, Neon, MongoDB Atlas, Cloudflare y Sentry procesan datos fuera de Chile. Antes de cargar datos reales se aceptan sus acuerdos de tratamiento de datos (DPA) con cláusulas contractuales tipo, se elige la región más cercana disponible y la transferencia se documenta en el registro de actividades de tratamiento. A Sentry no se envían datos personales (depuración de eventos).
+6. **D6. Vulneraciones de seguridad.** Procedimiento en cinco pasos: detectar (Sentry, UptimeRobot, alerta de reutilización de refresh), contener (revocar sesiones, rotar claves `kid`), evaluar el alcance, notificar a la Agencia sin dilación indebida y a los titulares cuando la ley lo exija, y registrar el incidente con sus lecciones aprendidas. Kotoduo lo ejecuta con apoyo del equipo.
+7. **D7. Datos de prueba.** Desarrollo y staging usan solo datos semilla ficticios. La carga inicial desde el Excel actual (A29) se hace solo en producción y únicamente con las columnas necesarias.
+8. **D8. Fotografías de evidencia.** Registran el trabajo, no a las personas. La guía rápida lo indica y el formulario de evidencia lo recuerda.
+9. **D9. Pentest autorizado.** Antes de A27 se firma un acta con Kotoduo que define el alcance, el ambiente (staging), las fechas y las técnicas permitidas.
+
+**Pertinencia de los estándares.** La Ley N.º 21.719 exige medidas de seguridad apropiadas según el riesgo, el estado de la técnica y el costo de aplicación, pero no prescribe un estándar. Los estándares internacionales permiten demostrar esa diligencia (principio de responsabilidad) y sirven de base para el modelo de prevención de infracciones que la ley contempla como voluntario. El INN adoptó la norma ISO/IEC 27001 en Chile como NCh-ISO 27001. No se busca una certificación, cuyo costo no se justifica para una pyme, sino usar estos estándares como catálogo de controles verificables.
+
+**Tabla 7.4 — Estándares de referencia y su relación con la normativa chilena.**
+
+| Estándar | Uso en el proyecto | Relación con la normativa chilena | Aplicación en el SGP |
+|---|---|---|---|
+| ISO/IEC 27001:2022 (NCh-ISO 27001) | Marco de gestión de la seguridad de la información y del riesgo | Medidas de seguridad apropiadas al riesgo; principio de responsabilidad | Modelo de amenazas con probabilidad e impacto (7.4); controles exigibles por la DoD |
+| ISO/IEC 27002:2022 | Catálogo de controles | Seguridad y confidencialidad de los datos personales | 5.15 control de acceso (7.1–7.3); 5.34 privacidad y protección de datos personales (D1–D5); 8.5 autenticación segura (7.2); 8.13 respaldo (AM-15); 8.15 registro de eventos (bitácora); 8.25 y 8.28 desarrollo y codificación seguros (7.5); 8.29 pruebas de seguridad (A27); 8.33 información de prueba (D7) |
+| ISO/IEC 27701 | Extensión de privacidad de ISO/IEC 27001 para responsables y encargados | Deber de información, derechos de los titulares y obligaciones del encargado | D2, D3 y D5 |
+| ISO/IEC 29100:2011 | Marco de principios de privacidad | Equivale a los principios de finalidad, proporcionalidad y transparencia de la ley | RNF-09 y D1 |
+| ISO/IEC 27018:2019 | Protección de datos personales en nubes públicas que actúan como encargadas | Selección de encargados y transferencia internacional | Criterio para evaluar a los proveedores (D5) |
+| ISO/IEC 27035-1:2023 | Gestión de incidentes de seguridad | Notificación de vulneraciones a la Agencia y a los titulares | Procedimiento D6 |
+| CIS Critical Security Controls v8.1 (IG1 + control 16) | Salvaguardas priorizadas para organizaciones pequeñas sin equipo de TI | Traduce las "medidas apropiadas" en acciones verificables para una pyme | 3 protección de datos (inventario, retención y eliminación segura: D4); 5 y 6 gestión de cuentas y accesos con MFA (7.2); 8 registros de auditoría (bitácora); 11 recuperación de datos (AM-15); 14 concientización (A30); 16 seguridad del software (7.5, 8.6); 17 respuesta a incidentes (D6) |
+| NIST Cybersecurity Framework 2.0 | Estructura de cumplimiento en seis funciones | La función Gobernar (GV.OC-03) exige conocer y gestionar los requisitos legales, incluidos los de privacidad | Gobernar: esta sección; Proteger: 7.1–7.5; Detectar: Sentry y UptimeRobot; Responder: D6; Recuperar: PITR y respaldos |
+| NIST Privacy Framework 1.0 | Gestión del riesgo de privacidad | Derechos de los titulares, transparencia y minimización | D1–D4 |
+| NIST SP 800-218 (SSDF) 1.1 | Prácticas de desarrollo seguro | Medidas de seguridad desde el diseño | DoD, SAST, revisión de PR (incluido el código generado con IA) |
+| NIST SP 800-115 | Metodología de pruebas técnicas y pentest | Pruebas autorizadas (Ley N.º 21.459) | Planificación, ejecución e informe de A27 |
+| NIST SP 800-61 Rev. 3 | Respuesta a incidentes alineada con CSF 2.0 | Notificación de vulneraciones | Procedimiento D6 |
+
+**Tabla 7.5 — Cumplimiento normativo en la planificación.** Las tareas normativas se integran en actividades existentes de la Tabla 3.2, sin agregar días al cronograma.
+
+| Actividad | Tarea normativa | Entregable |
+|---|---|---|
+| A01 (D1) | Validar con Kotoduo su rol de responsable, la finalidad del registro de actividad (D1) y si incluirá las medidas de control en su Reglamento Interno | Acta de validación |
+| A07 (D8–D9) | Elaborar la matriz normativa y el registro de actividades de tratamiento | Sección 7.7 |
+| A11 (D12) | Cargar solo datos semilla ficticios en desarrollo y staging (D7) | Script de semillas |
+| A12, A15 (Sprint 1) | Construir el aviso de privacidad en el login y el perfil (D2) | Pantallas P-01 y P-09 |
+| A27 (D28–D29) | Firmar el acta de autorización del pentest (D9); aplicar NIST SP 800-115; verificar que los logs no contengan datos personales | Acta + informe CP-24 a CP-32 |
+| A29 (D30) | Aceptar los DPA de los proveedores antes de cargar datos reales; cargar desde el Excel solo las columnas necesarias (D5, D7) | Registro de transferencias |
+| A30 (D30) | Informar a los trabajadores sobre el tratamiento de sus datos y las reglas para las fotografías de evidencia (D2, D8) | Guía rápida + registro de asistencia |
+| A31 (D30) | Entregar a Kotoduo los procedimientos de incidentes (D6), de atención de derechos (D3) y de retención (D4) | Anexo de procedimientos |
+
 ---
 
 ## 8. Plan de pruebas
@@ -1385,7 +1445,29 @@ Brooke, J. (1996). SUS: A "quick and dirty" usability scale. En P. W. Jordan, B.
 
 Biblioteca del Congreso Nacional de Chile. (1999). *Ley N.º 19.628 sobre protección de la vida privada*. https://www.bcn.cl/leychile/navegar?idNorma=141599
 
+Biblioteca del Congreso Nacional de Chile. (2002). *Código del Trabajo (DFL N.º 1, de 2002, del Ministerio del Trabajo y Previsión Social, texto refundido)*. https://www.bcn.cl/leychile
+
+Biblioteca del Congreso Nacional de Chile. (2018). *Ley N.º 21.096 que consagra el derecho a protección de los datos personales*. https://www.bcn.cl/leychile
+
+Biblioteca del Congreso Nacional de Chile. (2022). *Ley N.º 21.459 que establece normas sobre delitos informáticos*. https://www.bcn.cl/leychile
+
+Biblioteca del Congreso Nacional de Chile. (2024). *Ley N.º 21.663, Ley Marco de Ciberseguridad*. https://www.bcn.cl/leychile
+
 Biblioteca del Congreso Nacional de Chile. (2024). *Ley N.º 21.719 que regula la protección y el tratamiento de los datos personales y crea la Agencia de Protección de Datos Personales*. https://www.bcn.cl/leychile
+
+Center for Internet Security. (2024). *CIS Critical Security Controls* (versión 8.1). https://www.cisecurity.org/controls
+
+International Organization for Standardization & International Electrotechnical Commission. (2011). *Information technology — Security techniques — Privacy framework* (ISO/IEC 29100:2011).
+
+International Organization for Standardization & International Electrotechnical Commission. (2019). *Code of practice for protection of personally identifiable information (PII) in public clouds acting as PII processors* (ISO/IEC 27018:2019).
+
+International Organization for Standardization & International Electrotechnical Commission. (2019). *Extension to ISO/IEC 27001 and ISO/IEC 27002 for privacy information management* (ISO/IEC 27701:2019).
+
+International Organization for Standardization & International Electrotechnical Commission. (2022). *Information security management systems — Requirements* (ISO/IEC 27001:2022).
+
+International Organization for Standardization & International Electrotechnical Commission. (2022). *Information security controls* (ISO/IEC 27002:2022).
+
+International Organization for Standardization & International Electrotechnical Commission. (2023). *Information security incident management — Part 1: Principles and process* (ISO/IEC 27035-1:2023).
 
 Kotoduo. (2026). *Antecedentes complementarios para definición del proyecto Kotoduo* [Documento no publicado]. Proyecto Integrado, INACAP.
 
@@ -1393,7 +1475,17 @@ Kruchten, P. B. (1995). The 4+1 view model of architecture. *IEEE Software, 12*(
 
 MongoDB, Inc. (2025). *Schema validation*. MongoDB Manual. https://www.mongodb.com/docs/manual/core/schema-validation/
 
+National Institute of Standards and Technology. (2008). *Technical guide to information security testing and assessment* (NIST SP 800-115). https://doi.org/10.6028/NIST.SP.800-115
+
+National Institute of Standards and Technology. (2020). *NIST privacy framework: A tool for improving privacy through enterprise risk management* (versión 1.0). https://doi.org/10.6028/NIST.CSWP.01162020
+
+National Institute of Standards and Technology. (2022). *Secure software development framework (SSDF) version 1.1* (NIST SP 800-218). https://doi.org/10.6028/NIST.SP.800-218
+
+National Institute of Standards and Technology. (2024). *The NIST cybersecurity framework (CSF) 2.0* (NIST CSWP 29). https://doi.org/10.6028/NIST.CSWP.29
+
 National Institute of Standards and Technology. (2025). *Digital identity guidelines: Authentication and authenticator management* (NIST SP 800-63B-4). https://doi.org/10.6028/NIST.SP.800-63B-4
+
+National Institute of Standards and Technology. (2025). *Incident response recommendations and considerations for cybersecurity risk management* (NIST SP 800-61 Rev. 3). https://doi.org/10.6028/NIST.SP.800-61r3
 
 Nielsen, J. (1994, actualizado 2024). *10 usability heuristics for user interface design*. Nielsen Norman Group. https://www.nngroup.com/articles/ten-usability-heuristics/
 
