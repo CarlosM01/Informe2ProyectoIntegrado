@@ -1,0 +1,12 @@
+# Claude Code personal settings
+.claude/settings.local.json
+
+# Local agent tooling
+.atl/
+.codegraph/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*~
