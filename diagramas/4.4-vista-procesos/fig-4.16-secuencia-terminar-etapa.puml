@@ -21,8 +21,8 @@ ES -> PG : SELECT etapa … FOR UPDATE
 PG --> ES : estado, responsable, versión
 
 alt el actor no es el responsable
-  ES --> API : ErrorAutorizacion
-  API --> PWA : 403 Forbidden
+  ES --> API : ErrorNoEncontrado
+  API --> PWA : 404 Not Found\n(no revela que la etapa existe)
 else la versión no coincide
   ES --> API : ErrorConflicto
   API --> PWA : 409 Conflict

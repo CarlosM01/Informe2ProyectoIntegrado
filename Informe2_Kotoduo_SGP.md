@@ -440,7 +440,7 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 
 *Simbología de los diagramas de secuencia:* las líneas de vida verticales representan participantes (actores, componentes y bases de datos). Las flechas continuas son mensajes síncronos y las punteadas, respuestas. Los fragmentos `alt` modelan alternativas excluyentes, `loop` modela repeticiones y `opt` un paso opcional.
 
-**Figura 4.16 — Secuencia CU-06 "Terminar etapa": tramo síncrono** (`diagramas/4.4-vista-procesos/fig-4.16-secuencia-terminar-etapa.puml`). La API autentica el JWT, verifica el permiso `etapas.avanzar_propias` y valida el cuerpo con Zod. Luego bloquea la fila de la etapa (`SELECT … FOR UPDATE`), verifica que el actor sea el responsable (403 si no lo es) y que la versión coincida (409 si cambió: control de concurrencia optimista), y aplica todos los cambios en **una transacción ACID**: etapa terminada, consumos de insumo (que pueden disparar una alerta), siguiente etapa disponible y evento outbox.
+**Figura 4.16 — Secuencia CU-06 "Terminar etapa": tramo síncrono** (`diagramas/4.4-vista-procesos/fig-4.16-secuencia-terminar-etapa.puml`). La API autentica el JWT, verifica el permiso `etapas.avanzar_propias` y valida el cuerpo con Zod. Luego bloquea la fila de la etapa (`SELECT … FOR UPDATE`), verifica que el actor sea el responsable (404 si no lo es, para no revelar que la etapa existe) y que la versión coincida (409 si cambió: control de concurrencia optimista), y aplica todos los cambios en **una transacción ACID**: etapa terminada, consumos de insumo (que pueden disparar una alerta), siguiente etapa disponible y evento outbox.
 
 ![Figura 4.16 — Secuencia CU-06: tramo síncrono](figuras/4.4-vista-procesos/fig-4.16-secuencia-terminar-etapa.png)
 
@@ -524,7 +524,7 @@ Los once casos de uso se dividen en tres diagramas, uno por subsistema, para que
 | Precondiciones | Sesión activa; la etapa está asignada al actor y en estado DISPONIBLE o EN_CURSO |
 | Flujo básico | 1. El actor abre *Mi Trabajo* y selecciona la OT. 2. El sistema muestra la etapa, las instrucciones, los insumos requeridos y la siguiente área. 3. El actor pulsa **Iniciar**; el sistema cambia la etapa a EN_CURSO. 4. Al finalizar, el actor pulsa **Terminar** e ingresa los consumos reales. 5. El sistema registra la etapa como TERMINADA, descuenta el stock, habilita la siguiente etapa y notifica a su responsable. 6. El sistema muestra "Sigue: <etapa> en <área>". |
 | Flujos alternativos | 3a. Problema en la ejecución → **Reportar problema** con motivo → BLOQUEADA; se notifica a la Encargada. 4a. Insumo insuficiente → extiende CU-09. 4b. Adjuntar foto o nota → extensión "Registrar evidencia". 5a. Última etapa → la OT pasa a TERMINADA. |
-| Excepciones | E1. Otro usuario actualizó la etapa → 409 "La etapa cambió; recarga". E2. La etapa no pertenece al actor → 403. E3. Sin conexión → la PWA informa y conserva el formulario. |
+| Excepciones | E1. Otro usuario actualizó la etapa → 409 "La etapa cambió; recarga". E2. La etapa no pertenece al actor → 404, sin revelar que existe (AM-05). E3. Sin conexión → la PWA informa y conserva el formulario. |
 | Postcondiciones | El estado de la etapa y de la OT queda consistente; el evento queda en la bitácora; el siguiente responsable está notificado |
 | Reglas | Solo transiciones de la Fig. 4.7; el consumo no puede dejar stock negativo |
 
