@@ -42,6 +42,7 @@ PC -- EDGE : HTTPS 443
 EDGE - PAGES : sgp.kotoduo.cl
 EDGE -- WS : api.sgp.kotoduo.cl
 MOV ..> BKT : PUT/GET con URL\nprefirmada (5 min)
+PC ..> BKT : PUT/GET con URL\nprefirmada (5 min)
 WS -left- R2 : firma URLs\n(API S3)
 WS -- PGDB : TLS 5432\nverify-full
 WS -- MGDB : TLS 27017\nIP allowlist

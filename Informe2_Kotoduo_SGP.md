@@ -362,7 +362,7 @@ La vista lógica se presenta en seis figuras: un mapa del dominio (Fig. 4.2), tr
 
 ![Figura 4.5 — Dominio: usuarios, roles y áreas](figuras/4.2-vista-logica/fig-4.05-dominio-acceso.png)
 
-**Figura 4.6 — Servicios de aplicación** (`diagramas/4.2-vista-logica/fig-4.06-servicios-aplicacion.puml`). Cada servicio coordina una entidad del dominio. `EtapaService` delega el consumo en `InsumoService`, y los servicios que cambian estado registran el evento en `AuditoriaService`, que notifica de forma diferida mediante el relay outbox.
+**Figura 4.6 — Servicios de aplicación** (`diagramas/4.2-vista-logica/fig-4.06-servicios-aplicacion.puml`). Cada servicio coordina una entidad del dominio. `EtapaService` delega el consumo en `InsumoService`. Todos los servicios que cambian estado (órdenes, etapas, insumos y aprobaciones de diseño), además de `AuthService` con los eventos de seguridad, registran el evento en `AuditoriaService`, que notifica de forma diferida mediante el relay outbox.
 
 ![Figura 4.6 — Servicios de aplicación](figuras/4.2-vista-logica/fig-4.06-servicios-aplicacion.png)
 
@@ -424,7 +424,7 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 
 ![Figura 4.13 — Flujo productivo: visión general](figuras/4.4-vista-procesos/fig-4.13-flujo-general.png)
 
-**Figura 4.14 — Subproceso: registro de la orden y aprobación de diseño** (`diagramas/4.4-vista-procesos/fig-4.14-subproceso-registro-diseno.puml`). El bucle entre Diseñador y Vendedor modela las rondas de aprobación del diseño con el cliente.
+**Figura 4.14 — Subproceso: registro de la orden y aprobación de diseño** (`diagramas/4.4-vista-procesos/fig-4.14-subproceso-registro-diseno.puml`). El bucle entre Diseñador y Vendedor modela las rondas de aprobación del diseño con el cliente. Cada respuesta del cliente queda en la bitácora con la versión, el actor y el motivo (RF-12).
 
 ![Figura 4.14 — Subproceso: registro de la orden y aprobación de diseño](figuras/4.4-vista-procesos/fig-4.14-subproceso-registro-diseno.png)
 
@@ -476,7 +476,7 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 1. Los **smartphones** de los trabajadores ejecutan la PWA instalada y los **PC de oficina** la usan en el navegador.
 2. Todo el tráfico entra por **Cloudflare**, que provee DNS, TLS 1.3, WAF y limitación de tasa en el borde. `sgp.kotoduo.cl` sirve la PWA desde **Cloudflare Pages** y `api.sgp.kotoduo.cl` enruta al **Web Service de Render**, un contenedor Docker con Node.js 24 LTS que ejecuta la API y los trabajos programados.
 3. La API se conecta por TLS a **PostgreSQL 16 en Neon** (`sslmode=verify-full`) y a **MongoDB 8 en Atlas** (con lista de IP permitidas). Los tres están co-ubicados en la región este de EE. UU. para minimizar la latencia API↔BD.
-4. Los archivos se suben **directamente** desde el teléfono a **Cloudflare R2** mediante URL prefirmadas de 5 minutos. La API nunca recibe el binario, lo que reduce la carga y la superficie de ataque.
+4. Los archivos se suben y se consultan **directamente** entre el dispositivo (teléfono o PC) y **Cloudflare R2** mediante URL prefirmadas de 5 minutos. La API nunca recibe el binario, lo que reduce la carga y la superficie de ataque.
 5. **GitHub Actions** ejecuta CI/CD y el respaldo nocturno.
 6. Ambos dominios comparten el sitio `kotoduo.cl`, lo que habilita cookies `SameSite=Strict` (sección 7.2).
 

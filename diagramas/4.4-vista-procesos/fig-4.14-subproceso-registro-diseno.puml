@@ -26,6 +26,9 @@ if (¿El tipo de trabajo\nrequiere diseño?) then (sí)
     |Vendedor|
     :Presentar diseño al cliente
     y registrar su respuesta;
+    |SGP-Kotoduo|
+    :Registrar la decisión en la bitácora
+    (versión, actor, motivo);
   repeat while (¿Cliente aprueba?) is (no: registrar motivo)
   -> sí;
 else (no)

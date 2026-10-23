@@ -50,8 +50,11 @@ InsumoService ..> Insumo
 DisenoService ..> AprobacionDiseno
 
 EtapaService ..> InsumoService : registra consumo
+AuthService ..> AuditoriaService : eventos de seguridad
 OrdenService ..> AuditoriaService
 EtapaService ..> AuditoriaService
+InsumoService ..> AuditoriaService
+DisenoService ..> AuditoriaService
 AuditoriaService ..> NotificacionService : vía relay outbox
 
 legend bottom left
