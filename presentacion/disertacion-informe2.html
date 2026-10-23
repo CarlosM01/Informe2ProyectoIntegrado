@@ -180,7 +180,7 @@
 </div>
 <p style="font-size:24px;color:#C3CBDA;text-align:right">Scrum: Sprint 0 de diseño + 4 sprints de construcción</p>
 </div>
-<aside class="notes">Presentarse. Objetivo: mostrar cómo el diagnóstico de la Unidad 1 se tradujo en un diseño verificable: arquitectura 4+1, tecnologías, prototipo, modelo de datos y seguridad. La franja de etapas resume la idea central del sistema: al terminar una etapa, el trabajador ve qué sigue y en qué área.</aside>
+<aside class="notes">Presentarse. Objetivo: mostrar cómo el diagnóstico de la Unidad 1 se convirtió en un diseño que se puede verificar: arquitectura, tecnologías, prototipo, datos y seguridad. La franja de etapas resume la idea del sistema: al terminar una etapa, el trabajador ve qué sigue y en qué área.</aside>
 </section>
 
 <section id="problema" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:40px">
@@ -192,15 +192,15 @@
 <div style="display:flex;gap:24px">
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:32px">
 <h3 style="font-size:30px;font-weight:600;color:#14213D">Dependencia de personas</h3>
-<p style="font-size:26px;line-height:1.4;color:#3F4A5C">La producción se detiene cuando no están las tres personas a cargo.</p>
+<p style="font-size:26px;line-height:1.4;color:#3F4A5C">Si faltan las tres personas a cargo, la producción se detiene.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:32px">
 <h3 style="font-size:30px;font-weight:600;color:#14213D">Información dispersa</h3>
-<p style="font-size:26px;line-height:1.4;color:#3F4A5C">Excel, memoria, ERP, Softland, correo y WhatsApp, sin integración.</p>
+<p style="font-size:26px;line-height:1.4;color:#3F4A5C">Excel, memoria, ERP, Softland, correo y WhatsApp, sin conexión entre sí.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:32px">
 <h3 style="font-size:30px;font-weight:600;color:#14213D">Insumos reactivos</h3>
-<p style="font-size:26px;line-height:1.4;color:#3F4A5C">La falta de tinta o papel se detecta cuando el trabajo ya debía comenzar.</p>
+<p style="font-size:26px;line-height:1.4;color:#3F4A5C">La falta de tinta o papel se descubre cuando el trabajo ya debía empezar.</p>
 </div>
 </div>
 <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
@@ -211,7 +211,7 @@
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">02</p>
-<aside class="notes">El problema central lo confirmó la contraparte: el seguimiento depende de un Excel y de la memoria de la encargada de producción. Hay tres síntomas: dependencia de personas, información duplicada sin integración y una gestión de insumos que solo reacciona cuando el faltante ya detuvo el trabajo. Todas las decisiones del diseño se justifican contra tres criterios del cliente: autonomía, simplicidad (una app para el celular) y alcance acotado, sin contactos de clientes ni temas de dinero.</aside>
+<aside class="notes">La contraparte confirmó el problema: el seguimiento depende de un Excel y de la memoria de la encargada de producción. Se ve en tres síntomas: la producción depende de personas, la información está repetida en muchos lados y los faltantes de insumos se descubren tarde. Cada decisión del diseño se justifica con tres criterios del cliente: autonomía, simplicidad (una app para el celular) y alcance acotado, sin contactos de clientes ni dinero.</aside>
 </section>
 
 <section id="solucion" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:40px">
@@ -266,10 +266,10 @@
 <p style="font-size:26px;font-weight:600;color:#14213D">Bitácora y auditoría</p>
 </div>
 </div>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C"><b>Fuera de alcance:</b> contactos de clientes, precios, pagos y facturación, integración con Softland o el ERP, compras a proveedores y remuneraciones.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C"><b>Fuera de alcance:</b> contactos de clientes, precios, pagos, integración con Softland o el ERP, compras y remuneraciones.</p>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">03</p>
-<aside class="notes">SGP es una aplicación web progresiva (PWA) instalable. Cada trabajo se modela como una orden de trabajo (OT) compuesta por etapas que se generan desde una plantilla por tipo de trabajo. Así el conocimiento del proceso deja de estar en la memoria de tres personas. Ocho módulos, M1 a M8. Cinco roles: Administrador, Encargada de Producción, Vendedor, Diseñador y Operario. Lo que quedó fuera del alcance responde a decisiones del cliente.</aside>
+<aside class="notes">SGP es una aplicación web que se instala en el celular (PWA). Cada trabajo es una orden de trabajo (OT) con etapas que salen de una plantilla según el tipo de trabajo. Así, el proceso deja de vivir en la memoria de tres personas. Son ocho módulos y cinco roles: Administrador, Encargada de Producción, Vendedor, Diseñador y Operario. Lo que quedó fuera lo decidió el cliente.</aside>
 </section>
 
 <section id="fig-4-1" data-transition="fade" style="background:#FFFFFF;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:28px 40px 24px;display:flex;flex-direction:column;gap:16px">
@@ -285,25 +285,25 @@
 <section id="arquitectura" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:32px">
 <div style="display:flex;flex-direction:column;gap:12px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C;letter-spacing:1px;text-transform:uppercase">Arquitectura 4+1 · Visión general</p>
-<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Monolito modular en capas, con cliente PWA</h2>
+<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Una sola aplicación, dividida en módulos</h2>
 </div>
 <div style="display:flex;gap:40px;margin:auto 0">
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;border-radius:0 0 16px 16px;border-top:6px solid #1E40AF;padding:40px 40px 48px">
 <h3 style="font-size:40px;font-weight:600;color:#14213D">Monolito, no microservicios</h3>
-<p style="font-size:32px;line-height:1.45;color:#3F4A5C">2 desarrolladores, ~25 usuarios, ~30 OT por semana. Los límites de módulo permiten extraer servicios después.</p>
+<p style="font-size:32px;line-height:1.45;color:#3F4A5C">2 desarrolladores, ~25 usuarios y ~30 OT por semana. Si hace falta, un módulo se puede separar después.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;border-radius:0 0 16px 16px;border-top:6px solid #1E40AF;padding:40px 40px 48px">
-<h3 style="font-size:40px;font-weight:600;color:#14213D">Persistencia políglota</h3>
-<p style="font-size:32px;line-height:1.45;color:#3F4A5C">PostgreSQL para lo transaccional; MongoDB para eventos, evidencias y avisos.</p>
+<h3 style="font-size:40px;font-weight:600;color:#14213D">Dos bases de datos</h3>
+<p style="font-size:32px;line-height:1.45;color:#3F4A5C">PostgreSQL guarda órdenes, etapas e insumos; MongoDB guarda el historial, las fotos y los avisos.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;border-radius:0 0 16px 16px;border-top:6px solid #C2410C;padding:40px 40px 48px">
 <h3 style="font-size:40px;font-weight:600;color:#14213D">Outbox transaccional</h3>
-<p style="font-size:32px;line-height:1.45;color:#3F4A5C">Integra ambas bases sin transacciones distribuidas ni pérdida de eventos.</p>
+<p style="font-size:32px;line-height:1.45;color:#3F4A5C">Conecta las dos bases sin perder eventos, aunque MongoDB falle.</p>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">05</p>
-<aside class="notes">Recorrido de una petición (Figura 4.1): la PWA entra por Cloudflare, el middleware de seguridad la filtra (JWT, permisos, validación) y los módulos M1–M8 la resuelven contra PostgreSQL. Después, el relay publica los eventos en MongoDB y envía Web Push. Los archivos viajan directo de la PWA a R2. Los microservicios se descartaron: su costo operativo (despliegues, observabilidad distribuida, consistencia eventual) no aporta valor con dos desarrolladores y este volumen. Si M5 se integra con proveedores, se puede extraer sin reescribir el resto.</aside>
+<aside class="notes">Cómo viaja una petición (Figura 4.1): entra por Cloudflare, pasa los controles de seguridad (quién es, qué puede hacer, si los datos son válidos) y un módulo la resuelve contra PostgreSQL. Después, el relay copia los eventos a MongoDB y manda el aviso push. Los archivos van directo del celular a R2. No usamos microservicios: con dos desarrolladores y este volumen, solo suman despliegues y monitoreo sin aportar al cliente. Si algún día insumos (M5) se conecta con proveedores, ese módulo se puede separar.</aside>
 </section>
 
 <section id="vistas" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:40px">
@@ -313,26 +313,26 @@
 </div>
 <table style="font-size:26px;color:#14213D;border:1px solid #D9DEE7">
 <tr style="background:#14213D"><th style="width:16%;color:#F4F1EA">Vista</th><th style="width:36%;color:#F4F1EA">Pregunta que responde</th><th style="width:30%;color:#F4F1EA">Diagramas</th><th style="width:18%;color:#F4F1EA">Figuras</th></tr>
-<tr style="background:#FFFFFF"><td><b>Lógica</b></td><td>¿Qué clases y responsabilidades?</td><td>Clases y estados</td><td>4.2 – 4.8</td></tr>
-<tr style="background:#F0F2F6"><td><b>Desarrollo</b></td><td>¿Cómo se organiza el código?</td><td>Componentes y paquetes</td><td>4.9 – 4.13</td></tr>
-<tr style="background:#FFFFFF"><td><b>Procesos</b></td><td>¿Qué flujos y concurrencia existen?</td><td>Actividades BPMN y secuencia</td><td>4.14 – 4.18</td></tr>
-<tr style="background:#F0F2F6"><td><b>Física</b></td><td>¿Dónde se ejecuta cada pieza?</td><td>Despliegue y CI/CD</td><td>4.19 – 4.20</td></tr>
-<tr style="background:#FFFFFF"><td><b>Escenarios</b></td><td>¿Qué casos de uso unen las vistas?</td><td>Casos de uso (14 CU)</td><td>4.21 – 4.24</td></tr>
+<tr style="background:#FFFFFF"><td><b>Lógica</b></td><td>¿Qué partes tiene y qué hace cada una?</td><td>Clases y estados</td><td>4.2 – 4.8</td></tr>
+<tr style="background:#F0F2F6"><td><b>Desarrollo</b></td><td>¿Cómo se ordena el código?</td><td>Componentes y paquetes</td><td>4.9 – 4.13</td></tr>
+<tr style="background:#FFFFFF"><td><b>Procesos</b></td><td>¿Qué pasa y en qué orden?</td><td>Actividades BPMN y secuencia</td><td>4.14 – 4.18</td></tr>
+<tr style="background:#F0F2F6"><td><b>Física</b></td><td>¿Dónde corre cada pieza?</td><td>Despliegue y CI/CD</td><td>4.19 – 4.20</td></tr>
+<tr style="background:#FFFFFF"><td><b>Escenarios</b></td><td>¿Qué casos de uso unen todo?</td><td>Casos de uso (14 CU)</td><td>4.21 – 4.24</td></tr>
 </table>
 <div style="display:flex;gap:24px">
 <div style="flex:1;background:#E3E9F7;border-radius:14px;padding:24px 28px">
-<p style="font-size:24px;line-height:1.4;color:#14213D"><b>Legibilidad:</b> cada vista parte de una visión general y luego muestra acercamientos por tema.</p>
+<p style="font-size:24px;line-height:1.4;color:#14213D"><b>Legibilidad:</b> cada vista parte de un diagrama general y luego hace zoom por tema.</p>
 </div>
 <div style="flex:1;background:#E3E9F7;border-radius:14px;padding:24px 28px">
-<p style="font-size:24px;line-height:1.4;color:#14213D"><b>Consistencia:</b> módulos, entidades y roles tienen el mismo nombre en todas las vistas.</p>
+<p style="font-size:24px;line-height:1.4;color:#14213D"><b>Consistencia:</b> módulos, clases y roles se llaman igual en todas las vistas.</p>
 </div>
 <div style="flex:1;background:#E3E9F7;border-radius:14px;padding:24px 28px">
-<p style="font-size:24px;line-height:1.4;color:#14213D"><b>Trazabilidad:</b> 24 figuras en PlantUML, versionadas y revisables en cada PR.</p>
+<p style="font-size:24px;line-height:1.4;color:#14213D"><b>Trazabilidad:</b> 24 figuras escritas en PlantUML, versionadas junto al código.</p>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">06</p>
-<aside class="notes">Cada vista responde una pregunta distinta para un interesado distinto: la lógica para usuarios y analistas, la de desarrollo para programadores, la de procesos para integradores, la física para infraestructura y los escenarios para todos, incluido el cliente. Ningún diagrama intenta mostrar todo el sistema: hay una visión general y luego acercamientos. Los elementos en gris (ref) se detallan en otra figura.</aside>
+<aside class="notes">Cada vista responde una pregunta para un público distinto: la lógica para usuarios y analistas, la de desarrollo para programadores, la de procesos para integradores, la física para infraestructura y los escenarios para todos, incluido el cliente. Ningún diagrama muestra todo: hay uno general y luego acercamientos. Lo que aparece en gris se detalla en otra figura.</aside>
 </section>
 
 <section id="fig-4-2" data-transition="fade" style="background:#FFFFFF;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:28px 40px 24px;display:flex;flex-direction:column;gap:16px">
@@ -408,31 +408,31 @@
 <section id="logica" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:32px">
 <div style="display:flex;flex-direction:column;gap:12px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C;letter-spacing:1px;text-transform:uppercase">Vista lógica · Fig. 4.2 – 4.8</p>
-<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Vista lógica: el dominio y las máquinas de estados</h2>
+<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Vista lógica: las partes del sistema y sus estados</h2>
 </div>
 <div style="display:flex;gap:48px;align-items:start;margin:auto 0">
 <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:28px">
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px">
 <h3 style="font-size:34px;font-weight:600;color:#14213D">13 clases en 3 paquetes</h3>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C">Órdenes y procesos, insumos y alertas, usuarios y roles; más los servicios que las coordinan.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C">Órdenes y procesos, insumos y alertas, usuarios y roles, más los servicios que los coordinan.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px">
 <h3 style="font-size:34px;font-weight:600;color:#14213D">El conocimiento pasa a datos</h3>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C">TipoTrabajo y PlantillaEtapa guardan secuencia, área, instrucciones y duración, hoy en la memoria de tres personas.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C">Lo que hoy recuerdan tres personas (orden de etapas, área, instrucciones y tiempos) queda guardado en las plantillas.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px">
-<h3 style="font-size:34px;font-weight:600;color:#14213D">La etapa es una instantánea</h3>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C">EtapaOrden copia la plantilla al crear la OT: editar la plantilla no altera órdenes en curso.</p>
+<h3 style="font-size:34px;font-weight:600;color:#14213D">La etapa es una copia</h3>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C">Al crear la OT, cada etapa copia la plantilla: si alguien la edita, las órdenes en curso no cambian.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px">
 <h3 style="font-size:34px;font-weight:600;color:#14213D">Dos máquinas de estados</h3>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C">Etapa y OT validan sus transiciones en el dominio y en un trigger. Una etapa bloqueada detiene la OT. Se prueban con CP-01 y CP-02.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C">La etapa y la OT solo pasan de un estado a otro si la regla lo permite, y la base de datos lo vuelve a revisar. Una etapa bloqueada detiene la OT.</p>
 </div>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">14</p>
-<aside class="notes">La vista lógica tiene siete figuras: mapa del dominio (4.2), tres acercamientos por grupo de clases (4.3 a 4.5), servicios de aplicación (4.6) y las máquinas de estados de la etapa (4.7) y de la orden de trabajo (4.8). Etapa: PENDIENTE → DISPONIBLE → EN_CURSO → TERMINADA; pasa a DISPONIBLE cuando la anterior queda TERMINADA u OMITIDA; la etapa de diseño se cierra al aprobarse el diseño; Reportar problema exige motivo y detiene la OT, y solo la Encargada desbloquea. OT: nace REGISTRADA o EN_DISENO, pasa a EN_PRODUCCION y luego a TERMINADA y ENTREGADA. Queda DETENIDA si una etapa se bloquea o si la Encargada la detiene con motivo; al reanudarla, el pseudoestado de historia la devuelve a EN_DISENO o EN_PRODUCCION. Si se anula, sus etapas abiertas pasan a OMITIDA. Composición: una EtapaOrden no existe sin su OrdenTrabajo. Todo servicio que cambia estado, incluida la resolución de un diseño, y AuthService con los eventos de seguridad, registra el evento en AuditoriaService. Los servicios no llaman a MongoDB de forma síncrona: AuditoriaService escribe en el outbox dentro de la misma transacción.</aside>
+<aside class="notes">Siete figuras: el mapa del dominio (4.2), tres acercamientos (4.3 a 4.5), los servicios (4.6) y los estados de la etapa y de la OT (4.7 y 4.8). La etapa avanza así: pendiente, disponible, en curso y terminada. Queda disponible cuando la anterior se cierra. Si el operario reporta un problema, la etapa se bloquea y la OT se detiene hasta que la Encargada lo resuelva. La OT nace registrada (o en diseño), pasa a producción y termina cuando todas sus etapas se cierran. Al reanudarla, vuelve al estado que tenía. Cada cambio de estado deja un evento para la bitácora, que se guarda en la misma transacción: nadie espera a MongoDB.</aside>
 </section>
 
 <section id="fig-4-9" data-transition="fade" style="background:#FFFFFF;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:28px 40px 24px;display:flex;flex-direction:column;gap:16px">
@@ -488,21 +488,21 @@
 <section id="desarrollo" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:32px">
 <div style="display:flex;flex-direction:column;gap:12px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C;letter-spacing:1px;text-transform:uppercase">Vista de desarrollo · Fig. 4.9 – 4.13</p>
-<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Vista de desarrollo: monorepo en capas</h2>
+<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Vista de desarrollo: un repositorio, en capas</h2>
 </div>
 <div style="display:flex;gap:48px;align-items:start;margin:auto 0">
 <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:24px">
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Monorepo:</b> apps/web, apps/api, packages/shared, db y tests.</p>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">packages/shared:</b> esquemas Zod y mapa de permisos comunes a la PWA y la API.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Monorepo:</b> web, API, código compartido, base de datos y pruebas.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">packages/shared:</b> las mismas validaciones y permisos para la PWA y la API.</p>
 <p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Capas en un sentido:</b> routes → controller → service → repository → infra.</p>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Solo 3 dependencias</b> entre módulos: M3→M2, M4→M5 y M6→M4.</p>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Infra</b> aísla a los proveedores: cambiar de PostgreSQL gestionado es solo configuración.</p>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Convenciones:</b> main protegida, merge solo por PR con CI en verde, SemVer y TypeScript strict.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Solo 3 dependencias</b> entre módulos, todas en un sentido.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Infra</b> aísla a los proveedores: cambiar de proveedor de PostgreSQL es solo configuración.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Convenciones:</b> nada entra a main sin un PR revisado y las pruebas en verde.</p>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">20</p>
-<aside class="notes">La vista de desarrollo muestra cómo se organiza el código. La PWA y la API solo comparten código a través de packages/shared, que contiene los esquemas Zod y el mapa de permisos; así las validaciones y permisos no divergen entre capas. La regla de dependencias (Fig. 4.13) va en una sola dirección; solo la capa repository ejecuta SQL, siempre parametrizado, y los servicios se prueban con repositorios simulados. Infra encapsula PostgreSQL, MongoDB, R2 y Web Push.</aside>
+<aside class="notes">Cómo se ordena el código. La PWA y la API comparten solo un paquete con las validaciones y los permisos, así nunca se contradicen. Las dependencias van en un solo sentido (Fig. 4.13): solo la capa de datos escribe SQL, siempre con parámetros, y los servicios se prueban sin base de datos real. Infra esconde a los proveedores: PostgreSQL, MongoDB, R2 y los avisos push.</aside>
 </section>
 
 <section id="fig-4-14" data-transition="fade" style="background:#FFFFFF;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:28px 40px 24px;display:flex;flex-direction:column;gap:16px">
@@ -558,43 +558,43 @@
 <section id="procesos" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:32px">
 <div style="display:flex;flex-direction:column;gap:12px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C;letter-spacing:1px;text-transform:uppercase">Vista de procesos · Fig. 4.14 – 4.18</p>
-<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Vista de procesos: transacción ACID + outbox</h2>
+<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Vista de procesos: qué pasa al terminar una etapa</h2>
 </div>
 <div style="display:flex;flex-direction:column;gap:12px">
-<p style="font-size:26px;font-weight:600;color:#1E40AF">Tramo síncrono · el operario pulsa “Terminar etapa” (Fig. 4.17)</p>
+<p style="font-size:26px;font-weight:600;color:#1E40AF">Al instante · el operario pulsa “Terminar etapa” (Fig. 4.17)</p>
 <div style="display:flex;align-items:center;gap:16px">
 <div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:20px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#1E40AF">01</p>
-<p style="font-size:24px;line-height:1.35;color:#14213D">Autentica el JWT y verifica el permiso de la ruta</p>
+<p style="font-size:24px;line-height:1.35;color:#14213D">Comprueba quién es y si tiene permiso</p>
 </div>
 <svg width="40" height="20" viewBox="0 0 40 20" preserveAspectRatio="none" style="flex:none" aria-hidden="true"><path d="M0 6.5h24V0l16 10-16 10v-6.5H0z" fill="#1E40AF"/></svg>
 <div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:20px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#1E40AF">02</p>
-<p style="font-size:24px;line-height:1.35;color:#14213D">Valida el cuerpo de la solicitud con Zod</p>
+<p style="font-size:24px;line-height:1.35;color:#14213D">Valida los datos que llegan</p>
 </div>
 <svg width="40" height="20" viewBox="0 0 40 20" preserveAspectRatio="none" style="flex:none" aria-hidden="true"><path d="M0 6.5h24V0l16 10-16 10v-6.5H0z" fill="#1E40AF"/></svg>
 <div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:20px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#1E40AF">03</p>
-<p style="font-size:24px;line-height:1.35;color:#14213D">Bloquea la fila (FOR UPDATE) y compara responsable y versión</p>
+<p style="font-size:24px;line-height:1.35;color:#14213D">Bloquea la etapa y revisa que sea suya y que nadie la cambió</p>
 </div>
 <svg width="40" height="20" viewBox="0 0 40 20" preserveAspectRatio="none" style="flex:none" aria-hidden="true"><path d="M0 6.5h24V0l16 10-16 10v-6.5H0z" fill="#1E40AF"/></svg>
 <div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#1E40AF;border-radius:14px;padding:20px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C9D6F5">04</p>
-<p style="font-size:24px;line-height:1.35;color:#FFFFFF">Una transacción: etapa, consumos, siguiente etapa y evento outbox</p>
+<p style="font-size:24px;line-height:1.35;color:#FFFFFF">Guarda todo junto: etapa, consumos, siguiente etapa y evento</p>
 </div>
 </div>
 </div>
 <div style="display:flex;flex-direction:column;gap:12px">
-<p style="font-size:26px;font-weight:600;color:#C2410C">Tramo asíncrono · relay outbox cada 5 segundos (Fig. 4.18)</p>
+<p style="font-size:26px;font-weight:600;color:#C2410C">En segundo plano · el relay, cada 5 segundos (Fig. 4.18)</p>
 <div style="display:flex;align-items:center;gap:16px">
 <div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:20px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">05</p>
-<p style="font-size:24px;line-height:1.35;color:#14213D">Toma los eventos pendientes con SKIP LOCKED</p>
+<p style="font-size:24px;line-height:1.35;color:#14213D">Toma los eventos pendientes</p>
 </div>
 <svg width="40" height="20" viewBox="0 0 40 20" preserveAspectRatio="none" style="flex:none" aria-hidden="true"><path d="M0 6.5h24V0l16 10-16 10v-6.5H0z" fill="#C2410C"/></svg>
 <div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:20px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">06</p>
-<p style="font-size:24px;line-height:1.35;color:#14213D">Publica en MongoDB con escritura idempotente</p>
+<p style="font-size:24px;line-height:1.35;color:#14213D">Los copia a MongoDB sin duplicar</p>
 </div>
 <svg width="40" height="20" viewBox="0 0 40 20" preserveAspectRatio="none" style="flex:none" aria-hidden="true"><path d="M0 6.5h24V0l16 10-16 10v-6.5H0z" fill="#C2410C"/></svg>
 <div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:20px">
@@ -609,13 +609,13 @@
 </div>
 </div>
 <div style="display:flex;gap:16px;flex-wrap:wrap">
-<p style="font-size:24px;color:#14213D;background:#EBEFF5;padding:10px 20px;border-radius:999px">409 si otro usuario cambió la etapa</p>
-<p style="font-size:24px;color:#14213D;background:#EBEFF5;padding:10px 20px;border-radius:999px">Atrasos: verificador cada 15 min</p>
+<p style="font-size:24px;color:#14213D;background:#EBEFF5;padding:10px 20px;border-radius:999px">Si otro la cambió, pide recargar</p>
+<p style="font-size:24px;color:#14213D;background:#EBEFF5;padding:10px 20px;border-radius:999px">Revisión de atrasos cada 15 min</p>
 <p style="font-size:24px;color:#14213D;background:#EBEFF5;padding:10px 20px;border-radius:999px">Respaldo nocturno cifrado a R2</p>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">26</p>
-<aside class="notes">Primero se modela el flujo de negocio con diagramas de actividades con carriles, equivalentes a BPMN (Fig. 4.14 a 4.16): registro y diseño, asignación, ejecución repetida de etapas y entrega. Luego, el escenario crítico CU-06 en dos diagramas de secuencia. Tramo síncrono: si el actor no es el responsable se rechaza; si la versión cambió, 409 (concurrencia optimista); todo se aplica en una transacción ACID. Tramo asíncrono: FOR UPDATE SKIP LOCKED permite varias instancias del relay sin duplicar, y la escritura idempotente (_id = evt-n) evita documentos repetidos. Otros procesos (Tabla 4.1): verificador de atrasos cada 15 min, Service Worker con caché stale-while-revalidate, triggers dentro de la transacción y respaldo nocturno con GitHub Actions.</aside>
+<aside class="notes">Primero, el flujo del negocio en diagramas de actividades por carriles, equivalentes a BPMN (Fig. 4.14 a 4.16): registro y diseño, asignación, etapas y entrega. Después, el caso crítico “Terminar etapa” en dos diagramas de secuencia. En la parte inmediata, si la etapa no es del operario se rechaza, y si alguien la cambió antes, responde 409; todo se guarda en una sola transacción. En la parte de fondo, el relay copia los eventos a MongoDB sin duplicarlos, aunque corran varias copias. Otros procesos (Tabla 4.1): revisión de atrasos cada 15 minutos, caché del celular y respaldo nocturno.</aside>
 </section>
 
 <section id="fig-4-19" data-transition="fade" style="background:#FFFFFF;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:28px 40px 24px;display:flex;flex-direction:column;gap:16px">
@@ -646,17 +646,17 @@
 <div style="display:flex;gap:48px;align-items:start;margin:auto 0">
 <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:28px 48px">
 <div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">01</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Clientes:</b> PWA instalada en el celular; navegador en el PC de oficina.</p></div>
-<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">02</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Borde Cloudflare:</b> DNS, TLS 1.3, WAF y limitación de tasa.</p></div>
-<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">03</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Cómputo:</b> PWA en Cloudflare Pages; API en un contenedor Docker de Render (Node.js 24 LTS).</p></div>
-<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">04</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Datos:</b> PostgreSQL 16 en Neon y MongoDB 8 en Atlas, por TLS y en la misma región.</p></div>
-<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">05</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Archivos:</b> del teléfono o el PC directo a R2 con URL prefirmadas de 5 min; la API no recibe binarios.</p></div>
-<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">06</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">GitHub Actions:</b> CI/CD y respaldo nocturno cifrado (Fig. 4.20).</p></div>
+<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">02</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Borde Cloudflare:</b> dominio, cifrado, firewall y límite de peticiones.</p></div>
+<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">03</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Cómputo:</b> la PWA en Cloudflare Pages y la API en un contenedor de Render.</p></div>
+<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">04</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Datos:</b> PostgreSQL en Neon y MongoDB en Atlas, cifrados y en la misma región.</p></div>
+<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">05</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">Archivos:</b> van directo del celular a R2 con un enlace que dura 5 min; la API no los toca.</p></div>
+<div style="display:flex;gap:20px;align-items:baseline"><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">06</p><p style="font-size:30px;line-height:1.4;color:#3F4A5C"><b style="color:#14213D">GitHub Actions:</b> pruebas, despliegues y respaldo nocturno (Fig. 4.20).</p></div>
 <p style="font-size:28px;line-height:1.4;color:#14213D;background:#EBEFF5;grid-column:1 / -1;padding:20px 28px;border-radius:12px">Ambientes: local (Docker Compose) · staging (rama Neon + preview Render) · producción</p>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">29</p>
-<aside class="notes">La vista física muestra dónde corre cada pieza. Todo el tráfico entra por Cloudflare. La API y las dos bases están co-ubicadas en la región este de EE. UU. para minimizar la latencia API–BD. La conexión a PostgreSQL usa sslmode=verify-full y Atlas tiene lista de IP permitidas. Ambos dominios comparten el mismo sitio, lo que habilita cookies SameSite=Strict. La Fig. 4.20 separa las rutas que no atienden usuarios: despliegues y respaldo nocturno con pg_dump cifrado hacia R2.</aside>
+<aside class="notes">Dónde corre cada pieza. Todo el tráfico entra por Cloudflare. La API y las dos bases están en la misma región para responder rápido, y todas las conexiones van cifradas. Los dos dominios comparten kotoduo.cl, lo que permite cookies más seguras. La Fig. 4.20 muestra lo que no atiende usuarios: los despliegues y el respaldo nocturno cifrado hacia R2.</aside>
 </section>
 
 <section id="fig-4-21" data-transition="fade" style="background:#FFFFFF;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:28px 40px 24px;display:flex;flex-direction:column;gap:16px">
@@ -706,23 +706,23 @@
 </div>
 <div style="display:flex;gap:48px;align-items:start">
 <div style="flex:1;display:flex;flex-direction:column">
-<div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#1E40AF">Lógica</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">Clase EtapaOrden, su máquina de estados y EtapaService.terminar()</p></div>
-<div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#1E40AF">Desarrollo</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">Componente M4, paquete modules/etapas</p></div>
-<div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#1E40AF">Procesos</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">Bucle de producción, transacción ACID y relay outbox</p></div>
-<div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#1E40AF">Física</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">Contenedor en Render; persiste en Neon y Atlas</p></div>
+<div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#1E40AF">Lógica</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">La clase EtapaOrden y sus estados</p></div>
+<div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#1E40AF">Desarrollo</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">El módulo M4 (Mi Trabajo)</p></div>
+<div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#1E40AF">Procesos</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">Una transacción y el relay en segundo plano</p></div>
+<div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#1E40AF">Física</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">Corre en Render; guarda en Neon y Atlas</p></div>
 <div style="display:flex;gap:24px;padding:16px 0;border-top:1px solid #D9DEE7;border-bottom:1px solid #D9DEE7"><p style="width:220px;font-size:26px;font-weight:600;color:#C2410C">Verificación</p><p style="flex:1;font-size:26px;line-height:1.4;color:#3F4A5C">CP-01, CP-12, CP-19 y CP-27</p></div>
 <p style="font-size:24px;line-height:1.4;color:#3F4A5C;padding:24px 0 0 0">14 casos de uso en 4 diagramas: acceso y administración, gestión de órdenes, ejecución en el taller, supervisión y control.</p>
 </div>
 <div style="width:640px;display:flex;flex-direction:column;gap:16px;background:#14213D;border-radius:16px;padding:36px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#F2894E">CU-06 · Actualizar avance de etapa</p>
 <p style="font-size:26px;line-height:1.4;color:#F4F1EA"><b>Flujo:</b> Mi Trabajo → OT → Iniciar → Terminar con consumos → “Sigue: etapa en área”.</p>
-<p style="font-size:26px;line-height:1.4;color:#C3CBDA"><b style="color:#F4F1EA">Alternos:</b> reportar problema (Bloqueada), insumo insuficiente, adjuntar evidencia, última etapa cierra la OT.</p>
-<p style="font-size:26px;line-height:1.4;color:#C3CBDA"><b style="color:#F4F1EA">Excepciones:</b> 409 si otro la actualizó; 404 si la etapa es ajena; sin conexión conserva el formulario.</p>
+<p style="font-size:26px;line-height:1.4;color:#C3CBDA"><b style="color:#F4F1EA">Alternos:</b> reportar un problema, avisar que falta insumo, adjuntar foto; la última etapa cierra la OT.</p>
+<p style="font-size:26px;line-height:1.4;color:#C3CBDA"><b style="color:#F4F1EA">Excepciones:</b> si otro la cambió, pide recargar; si no es suya, no la encuentra; sin señal, guarda el formulario.</p>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">34</p>
-<aside class="notes">La vista +1 une las otras cuatro. El caso crítico CU-06 aparece con los mismos nombres en todas: así se demuestra la coherencia entre vistas. Los catorce casos de uso se dividen en cuatro diagramas, uno por subsistema, y sus actores coinciden con la matriz de permisos. Todos los roles heredan de “Usuario” y el Administrador hereda las capacidades de la Encargada. CU-06 declara dos puntos de extensión: registrar evidencia extiende “Etapa en curso” y reportar un faltante extiende “Registrar consumos”; todo avance notifica al siguiente responsable (include). La Fig. 4.24 reúne lo que hace la Encargada sobre las máquinas de estados: gestionar etapas (CU-12) y controlar el estado de la OT (CU-13). El Verificador de atrasos detecta las OT en riesgo cada 15 minutos (CU-14). Si la etapa no pertenece al actor, la API responde 404 y no 403, para no revelar que la etapa existe (AM-05, CP-27).</aside>
+<aside class="notes">La vista +1 une las otras cuatro. “Actualizar avance de etapa” aparece con los mismos nombres en todas: esa es la prueba de que describen la misma solución. Los catorce casos de uso están en cuatro diagramas, uno por área, y sus actores coinciden con la matriz de permisos. El Administrador puede todo lo que puede la Encargada. Adjuntar foto y reportar un faltante son opcionales dentro del avance, y todo avance avisa al siguiente responsable. Si la etapa no es del operario, la API responde “no existe” (404) en vez de “prohibido”, para no revelar que la etapa existe.</aside>
 </section>
 
 <section id="tec-app" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
@@ -732,16 +732,16 @@
 </div>
 <table style="font-size:24px;color:#14213D;border:1px solid #D9DEE7">
 <tr style="background:#14213D"><th style="width:17%;color:#F4F1EA">Componente</th><th style="width:23%;color:#F4F1EA">Tecnología</th><th style="width:35%;color:#F4F1EA">Justificación</th><th style="width:25%;color:#F4F1EA">Necesidad futura</th></tr>
-<tr style="background:#FFFFFF"><td><b>Front-end</b></td><td>React 19 + TypeScript + Vite</td><td>Ecosistema maduro; tipos compartidos con la API</td><td>Base para un portal de clientes</td></tr>
-<tr style="background:#F0F2F6"><td><b>Móvil</b></td><td>PWA (Workbox)</td><td>“App para el celular” sin tiendas; una sola base de código</td><td>Capacitor si se requiere hardware nativo</td></tr>
-<tr style="background:#FFFFFF"><td><b>Back-end</b></td><td>Node.js 24 LTS + Express 5</td><td>E/S asíncrona; mismo lenguaje que el front-end</td><td>Separar módulos y escalar horizontalmente</td></tr>
-<tr style="background:#F0F2F6"><td><b>BD relacional</b></td><td>PostgreSQL 16 (Neon)</td><td>ACID, FK, CHECK y triggers; branching y PITR</td><td>Particionar el kardex; Row-Level Security</td></tr>
-<tr style="background:#FFFFFF"><td><b>BD documental</b></td><td>MongoDB 8 (Atlas)</td><td>Eventos de esquema variable; índices TTL</td><td>Analítica de tiempos por etapa</td></tr>
+<tr style="background:#FFFFFF"><td><b>Front-end</b></td><td>React 19 + TypeScript + Vite</td><td>Muy usado; comparte tipos con la API</td><td>Base para un portal de clientes</td></tr>
+<tr style="background:#F0F2F6"><td><b>Móvil</b></td><td>PWA (Workbox)</td><td>“App para el celular” sin tiendas; un solo código</td><td>App nativa si se necesita hardware del teléfono</td></tr>
+<tr style="background:#FFFFFF"><td><b>Back-end</b></td><td>Node.js 24 LTS + Express 5</td><td>Bueno para muchas peticiones cortas; mismo lenguaje que la web</td><td>Separar módulos y sumar servidores</td></tr>
+<tr style="background:#F0F2F6"><td><b>BD relacional</b></td><td>PostgreSQL 16 (Neon)</td><td>Datos consistentes y reglas en la base; respaldos a un punto en el tiempo</td><td>Dividir el kardex cuando crezca</td></tr>
+<tr style="background:#FFFFFF"><td><b>BD documental</b></td><td>MongoDB 8 (Atlas)</td><td>Eventos que cambian de forma; borrado automático por antigüedad</td><td>Analítica de tiempos por etapa</td></tr>
 </table>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">También: Zod para validación compartida, TanStack Query para caché en redes 4G inestables y node-postgres con migraciones versionadas (SQL explícito, sin ORM).</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">También: Zod para validar datos en ambos lados, TanStack Query para que la app responda bien con 4G inestable y SQL escrito a mano, con migraciones versionadas.</p>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">35</p>
-<aside class="notes">Cada tecnología responde a un requerimiento y considera su evolución. La PWA cumple la expectativa de “una app para el celular” sin costo de cuentas de desarrollador ni revisiones de tiendas, con una sola base de código para Android, iOS y PC; push en iOS desde 16.4 con la PWA instalada. Node.js 24 tiene soporte LTS hasta 2028 y el mismo lenguaje en todo el equipo de dos personas. PostgreSQL porque el dominio es relacional y exige consistencia (stock, estados). MongoDB para eventos y evidencias de estructura variable, escritura append-only e índices TTL para la retención de 24 meses (RNF-05). Se eligió SQL explícito con node-postgres para controlar bloqueos, vistas y CTE y evitar consultas N+1 ocultas.</aside>
+<aside class="notes">Cada tecnología responde a un requerimiento y deja espacio para crecer. La PWA cumple con “una app para el celular” sin pagar tiendas ni esperar revisiones, con un solo código para Android, iOS y PC. Node.js 24 tiene soporte hasta 2028, y el equipo usa un solo lenguaje. PostgreSQL porque los datos son relacionales y el stock y los estados deben cuadrar siempre. MongoDB para eventos y evidencias que cambian de forma, y para borrar la bitácora sola a los 24 meses. El SQL se escribe a mano para controlar bloqueos y consultas.</aside>
 </section>
 
 <section id="tec-infra" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
@@ -751,21 +751,21 @@
 </div>
 <table style="font-size:24px;color:#14213D;border:1px solid #D9DEE7">
 <tr style="background:#14213D"><th style="width:17%;color:#F4F1EA">Componente</th><th style="width:23%;color:#F4F1EA">Tecnología</th><th style="width:35%;color:#F4F1EA">Justificación</th><th style="width:25%;color:#F4F1EA">Necesidad futura</th></tr>
-<tr style="background:#FFFFFF"><td><b>Archivos</b></td><td>Cloudflare R2 (API S3)</td><td>10 GB sin costo y sin cargos por egreso</td><td>Archivar diseños antiguos</td></tr>
-<tr style="background:#F0F2F6"><td><b>Autenticación</b></td><td>Argon2id, JWT EdDSA, TOTP</td><td>Recomendados por OWASP y NIST SP 800-63B</td><td>Login con Google Workspace (OIDC)</td></tr>
-<tr style="background:#FFFFFF"><td><b>Borde y hosting</b></td><td>Cloudflare Pages y WAF; Render</td><td>DDoS y WAF sin costo; API en imagen Docker portable</td><td>Cloudflare Access para /admin; autoescalado</td></tr>
-<tr style="background:#F0F2F6"><td><b>Avisos</b></td><td>Web Push (VAPID)</td><td>Estándar W3C, sin costo de SMS ni WhatsApp</td><td>Canal por correo para administración</td></tr>
-<tr style="background:#FFFFFF"><td><b>CI/CD</b></td><td>GitHub Actions + Docker</td><td>Lint, pruebas, SAST y despliegue con aprobación</td><td>Despliegues blue-green</td></tr>
+<tr style="background:#FFFFFF"><td><b>Archivos</b></td><td>Cloudflare R2 (API S3)</td><td>10 GB gratis y sin cobro por descarga</td><td>Archivar diseños antiguos</td></tr>
+<tr style="background:#F0F2F6"><td><b>Autenticación</b></td><td>Argon2id, JWT EdDSA, TOTP</td><td>Lo que recomiendan OWASP y NIST</td><td>Login con Google Workspace (OIDC)</td></tr>
+<tr style="background:#FFFFFF"><td><b>Borde y hosting</b></td><td>Cloudflare Pages y WAF; Render</td><td>Protección contra ataques sin costo; API en Docker, fácil de mover</td><td>Restringir /admin; escalar solo</td></tr>
+<tr style="background:#F0F2F6"><td><b>Avisos</b></td><td>Web Push (VAPID)</td><td>Estándar web, sin pagar SMS ni WhatsApp</td><td>Canal por correo para administración</td></tr>
+<tr style="background:#FFFFFF"><td><b>CI/CD</b></td><td>GitHub Actions + Docker</td><td>Pruebas, análisis de seguridad y despliegue con aprobación</td><td>Despliegues sin cortes</td></tr>
 </table>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">También: helmet, cors y express-rate-limit para seguridad HTTP; pino, Sentry y UptimeRobot para observabilidad; GitHub Projects y PlantUML para gestión y diagramas.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">También: helmet, cors y express-rate-limit para proteger la API; pino, Sentry y UptimeRobot para ver errores y caídas; GitHub Projects y PlantUML para gestión y diagramas.</p>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">36</p>
-<aside class="notes">R2 es compatible con S3 (portabilidad) y permite URL prefirmadas sin pasar binarios por la API. Render usa el plan Starter pagado para evitar la suspensión por inactividad de la capa gratuita, que dejaría a los operarios esperando. Web Push funciona con la app cerrada. GitHub Actions ofrece 2.000 minutos al mes gratis en repositorios privados; Docker y Testcontainers dan un ambiente local idéntico a producción y pruebas de integración contra motores reales. Kubernetes solo si la escala lo exige.</aside>
+<aside class="notes">R2 usa la misma interfaz que Amazon S3, así que se puede cambiar de proveedor, y los archivos no pasan por la API. En Render se paga el plan básico porque el gratuito se duerme y dejaría a los operarios esperando. Los avisos push llegan con la app cerrada. GitHub Actions da 2.000 minutos gratis al mes, y Docker permite probar en local con las mismas bases que en producción.</aside>
 </section>
 
 <section id="costo-iac" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
 <div style="display:flex;flex-direction:column;gap:12px">
-<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C;letter-spacing:1px;text-transform:uppercase">Costo y necesidades futuras · Tabla 4.3</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C;letter-spacing:1px;text-transform:uppercase">Costo y necesidades futuras · Sección 4.7 y Anexo I</p>
 <h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Costo inicial y portabilidad entre proveedores</h2>
 </div>
 <div style="display:flex;gap:56px;align-items:start">
@@ -774,11 +774,11 @@
 <p style="font-size:26px;color:#F4F1EA">al mes, sin licencias (RNF-08)</p>
 <hr style="border-top:1px solid #3A4A6E">
 <p style="font-size:24px;line-height:1.5;color:#C3CBDA">Render Starter ≈ US$ 7<br>Cloudflare Pages, R2 y WAF: US$ 0<br>Neon Free y Atlas M0: US$ 0<br>GitHub, Sentry, UptimeRobot: US$ 0</p>
-<p style="font-size:24px;line-height:1.4;color:#F4F1EA">~1.500 OT al año caben en las capas iniciales por al menos dos años.</p>
+<p style="font-size:24px;line-height:1.4;color:#F4F1EA">~1.500 OT al año caben en los planes iniciales por al menos dos años.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px">
 <h3 style="font-size:30px;font-weight:600;color:#14213D">Ideal: infraestructura como código con OpenTofu</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Fuera del alcance comprometido; primera mejora después del piloto. Módulos por rol, no por proveedor.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">No entra en este mes de construcción; es la primera mejora después del piloto. Cada pieza se puede cambiar de proveedor.</p>
 <table style="font-size:24px;color:#14213D;border:1px solid #D9DEE7">
 <tr style="background:#EBEFF5"><th style="width:22%">Módulo</th><th style="width:26%">Inicial</th><th style="width:26%">AWS</th><th style="width:26%">Google Cloud</th></tr>
 <tr style="background:#FFFFFF"><td>Borde</td><td>Cloudflare</td><td>CloudFront + WAF</td><td>Cloud Armor</td></tr>
@@ -792,7 +792,7 @@
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">37</p>
-<aside class="notes">Los valores son referenciales y se validan al contratar. Neon pasa a Launch (≈ US$ 19) si se superan 0,5 GB, y Atlas a M10 si se superan 512 MB. Como el cliente no tiene presupuesto definido y los precios cambian, lo ideal es declarar la infraestructura con OpenTofu (fork abierto de Terraform, licencia MPL 2.0). La IaC no forma parte del alcance comprometido por el plazo de un mes; dentro del plazo se asegura lo que la hace posible: la API solo depende de interfaces estándar (imagen Docker, protocolos PostgreSQL y MongoDB, API S3 y variables de entorno) y existe un inventario de recursos. DocumentDB se descartó porque es compatible solo en parte con MongoDB (TTL, aggregation pipeline). Límite: la IaC no traslada los datos; una migración real requiere copiar datos, actualizar DNS y adaptar funciones sin equivalente.</aside>
+<aside class="notes">Los precios son de referencia y se confirman al contratar. Si los datos crecen, Neon sube a unos US$ 19 y Atlas a un plan pagado. Como el cliente no tiene presupuesto y los precios cambian, lo ideal es describir la infraestructura en archivos con OpenTofu, la versión abierta de Terraform: cambiar de nube sería cambiar un módulo. No cabe en el mes de construcción, pero el diseño ya lo permite, porque la API solo usa interfaces estándar. Ojo: esto no mueve los datos; una migración real también exige copiarlos y actualizar el DNS.</aside>
 </section>
 
 <section id="proto-operario" data-transition="fade" style="background:#EBEFF5;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:32px">
@@ -812,7 +812,7 @@
 </div>
 <div style="display:flex;flex-direction:column;gap:10px">
 <h3 style="font-size:30px;font-weight:600;color:#14213D">Interacción crítica IK-3</h3>
-<p style="font-size:26px;line-height:1.4;color:#3F4A5C">Chip de estado y un solo botón primario: Iniciar etapa → Terminar etapa → confirmar consumos.</p>
+<p style="font-size:26px;line-height:1.4;color:#3F4A5C">Un estado visible y un solo botón: Iniciar etapa → Terminar etapa → confirmar consumos.</p>
 <p style="font-size:26px;line-height:1.4;color:#15803D;background:#E3F2E8;border-left:6px solid #15803D;padding:14px 20px;border-radius:8px;font-weight:600">Listo. Sigue: Sublimado — área Sublimación</p>
 </div>
 <div style="display:flex;gap:12px;flex-wrap:wrap">
@@ -824,7 +824,7 @@
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">38</p>
-<aside class="notes">Demostrar en vivo si es posible (abrir mi-trabajo.html?rol=OPERARIO y detalle-orden.html). El perfil Operario usa su celular en el taller, con las manos ocupadas y conectividad variable; por eso la tarea principal está en primer plano. En la etapa: chip de estado, un único botón primario contextual y, al terminar, un diálogo con los consumos prellenados. El mensaje “Sigue: …” es la respuesta directa al problema “no sé qué sigue”. Acciones secundarias (reportar faltante, reportar problema, adjuntar foto) están separadas para evitar toques accidentales. Reportar problema deja la etapa Bloqueada con motivo obligatorio.</aside>
+<aside class="notes">Si se puede, mostrarlo en vivo (mi-trabajo.html?rol=OPERARIO y detalle-orden.html). El operario usa su celular en el taller, con las manos ocupadas y mala señal, así que lo principal va primero. En la etapa hay un estado visible y un solo botón; al terminar, confirma los consumos, que ya vienen llenos. El mensaje “Sigue: …” responde directo a “no sé qué sigue”. Las acciones secundarias (faltante, problema, foto) están separadas para no tocarlas por error. Reportar un problema pide un motivo y bloquea la etapa.</aside>
 </section>
 
 <section id="proto-panel" data-transition="fade" style="background:#FFFFFF;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:28px 40px 24px;display:flex;flex-direction:column;gap:16px">
@@ -855,13 +855,13 @@
 <p style="font-size:28px;line-height:1.35;color:#14213D"><b>IK-9</b> Ciclo de alerta de insumo</p>
 <p style="font-size:28px;line-height:1.35;color:#14213D"><b>IK-10</b> Navegación por rol y “No tienes acceso”</p>
 <p style="font-size:28px;line-height:1.35;color:#14213D"><b>IK-11</b> Detener, reanudar, anular y entregar la OT</p>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C;padding:12px 0 0 0;border-top:1px solid #C9D1DE;grid-column:1 / -1">WCAG 2.2 AA: contraste ≥ 4,5:1, objetivos de 48 px, estado con color, ícono y texto; sin desplazamiento horizontal a 320 px.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C;padding:12px 0 0 0;border-top:1px solid #C9D1DE;grid-column:1 / -1">Accesible (WCAG 2.2 AA): buen contraste, botones de 48 px, estados con color, ícono y texto, y sin scroll lateral en pantallas chicas.</p>
 </div>
 </div>
-<p style="margin:0 0 auto 0;font-size:24px;line-height:1.4;color:#3F4A5C">Maqueta HTML/CSS sin back-end, con datos ficticios. Demo: [enlace de GitHub Pages]</p>
+<p style="margin:0 0 auto 0;font-size:24px;line-height:1.4;color:#3F4A5C">Maqueta HTML/CSS sin back-end, con datos ficticios. Se entrega como Anexo D.</p>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">40</p>
-<aside class="notes">El prototipo cubre las doce pantallas P-01 a P-12, cada una ligada a una historia de usuario y un caso de uso. El login simula el acceso con un selector de rol, y con ?rol= se abre cualquier pantalla como un rol, por ejemplo panel.html?rol=ENCARGADA_PRODUCCION. Navegación: barra inferior en móvil, lateral en escritorio; profundidad máxima de 3 niveles. Las rutas no permitidas no aparecen en el menú y, por URL, muestran “No tienes acceso”; la autorización real la aplica la API. Retroalimentación: la ronda 0 (antecedentes del cliente) ya cambió el diseño: PWA móvil, sin datos de contacto ni dinero, módulo de aprobación de diseño. La ronda 1 de usabilidad con 5 participantes está planificada (A06).</aside>
+<aside class="notes">Doce pantallas, cada una ligada a una historia de usuario y un caso de uso. El login simula el acceso con un selector de rol, y con ?rol= se abre cualquier pantalla como ese rol (por ejemplo, panel.html?rol=ENCARGADA_PRODUCCION). En el celular el menú va abajo; en el PC, al costado; nunca hay más de 3 niveles. Lo que un rol no puede usar no aparece y, si entra por la URL, ve “No tienes acceso”; quien decide de verdad es la API. Lo que pidió el cliente ya cambió el diseño: app para el celular, sin contactos ni dinero, y aprobación de diseño. La prueba con 5 trabajadores está planificada (A06).</aside>
 </section>
 
 <section id="fig-6-1" data-transition="fade" style="background:#FFFFFF;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:28px 40px 24px;display:flex;flex-direction:column;gap:16px">
@@ -917,7 +917,7 @@
 <section id="datos-modelo" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:32px">
 <div style="display:flex;flex-direction:column;gap:12px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C;letter-spacing:1px;text-transform:uppercase">Entidades y relaciones · Fig. 6.1 – 6.5</p>
-<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">16 tablas en 3FN, con integridad en la base</h2>
+<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">16 tablas normalizadas, con reglas en la base</h2>
 </div>
 <div style="display:flex;gap:48px;align-items:start;margin:auto 0">
 <div style="flex:1;display:flex;flex-direction:column;gap:32px">
@@ -930,16 +930,16 @@
 <p style="font-size:24px;color:#14213D;background:#EBEFF5;padding:6px 16px;border-radius:999px">Integración · 1</p>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Claves primarias:</b> UUID en entidades expuestas en URL (no enumerables, dificultan IDOR); SERIAL en catálogos; OT-AAAA-NNNN como clave alternativa UNIQUE.</p>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Claves foráneas:</b> toda relación declara su política ON DELETE; N:M resueltas con tablas puente con atributos (usuario_rol, plantilla_insumo, requerimiento_insumo).</p>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">3FN con desnormalización justificada:</b> la etapa es una instantánea de la plantilla; stock_actual lo mantiene un trigger desde el kardex.</p>
-<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Índices por consulta:</b> Mi Trabajo, panel y kardex; parciales para una sola alerta abierta por insumo.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Claves primarias:</b> UUID en lo que aparece en una URL, para que no se pueda adivinar; números correlativos en los catálogos; el código OT-AAAA-NNNN es único.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Claves foráneas:</b> cada relación define qué pasa al borrar; las relaciones muchos a muchos usan tablas intermedias.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Dos copias a propósito:</b> la etapa copia la plantilla; el stock se recalcula solo con cada movimiento.</p>
+<p style="font-size:30px;line-height:1.4;color:#3F4A5C;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px"><b style="color:#14213D">Índices por consulta:</b> Mi Trabajo, panel y kardex; uno especial asegura una sola alerta abierta por insumo.</p>
 </div>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">46</p>
-<aside class="notes">Relaciones principales: usuario–rol N:M (una persona puede ser Encargada y Vendedor en temporada alta); tipo_trabajo 1:N plantilla_etapa (al menos una); orden_trabajo 1:N etapa_orden, identificadora y en cascada; etapa_orden N:0..1 usuario (puede estar sin asignar); insumo 1:N movimiento_insumo (el stock es la suma del kardex); orden_trabajo 1:N aprobacion_diseno (versiones). 3FN: requerimiento_insumo no guarda orden_id porque se deriva de la etapa. JSONB acotado para especificaciones (tallas, medidas, colores) con CHECK de objeto; lo que se filtra son columnas indexadas. El DDL y los validadores de MongoDB se ejecutaron sobre los motores reales con Docker Compose y cumplieron los 16 criterios de la Tabla 6.4: transiciones inválidas, stock negativo, alerta única, segregación, privilegios, validador e idempotencia. MongoDB guarda bitacora_eventos, evidencias_etapa y notificaciones.</aside>
+<aside class="notes">Relaciones clave: una persona puede tener varios roles (por ejemplo, Encargada y Vendedor en temporada alta); cada tipo de trabajo tiene al menos una etapa; cada OT tiene sus etapas y se borran con ella; una etapa puede quedar sin responsable; el stock es la suma de los movimientos. Las tallas, medidas y colores van en un campo flexible, pero todo lo que se filtra es una columna normal. Lo más importante: los scripts ya se ejecutaron sobre PostgreSQL y MongoDB reales y pasaron los 16 criterios de la Tabla 6.3. MongoDB guarda la bitácora, las evidencias y las notificaciones.</aside>
 </section>
 
 <section id="datos-integridad" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
@@ -951,21 +951,21 @@
 <div style="width:540px;display:flex;flex-direction:column;gap:16px">
 <div style="display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-left:6px solid #1E40AF;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#1E40AF">ON DELETE CASCADE</p>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Composición: OT → etapas → requerimientos. En la práctica una OT se anula, no se borra.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Si se borra la OT, se borran sus etapas. En la práctica, una OT se anula, no se borra.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-left:6px solid #C2410C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C">ON DELETE RESTRICT</p>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">No se pierde historia: insumo con movimientos, usuario autor. Se desactiva con activo = FALSE.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">No se pierde historia: no se borra un insumo con movimientos ni un usuario con registros; se desactiva.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #D9DEE7;border-left:6px solid #5B6474;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#3F4A5C">ON DELETE SET NULL</p>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Referencias opcionales: responsable de la etapa, plantilla de origen, área del usuario.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Si desaparece algo opcional (responsable, plantilla, área), el registro sigue existiendo.</p>
 </div>
 </div>
 <div style="flex:1;display:flex">
 <table style="font-size:24px;color:#14213D;border:1px solid #D9DEE7">
 <tr style="background:#14213D"><th style="width:46%;color:#F4F1EA">Regla en PostgreSQL</th><th style="width:38%;color:#F4F1EA">Mecanismo</th><th style="width:16%;color:#F4F1EA">Prueba</th></tr>
-<tr style="background:#FFFFFF"><td><b>R2</b> Solo transiciones válidas en etapa y OT; sube la versión de la etapa</td><td>Triggers trg_etapa_transicion y trg_orden_transicion</td><td>CP-02</td></tr>
+<tr style="background:#FFFFFF"><td><b>R2</b> Solo cambios de estado válidos en etapa y OT</td><td>Triggers trg_etapa_transicion y trg_orden_transicion</td><td>CP-02</td></tr>
 <tr style="background:#F0F2F6"><td><b>R3</b> Una alerta automática abierta por insumo</td><td>Trigger + índice único parcial</td><td>CP-14</td></tr>
 <tr style="background:#FFFFFF"><td><b>R4</b> Stock nunca negativo</td><td>CHECK que aborta toda la transacción</td><td>CP-14</td></tr>
 <tr style="background:#F0F2F6"><td><b>R5</b> Bloqueo exige motivo</td><td>CHECK ck_etapa_bloqueo</td><td>CP-01</td></tr>
@@ -976,7 +976,7 @@
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">47</p>
-<aside class="notes">El diccionario de datos (Anexo J) documenta cada campo con tipo, clave (PK, FK, UQ), NOT NULL, CHECK y valor por defecto. Las reglas críticas se validan en la aplicación para dar mensajes claros y en la base de datos como defensa en profundidad, porque la base las garantiza ante cualquier cliente: un error futuro, un script de migración o una carga desde el Excel. R3 usa un índice único parcial con ON CONFLICT DO NOTHING: así hay una sola alerta automática aun con consumos concurrentes. R8: la aplicación se conecta con los roles sgp_app (DML) y sgp_relay, nunca con el superusuario. La integración con MongoDB usa outbox: el evento se escribe en la misma transacción que el cambio de negocio.</aside>
+<aside class="notes">El Anexo J describe cada campo: tipo, claves, obligatoriedad y restricciones. Las reglas críticas se revisan dos veces: en la aplicación, para mostrar mensajes claros, y en la base de datos, que las cumple pase lo que pase (un error futuro, un script o una carga desde el Excel). Por ejemplo, aunque dos consumos lleguen al mismo tiempo, solo se crea una alerta. La aplicación se conecta con usuarios de base de datos limitados, nunca como administrador.</aside>
 </section>
 
 <section id="roles" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
@@ -992,10 +992,10 @@
 <tr style="background:#F0F2F6"><td><b>Diseñador</b></td><td>Avanzar sus etapas de diseño, subir versiones, reportar faltantes</td><td>No aprueba sus propios diseños (R6)</td></tr>
 <tr style="background:#FFFFFF"><td><b>Operario</b></td><td>Ver y avanzar sus etapas, consumos, faltantes y evidencias</td><td>Solo sus etapas; sin panel ni bitácora</td></tr>
 </table>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Origen: el perfil “administrador” del cliente = Administrador + Encargada; el perfil “de respuesta” = Operario + Diseñador; Vendedor surge del proceso vendedor → encargada → operarios.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Origen: el perfil “administrador” del cliente se divide en Administrador y Encargada; el “de respuesta”, en Operario y Diseñador; el Vendedor sale del proceso vendedor → encargada → operarios.</p>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">48</p>
-<aside class="notes">El cliente habló de dos perfiles; se refinaron en cinco roles para respetar el mínimo privilegio (FB-06), y la equivalencia se valida en la actividad A01. El Administrador no puede quitarse a sí mismo el último rol de Administrador: siempre existe al menos uno. La Encargada ve a los usuarios solo por nombre y área. El Operario solo ve las etapas asignadas a él y los datos de producción de esas OT, más el stock en modo lectura. Un usuario puede tener varios roles (relación N:M).</aside>
+<aside class="notes">El cliente habló de dos perfiles; los dividimos en cinco para que cada persona tenga solo los permisos que necesita. Esto se valida con el cliente en A01. Siempre queda al menos un Administrador. La Encargada ve a los usuarios solo por nombre y área. El Operario ve solo sus etapas y el stock. Una persona puede tener más de un rol.</aside>
 </section>
 
 <section id="autenticacion" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
@@ -1006,54 +1006,54 @@
 <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px">
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px">
 <h3 style="font-size:28px;font-weight:600;color:#14213D">Contraseña</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Mínimo 12 caracteres, frases permitidas, sin reglas de composición ni expiración; rechaza 100.000 claves comprometidas.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Mínimo 12 caracteres; se aceptan frases; sin reglas raras ni vencimiento; rechaza claves filtradas conocidas.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px">
 <h3 style="font-size:28px;font-weight:600;color:#14213D">Almacenamiento</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Argon2id (m = 19 MiB, t = 2, p = 1) con sal por usuario; parámetros en el hash para recalibrar.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Argon2id, el algoritmo que recomienda OWASP, con sal distinta por usuario.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px">
 <h3 style="font-size:28px;font-weight:600;color:#14213D">MFA</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">TOTP obligatorio para Administrador y Encargada; secreto cifrado con AES-256-GCM y 10 códigos de recuperación.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Código de una app autenticadora, obligatorio para Administrador y Encargada; 10 códigos de respaldo.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px">
 <h3 style="font-size:28px;font-weight:600;color:#14213D">Fuerza bruta</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">5 intentos → bloqueo de 15, 30 y 60 min; 10 solicitudes/min por IP más WAF; mensaje genérico y tiempo uniforme.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">5 intentos fallidos bloquean la cuenta 15 min (luego 30 y 60); límite de peticiones por IP; el error no revela si el usuario existe.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#14213D;border-radius:16px;padding:28px">
 <h3 style="font-size:28px;font-weight:600;color:#F2894E">Sesión con dos tokens</h3>
-<p style="font-size:24px;line-height:1.4;color:#F4F1EA">JWT EdDSA de 10 min solo en memoria. Refresco opaco en cookie __Host- HttpOnly, SameSite=Strict, que rota en cada uso.</p>
+<p style="font-size:24px;line-height:1.4;color:#F4F1EA">Un token corto (10 min) que vive solo en memoria y otro de refresco en una cookie protegida, que cambia en cada uso.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px">
 <h3 style="font-size:28px;font-weight:600;color:#14213D">Duración y cierre</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Inactividad: 2 h operarios, 30 min privilegiados; absoluta 12 h. Revocación remota si se pierde el teléfono.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Se cierra tras 2 h sin uso (30 min para roles con más permisos) y siempre a las 12 h. Si se pierde el teléfono, se cierra a distancia.</p>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">49</p>
-<aside class="notes">Identificador: nombre de usuario único, porque los operarios pueden no tener correo. La política sigue NIST SP 800-63B: largo mínimo en vez de reglas de composición y sin expiración periódica. El login responde “Usuario o contraseña incorrectos” y verifica contra un hash ficticio si el usuario no existe, para igualar tiempos y evitar la enumeración. Si se reutiliza un refresh ya rotado, se revoca toda la familia (posible robo). Recuperación: para operarios, la Encargada o el Administrador generan una clave temporal de un solo uso (24 h) con cambio obligatorio; con correo, enlace de un solo uso de 30 min. Solo HTTPS (TLS 1.2+, HSTS de un año). Todo inicio de sesión, bloqueo y revocación queda en la bitácora, sin la contraseña.</aside>
+<aside class="notes">Se entra con un nombre de usuario, porque varios operarios no tienen correo. Seguimos a NIST: claves largas en vez de reglas de símbolos, y sin vencimiento. Si el usuario no existe, el login tarda lo mismo y da el mismo error, para no revelar qué cuentas hay. Si alguien reutiliza un token de refresco viejo, se cierran todas las sesiones de esa cadena, porque puede ser un robo. Si un operario olvida su clave, la Encargada le da una temporal de un solo uso. Todo va por HTTPS, y cada inicio de sesión queda en la bitácora.</aside>
 </section>
 
 <section id="autorizacion" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
 <div style="display:flex;flex-direction:column;gap:12px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#C2410C;letter-spacing:1px;text-transform:uppercase">Política de autorización · Tabla 7.1</p>
-<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Autorización RBAC en tres niveles</h2>
+<h2 style="font-family:Rubik, Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.1;color:#14213D">Permisos por rol, en tres niveles</h2>
 </div>
 <div style="display:flex;gap:48px;align-items:start">
 <div style="width:600px;display:flex;flex-direction:column;gap:16px">
 <div style="display:flex;gap:20px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:22px 24px">
 <p style="font-family:Rubik, Arial, sans-serif;font-size:44px;font-weight:600;color:#C2410C;line-height:1">1</p>
-<div style="flex:1;display:flex;flex-direction:column;gap:4px"><h3 style="font-size:28px;font-weight:600;color:#14213D">Permiso por rol</h3><p style="font-size:24px;line-height:1.4;color:#3F4A5C">Denegación por defecto: cada ruta declara requierePermiso(); una prueba falla si falta.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px"><h3 style="font-size:28px;font-weight:600;color:#14213D">Permiso por rol</h3><p style="font-size:24px;line-height:1.4;color:#3F4A5C">Todo está prohibido salvo lo permitido: cada ruta declara su permiso y una prueba avisa si falta.</p></div>
 </div>
 <div style="display:flex;gap:20px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:22px 24px">
 <p style="font-family:Rubik, Arial, sans-serif;font-size:44px;font-weight:600;color:#C2410C;line-height:1">2</p>
-<div style="flex:1;display:flex;flex-direction:column;gap:4px"><h3 style="font-size:28px;font-weight:600;color:#14213D">Propiedad del recurso</h3><p style="font-size:24px;line-height:1.4;color:#3F4A5C">responsable_id = actor.id, tomado del JWT; el SQL del operario filtra por responsable.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px"><h3 style="font-size:28px;font-weight:600;color:#14213D">Propiedad del recurso</h3><p style="font-size:24px;line-height:1.4;color:#3F4A5C">El recurso tiene que ser de quien lo pide; el operario solo puede cargar sus propias etapas.</p></div>
 </div>
 <div style="display:flex;gap:20px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:14px;padding:22px 24px">
 <p style="font-family:Rubik, Arial, sans-serif;font-size:44px;font-weight:600;color:#C2410C;line-height:1">3</p>
 <div style="flex:1;display:flex;flex-direction:column;gap:4px"><h3 style="font-size:28px;font-weight:600;color:#14213D">Estado del recurso</h3><p style="font-size:24px;line-height:1.4;color:#3F4A5C">Solo transiciones válidas: no se termina una etapa PENDIENTE ni se inicia una etapa de una OT DETENIDA.</p></div>
 </div>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">La PWA oculta botones con el mismo mapa de permisos, pero solo por usabilidad: la autoridad es la API.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">La PWA esconde los botones que no corresponden, pero eso es solo comodidad: quien decide es la API.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px">
 <table style="font-size:24px;color:#14213D;border:1px solid #D9DEE7">
@@ -1072,7 +1072,7 @@
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">50</p>
-<aside class="notes">Modelo RBAC con permisos atómicos definidos como código en packages/shared/permisos.ts, versionados y revisados en PR. La matriz completa tiene 25 permisos. Reglas complementarias: segregación de funciones (quien sube un diseño no lo resuelve, R6, en API y BD); solo el Administrador asigna roles y el cambio se aplica al refrescar el token (máximo 10 min); una cuenta desactivada pierde de inmediato sus sesiones; mínimo privilegio también en la infraestructura: el usuario de BD de la aplicación no altera el esquema ni borra kardex u outbox, y el usuario de Mongo solo hace insert y find en la bitácora. Si un recurso no pertenece al actor, la política responde 404 para no revelar que existe.</aside>
+<aside class="notes">Cada acción tiene su propio permiso, y la lista vive en el código, revisada en cada PR; en total son 25. Además: quien sube un diseño no puede aprobarlo; solo el Administrador asigna roles, y el cambio rige en menos de 10 minutos; una cuenta desactivada pierde sus sesiones al instante. La misma idea vale para la base de datos: la aplicación no puede cambiar la estructura ni borrar el historial. Si un recurso no es del usuario, la API responde “no existe” para no revelar nada.</aside>
 </section>
 
 <section id="amenazas-altas" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
@@ -1084,55 +1084,55 @@
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #D9DEE7;border-top:6px solid #B91C1C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B91C1C">AM-01 · A03 · Alto</p>
 <h3 style="font-size:26px;font-weight:600;color:#14213D">Inyección SQL</h3>
-<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Consultas parametrizadas solo en repository; Zod; Semgrep en CI</p>
+<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Consultas con parámetros; validación de entradas; revisión automática</p>
 <p style="font-size:24px;font-weight:600;color:#1E40AF">CP-24</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #D9DEE7;border-top:6px solid #B91C1C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B91C1C">AM-03 · A03 · Alto</p>
 <h3 style="font-size:26px;font-weight:600;color:#14213D">XSS almacenado</h3>
-<p style="font-size:24px;line-height:1.35;color:#3F4A5C">React escapa; sin dangerouslySetInnerHTML; CSP estricta</p>
+<p style="font-size:24px;line-height:1.35;color:#3F4A5C">React muestra el texto como texto; política que bloquea scripts ajenos</p>
 <p style="font-size:24px;font-weight:600;color:#1E40AF">CP-25</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #D9DEE7;border-top:6px solid #B91C1C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B91C1C">AM-05 · A01 · Alto</p>
 <h3 style="font-size:26px;font-weight:600;color:#14213D">IDOR horizontal</h3>
-<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Propiedad verificada con el JWT; filtro SQL por responsable; UUID</p>
+<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Se revisa que el recurso sea del usuario; IDs imposibles de adivinar</p>
 <p style="font-size:24px;font-weight:600;color:#1E40AF">CP-27</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #D9DEE7;border-top:6px solid #B91C1C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B91C1C">AM-06 · A01 · Alto</p>
 <h3 style="font-size:26px;font-weight:600;color:#14213D">Escalada vertical</h3>
-<p style="font-size:24px;line-height:1.35;color:#3F4A5C">requierePermiso() en cada ruta; denegación por defecto</p>
+<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Cada ruta exige su permiso; todo prohibido por defecto</p>
 <p style="font-size:24px;font-weight:600;color:#1E40AF">CP-28</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #D9DEE7;border-top:6px solid #B91C1C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B91C1C">AM-07 · A07 · Alto</p>
 <h3 style="font-size:26px;font-weight:600;color:#14213D">Fuerza bruta</h3>
-<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Bloqueo progresivo, rate limit, WAF, claves filtradas y MFA</p>
+<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Bloqueo tras intentos fallidos, límite por IP y segundo factor</p>
 <p style="font-size:24px;font-weight:600;color:#1E40AF">CP-29</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #D9DEE7;border-top:6px solid #B91C1C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B91C1C">AM-08 · A07 · Alto</p>
 <h3 style="font-size:26px;font-weight:600;color:#14213D">Robo de sesión</h3>
-<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Refresh HttpOnly que rota y detecta reutilización; acceso de 10 min</p>
+<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Token corto; el de refresco cambia en cada uso y detecta copias</p>
 <p style="font-size:24px;font-weight:600;color:#1E40AF">CP-30</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #D9DEE7;border-top:6px solid #B91C1C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B91C1C">AM-10 · A05 · Alto</p>
 <h3 style="font-size:26px;font-weight:600;color:#14213D">Secretos expuestos</h3>
-<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Gestor de secretos; secret scanning y push protection</p>
+<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Claves solo en el proveedor; GitHub bloquea secretos en el código</p>
 <p style="font-size:24px;font-weight:600;color:#1E40AF">CP-32</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #D9DEE7;border-top:6px solid #B91C1C;border-radius:12px;padding:20px 24px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B91C1C">AM-12 · A06 · Alto</p>
-<h3 style="font-size:26px;font-weight:600;color:#14213D">Dependencias con CVE</h3>
-<p style="font-size:24px;line-height:1.35;color:#3F4A5C">npm audit y Dependabot en CI; imagen slim; lockfile</p>
+<h3 style="font-size:26px;font-weight:600;color:#14213D">Librerías vulnerables</h3>
+<p style="font-size:24px;line-height:1.35;color:#3F4A5C">Revisión automática de librerías en cada PR</p>
 <p style="font-size:24px;font-weight:600;color:#1E40AF">CI en cada PR</p>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">51</p>
-<aside class="notes">Metodología: STRIDE (Shostack, 2014) aplicado sobre los flujos de la Figura 4.19, cruzado con las categorías de OWASP Top 10:2021. El riesgo es probabilidad × impacto. Ejemplos de escenario: AM-01, un parámetro “' OR 1=1--” altera la consulta; AM-03, un script guardado en una nota roba el token cuando la Encargada la abre; AM-05, el Operario A cambia el UUID en la URL y avanza la etapa del Operario B; AM-06, un Operario invoca POST /plantillas; AM-07, un bot prueba contraseñas filtradas; AM-08, robo del refresh desde un teléfono compartido o perdido; AM-10, un .env publicado en GitHub; AM-12, una librería con CVE crítico. Cada amenaza tiene mitigación, estándar de codificación exigible por la Definition of Done y un caso de prueba.</aside>
+<aside class="notes">Las amenazas salen de aplicar STRIDE (Shostack, 2014) a los flujos de la Figura 4.19 y cruzarlas con el OWASP Top 10. Riesgo = probabilidad × impacto. Ejemplos concretos: alguien escribe código SQL en un filtro; un script escondido en una nota roba la sesión de la Encargada; un operario cambia el ID en la URL y termina la etapa de otro; un bot prueba claves filtradas; alguien publica por error un archivo con contraseñas en GitHub. Cada amenaza tiene su control, una regla de código obligatoria y una prueba.</aside>
 </section>
 
 <section id="amenazas-otras" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
@@ -1142,19 +1142,19 @@
 </div>
 <table style="font-size:24px;color:#14213D;border:1px solid #D9DEE7">
 <tr style="background:#14213D"><th style="width:9%;color:#F4F1EA">ID</th><th style="width:23%;color:#F4F1EA">Amenaza</th><th style="width:10%;color:#F4F1EA">Riesgo</th><th style="width:46%;color:#F4F1EA">Mitigación principal</th><th style="width:12%;color:#F4F1EA">Prueba</th></tr>
-<tr style="background:#FFFFFF"><td>AM-02</td><td>Inyección NoSQL</td><td>Medio</td><td>Zod exige tipos primitivos; sanitizeFilter del driver</td><td>CP-24</td></tr>
-<tr style="background:#F0F2F6"><td>AM-04</td><td>CSRF</td><td>Medio</td><td>Bearer en negocio; SameSite=Strict; Origin y encabezado propio</td><td>CP-26</td></tr>
-<tr style="background:#FFFFFF"><td>AM-09</td><td>Archivo malicioso</td><td>Medio</td><td>URL prefirmada; lista blanca hasta 10 MB; bucket privado</td><td>CP-31</td></tr>
-<tr style="background:#F0F2F6"><td>AM-11</td><td>Cabeceras inseguras</td><td>Medio</td><td>helmet: CSP, HSTS y frame-ancestors 'none'</td><td>CP-32</td></tr>
-<tr style="background:#FFFFFF"><td>AM-13</td><td>Repudio</td><td>Medio</td><td>Outbox en la transacción; bitácora solo de inserción</td><td>CP-11</td></tr>
-<tr style="background:#F0F2F6"><td>AM-14</td><td>Denegación de servicio</td><td>Medio</td><td>Cloudflare; paginación máx. 50; statement_timeout 5 s</td><td>CP-20</td></tr>
-<tr style="background:#FFFFFF"><td>AM-15</td><td>Pérdida de datos</td><td>Medio</td><td>PITR + pg_dump cifrado diario; restauración ensayada</td><td>A29</td></tr>
-<tr style="background:#F0F2F6"><td>AM-16</td><td>Datos personales</td><td>Bajo</td><td>Minimización; logs sin cuerpos ni tokens</td><td>CP-32</td></tr>
+<tr style="background:#FFFFFF"><td>AM-02</td><td>Inyección NoSQL</td><td>Medio</td><td>Se aceptan solo valores simples, no objetos</td><td>CP-24</td></tr>
+<tr style="background:#F0F2F6"><td>AM-04</td><td>CSRF</td><td>Medio</td><td>Token en encabezado; cookie que no viaja desde otros sitios</td><td>CP-26</td></tr>
+<tr style="background:#FFFFFF"><td>AM-09</td><td>Archivo malicioso</td><td>Medio</td><td>Solo tipos permitidos, hasta 10 MB; almacenamiento privado</td><td>CP-31</td></tr>
+<tr style="background:#F0F2F6"><td>AM-11</td><td>Cabeceras inseguras</td><td>Medio</td><td>Cabeceras de seguridad con helmet</td><td>CP-32</td></tr>
+<tr style="background:#FFFFFF"><td>AM-13</td><td>Repudio</td><td>Medio</td><td>Cada cambio deja registro; la bitácora no se puede editar</td><td>CP-11</td></tr>
+<tr style="background:#F0F2F6"><td>AM-14</td><td>Denegación de servicio</td><td>Medio</td><td>Cloudflare; listas de 50 en 50; consultas con tiempo máximo</td><td>CP-20</td></tr>
+<tr style="background:#FFFFFF"><td>AM-15</td><td>Pérdida de datos</td><td>Medio</td><td>Respaldo diario cifrado; restauración ensayada</td><td>A29</td></tr>
+<tr style="background:#F0F2F6"><td>AM-16</td><td>Datos personales</td><td>Bajo</td><td>Solo los datos necesarios; logs sin datos sensibles</td><td>CP-32</td></tr>
 </table>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Cada mitigación se convierte en un estándar exigible por la Definition of Done: el PR no se fusiona si el pipeline detecta un hallazgo High.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Cada control es una regla obligatoria: un PR no se acepta si las revisiones automáticas encuentran un problema grave.</p>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">52</p>
-<aside class="notes">CSRF tiene riesgo medio porque las acciones de negocio usan Bearer, que un sitio externo no puede agregar; solo el endpoint de refresco usa cookie, y además verifica Origin y un encabezado personalizado. Archivos: Content-Type y Content-Length firmados, descarga como attachment y nosniff. Denegación de servicio: también se verifica con CP-23. Pérdida de datos: RPO 24 h y RTO 4 h, con ensayo de restauración. Datos personales: alineado con la Ley 19.628 modificada por la Ley 21.719; no se guardan contactos de clientes. Los controles siguen OWASP ASVS 4.0.3 nivel 2 y, en gestión, ISO/IEC 27001/27002, CIS Controls v8.1 y NIST CSF 2.0.</aside>
+<aside class="notes">CSRF es riesgo medio porque las acciones usan un token en el encabezado, que otro sitio no puede agregar; solo el refresco usa cookie, y además revisa el origen. Pérdida de datos: como máximo se pierde un día y se recupera en 4 horas, y eso se ensaya. Datos personales: se cumple la Ley 19.628 con los cambios de la Ley 21.719, y no se guardan contactos de clientes. Los controles siguen OWASP ASVS nivel 2 y, en gestión, ISO 27001, CIS Controls y NIST CSF.</aside>
 </section>
 
 <section id="conclusiones" data-transition="fade" style="background:#F7F7F4;color:#14213D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:120px 128px 160px;display:flex;flex-direction:column;gap:36px">
@@ -1165,35 +1165,35 @@
 <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:24px">
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px">
 <h3 style="font-size:30px;font-weight:600;color:#14213D">Diagnóstico → diseño</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Plantillas, máquina de estados y una vista móvil responden “qué hago ahora y qué sigue”. Las alertas se generan al planificar, no al descubrir el faltante.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Plantillas, estados de etapa y una vista móvil responden “qué hago ahora y qué sigue”. Las alertas de insumos llegan al planificar, no cuando ya falta.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px">
 <h3 style="font-size:30px;font-weight:600;color:#14213D">Arquitectura proporcional</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Monolito modular, PWA y persistencia políglota: simple para dos personas, ≈ US$ 7–10 al mes y preparada para evolucionar.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Una aplicación modular con dos bases de datos: simple para dos personas, ≈ US$ 7–10 al mes y lista para crecer.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px">
-<h3 style="font-size:30px;font-weight:600;color:#14213D">Integridad en varias capas</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Las reglas críticas viven en el dominio y en PostgreSQL; el outbox evita perder eventos de auditoría.</p>
+<h3 style="font-size:30px;font-weight:600;color:#14213D">Reglas protegidas dos veces</h3>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">Las reglas críticas se revisan en la aplicación y en la base de datos; el historial no pierde eventos.</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D9DEE7;border-radius:16px;padding:28px 32px">
 <h3 style="font-size:30px;font-weight:600;color:#14213D">Seguridad basada en riesgo</h3>
-<p style="font-size:24px;line-height:1.4;color:#3F4A5C">16 amenazas, 8 altas; cada una con mitigación, estándar exigible y caso de prueba.</p>
+<p style="font-size:24px;line-height:1.4;color:#3F4A5C">16 amenazas, 8 altas; cada una con su control, una regla de código y una prueba.</p>
 </div>
 </div>
-<p style="font-size:24px;line-height:1.4;color:#14213D;background:#EBEFF5;padding:20px 28px;border-radius:12px"><b>Pendiente:</b> validar supuestos con el cliente (A01), ronda de usabilidad con trabajadores, ejecutar los 36 casos de prueba y definir quién financia el hosting.</p>
+<p style="font-size:24px;line-height:1.4;color:#14213D;background:#EBEFF5;padding:20px 28px;border-radius:12px"><b>Pendiente:</b> validar supuestos con el cliente, probar con trabajadores reales, ejecutar los 36 casos de prueba y definir quién paga el hosting.</p>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5B6474">SGP · Informe N.º 2 — Diseño de la solución</p>
 <p style="position:absolute;right:128px;bottom:64px;width:200px;text-align:right;font-size:24px;color:#5B6474">53</p>
-<aside class="notes">Cerrar volviendo al problema: los trabajadores no saben qué sigue cuando faltan las personas encargadas. El diseño lo resuelve con tres decisiones trazables: plantillas que externalizan el conocimiento (M2), la máquina de estados con habilitación y aviso automático de la siguiente etapa (M4) y la vista personal mobile-first. Mencionar también los riesgos abiertos: supuestos marcados como “S”, disponibilidad de teléfonos y conectividad en el taller y en terreno, la ronda de usabilidad FB-07 a FB-11 y el costo mensual mínimo.</aside>
+<aside class="notes">Cerrar volviendo al problema: cuando faltan las encargadas, nadie sabe qué sigue. El diseño lo resuelve con tres piezas: plantillas que guardan el proceso, etapas que se habilitan y avisan solas, y una vista en el celular que dice qué hacer. Nombrar también lo pendiente: validar los supuestos con el cliente, confirmar que hay teléfonos y señal en el taller, probar con trabajadores reales y definir quién paga el hosting.</aside>
 </section>
 
 <section id="preguntas" data-transition="fade" style="background:#C2410C;color:#FBF6F1;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between;gap:48px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#FBF6F1;letter-spacing:2px;text-transform:uppercase">Preguntas</p>
 <h1 style="font-family:Rubik, Arial, sans-serif;font-size:160px;font-weight:600;line-height:1;color:#FBF6F1">¿Preguntas?</h1>
-<aside class="notes">1. ¿Por qué monolito modular? Unos 25 usuarios y 30 OT por semana; un proceso Node.js con pool de 10 conexiones cumple p95 < 500 ms con 40 usuarios (CP-20). Dos desarrolladores y sin presupuesto: los microservicios suman despliegues, observabilidad distribuida y consistencia eventual sin valor para el cliente. Es modular: límites explícitos (Fig. 4.11), dependencias en un sentido (Fig. 4.13) y outbox; M5 se puede extraer. Coherencia: CU-06 recorre las cinco vistas con los mismos nombres.
-2. ¿Consistencia entre PostgreSQL y MongoDB? Outbox transaccional: cambio de negocio y evento en la misma transacción ACID; o ambos o ninguno. El relay publica con _id determinista (evt-id) y upsert: entrega al menos una vez, efecto exactamente una vez. Si MongoDB cae, el operario no falla: el evento queda pendiente y se reintenta; tras 10 intentos, alerta en Sentry. Se descartó la doble escritura (podría dejar acciones sin auditar) y el two-phase commit (no soportado entre ambos motores gestionados).
-3. ¿Por qué validar en la BD si ya lo hace la app? Defensa en profundidad: la app valida para dar buenos mensajes; la BD garantiza la regla ante cualquier cliente (error futuro, migración, carga desde Excel). Los triggers rechazan PENDIENTE→TERMINADA en una etapa o TERMINADA→EN_PRODUCCION en una OT (CP-02); CHECK stock ≥ 0 aborta toda la transacción (CP-14); el índice único parcial asegura una sola alerta aun con concurrencia. Cada grafo (Fig. 4.7 y 4.8) especifica ambas implementaciones y CP-01/CP-02 prueban las dos.
-4. ¿Por qué no JWT en localStorage? Cualquier script lo lee: un XSS robaría un token duradero. Acceso: JWT de 10 min en memoria enviado como Bearer, que no es vulnerable a CSRF. Refresco: opaco, con hash en BD, cookie __Host- HttpOnly (mitiga XSS) y SameSite=Strict (mitiga CSRF), más Origin y encabezado propio; rota en cada uso y la reutilización revoca la familia (CP-30). Además React escapa, lint prohíbe dangerouslySetInnerHTML y la CSP bloquea scripts (CP-25).
-5. ¿IDOR o dos “Terminar” al mismo tiempo? IDOR: ambos operarios tienen el permiso, así que se verifica propiedad: SELECT … FOR UPDATE y responsable_id = actor.id del JWT, nunca del cuerpo; si no coincide, 404; lecturas filtradas por responsable y UUID no enumerables (CP-27). Concurrencia: ambas llegan con version 3; la primera termina y el trigger sube a 4; la segunda encuentra 4 ≠ 3 y estado TERMINADA → 409, sin descontar insumos dos veces (CP-19).</aside>
+<aside class="notes">1. ¿Por qué una sola aplicación y no microservicios? Son unos 25 usuarios y 30 OT por semana: un solo servidor responde en menos de medio segundo con 40 usuarios (CP-20). Con dos desarrolladores y sin presupuesto, los microservicios solo suman despliegues y monitoreo. Igual es modular (Fig. 4.11 y 4.13): un módulo como insumos se puede separar después. Coherencia: “Terminar etapa” recorre las cinco vistas con los mismos nombres.
+2. ¿Cómo cuadran PostgreSQL y MongoDB? Con un outbox: el cambio y su evento se guardan juntos en PostgreSQL, o ninguno. Después, el relay copia el evento a MongoDB con un ID fijo, así que repetirlo no lo duplica. Si MongoDB se cae, el operario no lo nota: el evento espera y se reintenta, y tras 10 fallos llega una alerta. Escribir en las dos bases a la vez podría dejar acciones sin registrar.
+3. ¿Por qué validar en la base si ya lo hace la app? Porque la app valida para dar buenos mensajes, pero la base cumple la regla venga de donde venga: un error futuro, un script o una carga desde el Excel. Por ejemplo, rechaza terminar una etapa que no empezó (CP-02), aborta todo si el stock quedaría negativo (CP-14) y asegura una sola alerta aunque lleguen dos consumos a la vez. Un mismo diagrama de estados (Fig. 4.7 y 4.8) define las dos validaciones, y las pruebas revisan ambas.
+4. ¿Por qué no guardar el token en localStorage? Porque cualquier script de la página lo puede leer: un ataque XSS se llevaría una sesión larga. Por eso hay dos tokens. El de acceso dura 10 minutos, vive en memoria y va en un encabezado, así que otro sitio no puede usarlo (CSRF). El de refresco va en una cookie que JavaScript no puede leer y que no viaja desde otros sitios; cambia en cada uso y, si alguien reutiliza uno viejo, se cierran todas las sesiones (CP-30). Además, React no ejecuta texto como código y una política bloquea scripts ajenos (CP-25).
+5. ¿Y si un operario cambia el ID en la URL, o dos aprietan “Terminar” a la vez? En el primer caso, los dos tienen el permiso, así que se revisa que la etapa sea de quien la pide, según su sesión y no según lo que envía; si no es suya, la API responde “no existe” (CP-27). En el segundo, las dos peticiones traen la versión 3: la primera termina la etapa y la deja en versión 4; la segunda ve que la versión cambió y recibe un aviso para recargar, sin descontar insumos dos veces (CP-19).</aside>
 </section>
 </div>
 <div id="notes"></div>
