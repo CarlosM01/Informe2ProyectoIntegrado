@@ -1,0 +1,256 @@
+%% ════════════════════════════════════════════════════════════════════════════
+%% PLANTILLA DE INFORME INACAP
+%% Compilar con: pdflatex -shell-escape plantilla_informe_inacap.tex
+%% (se requiere -shell-escape por el paquete minted; ejecutar 2 veces para el índice)
+%% Archivos necesarios en la misma carpeta: logo_inacap.png
+%% ════════════════════════════════════════════════════════════════════════════
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{eso-pic}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{minted}
+\setlength{\headheight}{42pt} % Altura suficiente para 3 líneas
+
+% ── Colores corporativos INACAP ─────────────────────────────────────────────
+\definecolor{inacapRed}{RGB}{204,0,0}
+\definecolor{lightGray}{RGB}{200,200,200}
+
+% ── Variables del documento (editar solo aquí) ──────────────────────────────
+\newcommand{\docTitulo}{Título del Informe}
+\newcommand{\docEvaluacion}{Nombre de la Evaluación}
+\newcommand{\docCarrera}{Nombre de la Carrera}
+\newcommand{\docAsignatura}{Nombre de la Asignatura}
+\newcommand{\docSeccion}{Código / Sección}
+\newcommand{\docDocente}{Nombre del Docente}
+\newcommand{\docEstudiante}{Nombre del Estudiante (o integrantes del grupo)}
+\newcommand{\docFecha}{DD de Mes de AAAA}
+
+% ── Cabecera de página ───────────────────────────────────────────────────────
+\fancypagestyle{mainpage}{%
+  \fancyhf{}
+  % Línea roja bajo el encabezado
+  \renewcommand{\headrule}{\color{inacapRed}\hrule width\headwidth height 1.5pt \vss}
+  \renewcommand{\headrulewidth}{1.5pt}
+  % Logo a la izquierda
+  \fancyhead[L]{\includegraphics[height=1.1cm,keepaspectratio]{logo_inacap.png}}
+  % Información a la derecha
+  \fancyhead[R]{%
+    \footnotesize\color{gray}%
+    \docCarrera\\%
+    \docAsignatura\\%
+    \docSeccion}
+  % Número de página centrado al pie
+  \fancyfoot[C]{\thepage}
+}
+
+% ── Configuración de márgenes (contenido principal) ─────────────────────────
+\geometry{top=2.5cm, bottom=2.5cm, left=3cm, right=3cm}
+
+% ── Estilo de títulos ────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\title{\docTitulo}
+\author{}
+\date{}
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ════════════════════════════════════════════════════════════════════════════
+% PORTADA
+% ════════════════════════════════════════════════════════════════════════════
+\pagestyle{empty}
+\newgeometry{top=0cm, bottom=2cm, left=2cm, right=2cm}
+
+\AddToShipoutPictureBG*{%
+\begin{tikzpicture}[remember picture, overlay]
+
+  % --- Fondo gris claro franja superior ---
+  \fill[lightGray!50]
+    (current page.north west)
+    rectangle
+    ([yshift=-2.2cm] current page.north east);
+
+  % --- Logo INACAP ---
+  \node[anchor=north west, inner sep=0pt]
+    at ([xshift=1.5cm, yshift=0cm] current page.north west)
+    {\includegraphics[width=4cm, height=2.2cm, keepaspectratio]{logo_inacap.png}};
+
+  % --- Rayas rojas decorativas derecha (10 rayas) ---
+  \foreach \i in {0,1,2,3,4,5,6,7,8,9}{
+    \pgfmathsetmacro{\xstart}{-3.5 + \i*0.28}
+    \pgfmathsetmacro{\xend}{\xstart + 0.16}
+    \fill[inacapRed]
+      ([xshift=\xstart cm, yshift=-0.15cm] current page.north east)
+      rectangle
+      ([xshift=\xend cm, yshift=-2.05cm] current page.north east);
+  }
+
+  % --- Bloque rojo sólido esquina superior derecha ---
+  \fill[inacapRed]
+    ([xshift=-0.9cm, yshift=0cm] current page.north east)
+    rectangle
+    ([xshift=0cm, yshift=-2.2cm] current page.north east);
+
+  % --- Líneas decorativas diagonales abajo-derecha ---
+  \draw[lightGray, line width=0.8pt]
+    ([xshift=-2cm, yshift=4.5cm] current page.south east)
+    --
+    ([xshift=1cm, yshift=3.0cm] current page.south east);
+  \draw[lightGray!70, line width=0.5pt]
+    ([xshift=-4cm, yshift=5.0cm] current page.south east)
+    --
+    ([xshift=-1cm, yshift=3.5cm] current page.south east);
+
+\end{tikzpicture}%
+}
+
+% ── Espacio para la barra de encabezado ─────────────────────────────────────
+\vspace{2.8cm}
+
+\begin{center}
+  \vspace{4cm}
+
+  {\large\bfseries \docEvaluacion}
+
+  \vspace{0.6cm}
+\end{center}
+
+\vspace*{\fill}
+
+\begin{center}
+    {\huge\bfseries \docTitulo}
+\end{center}
+
+\vfill
+\noindent
+\begin{tabular}{@{}p{5.5cm} p{9cm}@{}}
+  \textbf{Asignatura:}              & \docAsignatura \\[0.4em]
+  \textbf{Sección:}                 & \docSeccion \\[0.4em]
+  \textbf{Nombre del docente:}      & \docDocente \\[0.4em]
+  \textbf{Nombre de los}            & \\
+  \textbf{integrantes del grupo:}   &
+    {\color{inacapRed} \docEstudiante}   \\[0.15em]
+\end{tabular}
+
+\vspace{1.5cm}
+
+\begin{center}
+  \textbf{\docFecha}
+\end{center}
+
+% ════════════════════════════════════════════════════════════════════════════
+% CONTENIDO DEL INFORME
+% ════════════════════════════════════════════════════════════════════════════
+\clearpage
+\restoregeometry
+\pagestyle{mainpage}
+
+\vspace{1cm}
+
+\tableofcontents
+\newpage
+
+% ── Introducción ─────────────────────────────────────────────────────────────
+\section*{Introducción}
+Texto de la introducción.
+
+\subsection*{Subtítulo sin numerar}
+\begin{enumerate}[label=\alph*)]
+    \item Primer elemento.
+    \item Segundo elemento.
+\end{enumerate}
+
+% ── Sección numerada ─────────────────────────────────────────────────────────
+\newpage
+\section{Título de la sección}
+
+\subsection{Título de la subsección}
+Texto de la subsección.
+
+\begin{enumerate}[label=\alph*)]
+    \item Elemento con lista literal.
+    \item Otro elemento.
+\end{enumerate}
+
+\subsubsection*{Subsubsección sin numerar}
+Texto.
+
+% ── Tabla ────────────────────────────────────────────────────────────────────
+\newpage
+\subsection{Tabla comparativa}
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}p{3.5cm}p{5cm}p{5cm}@{}}
+\toprule
+\textbf{Criterio} & \textbf{Columna A} & \textbf{Columna B} \\ \midrule
+Criterio 1 & \textbf{Etiqueta.} Descripción. & \textbf{Etiqueta.} Descripción. \\
+Criterio 2 & \textbf{Etiqueta.} Descripción. & \textbf{Etiqueta.} Descripción. \\
+Criterio 3 & \textbf{Etiqueta.} Descripción. & \textbf{Etiqueta.} Descripción. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+% ── Subsección con descripción/aplicación ────────────────────────────────────
+\section{Otra sección}
+
+\subsection{Elemento con descripción}
+\textbf{Descripción:} Texto descriptivo.
+
+\textbf{Aplicación en el caso:} Texto de aplicación.
+
+% ── Bloques de código (minted) ───────────────────────────────────────────────
+\newpage
+\section{Ejemplos de código}
+
+\subsection{Ejemplo 1}
+
+\subsubsection*{Prompt / Entrada:}
+\begin{minted}[breaklines]{python}
+def funcion(param):
+    return param
+\end{minted}
+
+\subsubsection*{Salida esperada:}
+\begin{minted}[breaklines]{json}
+{
+  "clave": "valor"
+}
+\end{minted}
+
+\begin{minted}[breaklines]{text}
+Texto plano de salida.
+\end{minted}
+
+% ── Conclusiones ─────────────────────────────────────────────────────────────
+\newpage
+\section*{Conclusiones}
+Párrafo de conclusión 1.
+
+Párrafo de conclusión 2.
+
+% ── Bibliografía ─────────────────────────────────────────────────────────────
+\newpage
+\section{Bibliografía}
+\begin{enumerate}
+\item \textbf{Autor (año).} \textit{Título de la obra}. Editorial. \url{https://ejemplo.com}
+\item \textbf{Autor (año).} \textit{Título de la obra}. Editorial.
+\end{enumerate}
+
+\end{document}

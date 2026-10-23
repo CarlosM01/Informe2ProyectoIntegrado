@@ -10,3 +10,10 @@
 Thumbs.db
 *.swp
 *~
+
+# LaTeX build files
+tex/*.aux
+tex/*.log
+tex/*.out
+tex/*.toc
+tex/*.synctex.gz

@@ -12,6 +12,10 @@ Repositorio del **Informe N.º 2** del Proyecto Integrado (Unidad 2, INACAP). Co
 ```
 .
 ├── Informe2_Kotoduo_SGP.md      # Documento principal del informe
+├── tex/                         # Versión LaTeX del informe (plantilla INACAP)
+│   ├── Informe2_Kotoduo_SGP.tex #   Informe completo, generado desde el Markdown
+│   ├── plantilla_informe_inacap.tex # Plantilla institucional original
+│   └── logo_inacap.png          #   Logo usado en la portada y la cabecera
 ├── docker-compose.yml           # Levanta PostgreSQL y MongoDB con los anexos B y C
 ├── diagramas/                   # Anexo A: fuentes PlantUML, una carpeta por vista
 │   ├── _comun/estilo.iuml       #   Estilo compartido por todas las figuras
@@ -38,7 +42,7 @@ Repositorio del **Informe N.º 2** del Proyecto Integrado (Unidad 2, INACAP). Co
 
 ## Cómo está organizado el informe
 
-El informe se evalúa con una rúbrica. La tabla "Matriz de trazabilidad" al inicio de `Informe2_Kotoduo_SGP.md` relaciona cada criterio con su sección.
+El informe tiene dos niveles: el cuerpo (caps. 1–9) presenta decisiones, diagramas y tablas de resumen, y los anexos (cap. 13) reúnen las tablas extensas de consulta. La "Guía de lectura" al inicio del informe lo explica y define los códigos usados (RF, HU, CU, CP, AM, etc.).
 
 | Cap. | Contenido |
 |---|---|
@@ -49,10 +53,20 @@ El informe se evalúa con una rúbrica. La tabla "Matriz de trazabilidad" al ini
 | 6 | Modelo de datos (PostgreSQL y MongoDB) |
 | 7 | Seguridad: roles, autenticación, amenazas y codificación segura |
 | 8 | Plan de pruebas |
-| 9–11 | Conclusiones, referencias y anexos |
-| 12 | Balotario para la defensa oral |
+| 9–10 | Conclusiones y referencias |
+| 11 | Preparación para la defensa oral (balotario) |
+| 12 | Manifiesto de uso de inteligencia artificial |
+| 13 | Anexos: lista de cotejo (E) y tablas extensas (H: plan y dependencias, I: tecnologías, J: diccionario, K: amenazas y patrones, L: casos de prueba) |
 
 ## Cómo usar los artefactos
+
+### Versión LaTeX del informe
+
+`tex/Informe2_Kotoduo_SGP.tex` es el mismo informe sobre la plantilla institucional de INACAP. El Markdown sigue siendo la fuente principal: si cambias `Informe2_Kotoduo_SGP.md`, aplica el mismo cambio en el `.tex`.
+
+- **Compilar:** desde `tex/`, `pdflatex Informe2_Kotoduo_SGP.tex` dos veces (para el índice). También funciona con `xelatex`, `lualatex` o `tectonic Informe2_Kotoduo_SGP.tex`.
+- **Figuras:** el documento las busca en `../figuras/` y en `./figuras/`. Para Overleaf, sube `tex/` junto con la carpeta `figuras/` completa.
+- Las tablas de ocho o más columnas (amenazas y casos de prueba) van en páginas horizontales.
 
 ### Diagramas (PlantUML)
 
@@ -138,9 +152,10 @@ Abrir `anexos/prototipo/index.html` en el navegador. No requiere servidor ni cre
 
 ## Convenciones de trabajo
 
-- **Mantener la coherencia entre artefactos.** Un cambio en el modelo de datos afecta al diagrama ER (`diagramas/6.1-modelo-datos/`), a `ddl_postgresql.sql`, al diccionario de datos del cap. 6 y, si corresponde, a los casos de prueba del cap. 8.
+- **Mantener la coherencia entre artefactos.** Un cambio en el modelo de datos afecta al diagrama ER (`diagramas/6.1-modelo-datos/`), a `ddl_postgresql.sql`, al resumen del diccionario (Tabla 6.1), al diccionario completo (Anexo J) y, si corresponde, a los casos de prueba (Anexo L).
+- **Resumen en el cuerpo, detalle en el anexo.** Las tablas extensas viven en los anexos H–L y el cuerpo muestra un resumen. Si cambias una, revisa la otra.
 - **Respetar los identificadores.** El informe referencia requisitos y casos por ID (RF, HU, CU, CP, IK, P-xx). No los renumeres sin actualizar todas las referencias cruzadas.
-- **No romper las rutas.** El informe cita archivos como `diagramas/…`, `bd/…` y `anexos/prototipo/…`. Si mueves o renombras alguno, actualiza la sección 11 (Anexos) y las menciones en el texto.
+- **Sin rutas ni rúbrica en el texto.** El informe nombra los artefactos por su anexo (Anexos A–G), no por su ruta, y no cita la rúbrica. Las únicas rutas son los enlaces a las imágenes de `figuras/`: si mueves o renombras una figura, actualiza el Markdown y el `.tex`.
 - **Un cambio por rama.** Trabaja en una rama propia (por ejemplo `feat/cap7-amenazas` o `fix/ddl-indices`) y abre un Pull Request para que la otra persona revise antes de fusionar a `main`.
 - **Commits pequeños y descriptivos**, en español, en imperativo o en pasado de forma consistente.
 
