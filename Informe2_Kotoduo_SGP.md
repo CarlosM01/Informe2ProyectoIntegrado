@@ -6,11 +6,12 @@
 |---|---|
 | Nombre del proyecto | SGP-Kotoduo: Sistema de Gestión y Seguimiento Productivo |
 | Empresa / contraparte | Kotoduo — agencia publicitaria y taller de confección, Temuco, La Araucanía (kotoduo.cl) |
-| Integrantes | Integrante 1 — Integrante 2 |
+| Asignatura | Proyecto Integrado |
+| Sección | 2026/P TIHI43/IEC-N4-C2/D Temuco IEC |
+| Profesor | Manuel Alfredo Sanchez Carcamo |
+| Estudiante | Carlos David Mac-Iver Reydet |
 | Metodología | Scrum (Sprint 0 de diseño + 4 Sprints de construcción) |
-| Carrera / Sección / Sede | [Completar] |
-| Docente | [Completar] |
-| Fecha de entrega | [Completar] |
+| Fecha de entrega | 23 de octubre de 2026 |
 
 ## Matriz de trazabilidad entre rúbrica e informe
 
