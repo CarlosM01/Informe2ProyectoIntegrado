@@ -1,0 +1,29 @@
+@startuml
+' Figura 4.24 — Casos de uso: supervisión y control de la producción
+!include ../_comun/estilo.iuml
+skinparam actorStyle awesome
+left to right direction
+
+actor "Encargada de\nProducción" as EP
+actor "Vendedor" as VE
+actor "Verificador de atrasos\n(proceso programado)" as VA <<sistema>>
+
+rectangle "SGP-Kotoduo — Supervisión" {
+  usecase "CU-10 Supervisar\nproducción" as CU10
+  usecase "CU-12 Gestionar etapas de la OT\n(asignar, reasignar,\nomitir, desbloquear)" as CU12
+  usecase "CU-13 Controlar estado de la OT\n(detener, reanudar, anular,\nmarcar entregada)" as CU13
+  usecase "CU-14 Detectar\nOT en riesgo" as CU14
+  usecase "Notificar siguiente\nresponsable" as NOT
+  usecase "Notificar a la\nEncargada" as NEP
+}
+
+EP --> CU10
+EP --> CU12
+EP --> CU13
+VE --> CU10 : solo consulta
+VE --> CU13 : solo marcar entregada
+VA --> CU14 : cada 15 min
+
+CU12 ..> NOT : <<include>>
+CU14 ..> NEP : <<include>>
+@enduml

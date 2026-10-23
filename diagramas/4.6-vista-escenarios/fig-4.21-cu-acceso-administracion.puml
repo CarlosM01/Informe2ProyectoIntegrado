@@ -9,7 +9,7 @@ actor "Diseñador" as DI
 actor "Vendedor" as VE
 actor "Encargada de\nProducción" as EP
 actor "Administrador" as AD
-actor "Usuario\nautenticado" as U
+actor "Usuario" as U
 
 OP --|> U
 DI --|> U
@@ -26,4 +26,5 @@ rectangle "SGP-Kotoduo — Acceso y administración" {
 U --> CU01
 AD --> CU02
 AD --> CU11
+EP --> CU11 : solo por OT
 @enduml

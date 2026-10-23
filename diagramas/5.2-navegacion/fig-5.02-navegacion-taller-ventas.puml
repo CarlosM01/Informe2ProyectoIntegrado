@@ -13,5 +13,7 @@
 **> Vendedor\n/ordenes
 ***> /ordenes/nueva\nRegistrar orden
 ***> /ordenes/:codigo\nDetalle (solo lectura de etapas)
+****> Marcar entregada
 ***> /ordenes/:codigo/diseno\nRegistrar respuesta del cliente
+***> /panel\nPanel (solo lectura)
 @endwbs

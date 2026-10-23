@@ -66,7 +66,7 @@
   var NAV = {
     OPERARIO: ['mi-trabajo', 'avisos', 'insumos'],
     DISENADOR: ['mi-trabajo', 'avisos', 'insumos'],
-    VENDEDOR: ['ordenes', 'nueva', 'avisos'],
+    VENDEDOR: ['ordenes', 'nueva', 'avisos', '+panel'],
     ENCARGADA_PRODUCCION: ['panel', 'ordenes', 'plantillas', 'insumos'],
     ADMINISTRADOR: ['panel', 'ordenes', 'usuarios', 'bitacora', '+plantillas', '+insumos']
   };

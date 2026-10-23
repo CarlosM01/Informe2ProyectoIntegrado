@@ -9,7 +9,12 @@ actor "Diseñador" as DI
 
 rectangle "SGP-Kotoduo — Taller" {
   usecase "CU-05 Consultar\nMi Trabajo" as CU05
-  usecase "CU-06 Actualizar\navance de etapa" as CU06
+  usecase CU06 as "CU-06 Actualizar
+avance de etapa
+--
+puntos de extensión:
+Etapa en curso
+Registrar consumos"
   usecase "CU-09 Reportar faltante\n/ alerta de insumo" as CU09
   usecase "Registrar evidencia" as EVI
   usecase "Notificar siguiente\nresponsable" as NOT
@@ -20,8 +25,9 @@ OP --> CU06
 OP --> CU09
 DI --> CU05
 DI --> CU06
+DI --> CU09
 
 CU06 ..> NOT : <<include>>
-EVI ..> CU06 : <<extend>>\n[foto o nota]
-CU09 ..> CU06 : <<extend>>\n[insumo insuficiente]
+EVI ..> CU06 : <<extend>>\n[foto o nota]\n(Etapa en curso)
+CU09 ..> CU06 : <<extend>>\n[insumo insuficiente]\n(Registrar consumos)
 @enduml

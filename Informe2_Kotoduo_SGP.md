@@ -18,7 +18,7 @@
 |---|---|---|---|
 | 2.1.1.1 | 3.1 | Fases, Sprints, actividades A00–A31, entregables, plazos en días y responsables | 5 |
 | 2.1.1.2 | 3.2 | Matriz de dependencias, prioridades, ruta crítica e impacto de retrasos | 5 |
-| 2.1.2.3 | 4.1 a 4.6 | Vistas lógica, desarrollo, procesos, física y escenarios (Figuras 4.1–4.23) | 5 |
+| 2.1.2.3 | 4.1 a 4.6 | Vistas lógica, desarrollo, procesos, física y escenarios (Figuras 4.1–4.24) | 5 |
 | 2.1.2.4 | 4.7 | Matriz de tecnologías con justificación y necesidad futura | 5 |
 | 2.1.3.5 | 5.1 a 5.3 | Perfiles, mapa de navegación y prototipo navegable (Anexo D) | 5 |
 | 2.1.3.6 | 5.4 | Guía de estilo, contraste WCAG 2.2 AA y estrategia responsive | 5 |
@@ -326,7 +326,7 @@ Se descartaron los microservicios: con dos desarrolladores, alrededor de 25 usua
 | Desarrollo | ¿Cómo se organiza el código y sus dependencias? | Programadores, jefe de proyecto | Componentes, paquetes | 4.9–4.13 | 4.3 |
 | Procesos | ¿Qué flujos, concurrencia y sincronización existen? | Integradores de sistemas | Actividades con carriles (BPMN), secuencia, tabla de procesos | 4.14–4.18 | 4.4 |
 | Física | ¿Dónde se ejecuta cada elemento y cómo se comunica? | Infraestructura y administración | Despliegue | 4.19–4.20 | 4.5 |
-| Escenarios (+1) | ¿Qué casos de uso validan y unen las cuatro vistas? | Todos, incluido el cliente | Casos de uso | 4.21–4.23 | 4.6 |
+| Escenarios (+1) | ¿Qué casos de uso validan y unen las cuatro vistas? | Todos, incluido el cliente | Casos de uso | 4.21–4.24 | 4.6 |
 
 **Coherencia entre vistas.** El escenario CU-06 "Actualizar avance de etapa" recorre las cinco vistas:
 
@@ -495,35 +495,42 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 
 ### 4.6 Vista de escenarios o casos de uso (2.1.2.3)
 
-Los once casos de uso se dividen en tres diagramas, uno por subsistema, para que cada interesado vea solo los que le conciernen.
+Los catorce casos de uso se dividen en cuatro diagramas, uno por subsistema, para que cada interesado vea solo los que le conciernen.
 
-*Simbología:* los actores (figuras) son roles externos al sistema y el rectángulo delimita la frontera de SGP-Kotoduo. Las elipses son casos de uso. Las líneas actor–caso indican participación. La flecha con triángulo indica generalización. `<<include>>` indica comportamiento obligatorio reutilizado y `<<extend>>`, comportamiento opcional bajo condición.
+*Simbología:* los actores (figuras) son roles externos al sistema y el rectángulo delimita la frontera de SGP-Kotoduo. Las elipses son casos de uso. Las líneas actor–caso indican participación. La flecha con triángulo indica generalización. `<<include>>` indica comportamiento obligatorio reutilizado y `<<extend>>`, comportamiento opcional bajo condición, que se inserta en un punto de extensión declarado en el caso base. Una etiqueta sobre una línea actor–caso restringe la participación de ese actor. Los actores de cada diagrama coinciden con la matriz de permisos (Tabla 7.1).
 
-**Figura 4.21 — Casos de uso: actores, acceso y administración** (`diagramas/4.6-vista-escenarios/fig-4.21-cu-acceso-administracion.puml`). Define la jerarquía de actores: todos los roles heredan de "Usuario autenticado" (y por tanto pueden iniciar sesión) y el Administrador hereda las capacidades de la Encargada.
+**Figura 4.21 — Casos de uso: actores, acceso y administración** (`diagramas/4.6-vista-escenarios/fig-4.21-cu-acceso-administracion.puml`). Define la jerarquía de actores: todos los roles heredan de "Usuario" (y por tanto pueden iniciar sesión) y el Administrador hereda las capacidades de la Encargada. La Encargada consulta la bitácora solo por OT; el Administrador la consulta completa.
 
 ![Figura 4.21 — Casos de uso: actores, acceso y administración](figuras/4.6-vista-escenarios/fig-4.21-cu-acceso-administracion.png)
 
-**Figura 4.22 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión** (`diagramas/4.6-vista-escenarios/fig-4.22-cu-gestion-ordenes.puml`). Registrar una OT siempre genera sus etapas (`<<include>>`). El actor `<<sistema>>` "Planificador" representa el proceso programado de detección de atrasos.
+**Figura 4.22 — Casos de uso: gestión de órdenes, diseño e insumos** (`diagramas/4.6-vista-escenarios/fig-4.22-cu-gestion-ordenes.puml`). Registrar una OT siempre genera sus etapas (`<<include>>`). En la aprobación de diseño, el Diseñador sube versiones y el Vendedor registra la respuesta del cliente; nunca la misma persona (R6).
 
-![Figura 4.22 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión](figuras/4.6-vista-escenarios/fig-4.22-cu-gestion-ordenes.png)
+![Figura 4.22 — Casos de uso: gestión de órdenes, diseño e insumos](figuras/4.6-vista-escenarios/fig-4.22-cu-gestion-ordenes.png)
 
-**Figura 4.23 — Casos de uso: ejecución en el taller** (`diagramas/4.6-vista-escenarios/fig-4.23-cu-ejecucion-taller.puml`). Contiene el escenario crítico CU-06. Adjuntar evidencia o reportar un faltante extienden el avance de una etapa (`<<extend>>`), y todo avance notifica al siguiente responsable (`<<include>>`).
+**Figura 4.23 — Casos de uso: ejecución en el taller** (`diagramas/4.6-vista-escenarios/fig-4.23-cu-ejecucion-taller.puml`). Contiene el escenario crítico CU-06, que declara dos puntos de extensión: *Etapa en curso* y *Registrar consumos*. Registrar evidencia extiende el primero y reportar un faltante (CU-09) extiende el segundo (`<<extend>>`). Todo avance notifica al siguiente responsable (`<<include>>`).
 
 ![Figura 4.23 — Casos de uso: ejecución en el taller](figuras/4.6-vista-escenarios/fig-4.23-cu-ejecucion-taller.png)
 
-| CU | Nombre | Actor principal | RF | HU |
-|---|---|---|---|---|
-| CU-01 | Iniciar sesión (con MFA si corresponde) | Todos | RF-01 | HU-11 |
-| CU-02 | Gestionar usuarios y roles | Administrador | RF-01 | HU-11 |
-| CU-03 | Gestionar plantillas de proceso | Encargada de Producción | RF-02 | HU-07 |
-| CU-04 | Registrar orden de trabajo | Vendedor | RF-03, RF-04 | HU-05, HU-08 |
-| CU-05 | Consultar Mi Trabajo | Operario, Diseñador | RF-05 | HU-01 |
-| CU-06 | Actualizar avance de etapa | Operario, Diseñador | RF-06, RF-07 | HU-02, HU-04 |
-| CU-07 | Gestionar aprobación de diseño | Diseñador, Vendedor | RF-08 | HU-06 |
-| CU-08 | Gestionar insumos y movimientos | Encargada de Producción | RF-09 | HU-09 |
-| CU-09 | Reportar faltante / alerta de insumo | Operario | RF-10 | HU-03, HU-09 |
-| CU-10 | Supervisar producción | Encargada, Administrador | RF-11 | HU-10 |
-| CU-11 | Consultar bitácora de auditoría | Administrador | RF-12 | HU-12 |
+**Figura 4.24 — Casos de uso: supervisión y control de la producción** (`diagramas/4.6-vista-escenarios/fig-4.24-cu-supervision-control.puml`). Reúne las acciones de la Encargada que mueven las máquinas de estados de la etapa y de la OT (Fig. 4.7 y 4.8): gestionar etapas (CU-12) y controlar el estado de la OT (CU-13). El Vendedor consulta el panel y marca la OT como entregada, sin otras acciones. El actor `<<sistema>>` "Verificador de atrasos" es el proceso programado de la vista de procesos, que cada 15 minutos detecta las OT en riesgo (CU-14) y avisa a la Encargada.
+
+![Figura 4.24 — Casos de uso: supervisión y control de la producción](figuras/4.6-vista-escenarios/fig-4.24-cu-supervision-control.png)
+
+| CU | Nombre | Actores (el Administrador hereda los de la Encargada) | RF | HU | Figura |
+|---|---|---|---|---|---|
+| CU-01 | Iniciar sesión (con MFA si corresponde) | Todos | RF-01 | HU-11 | 4.21 |
+| CU-02 | Gestionar usuarios y roles | Administrador | RF-01 | HU-11 | 4.21 |
+| CU-03 | Gestionar plantillas de proceso | Encargada de Producción | RF-02 | HU-07 | 4.22 |
+| CU-04 | Registrar orden de trabajo | Vendedor, Encargada de Producción | RF-03, RF-04 | HU-05 | 4.22 |
+| CU-05 | Consultar Mi Trabajo | Operario, Diseñador | RF-05 | HU-01 | 4.23 |
+| CU-06 | Actualizar avance de etapa | Operario, Diseñador | RF-06, RF-07 | HU-02, HU-04 | 4.23 |
+| CU-07 | Gestionar aprobación de diseño | Diseñador (sube), Vendedor (resuelve) | RF-08 | HU-06 | 4.22 |
+| CU-08 | Gestionar insumos y movimientos | Encargada de Producción | RF-09 | HU-09 | 4.22 |
+| CU-09 | Reportar faltante / alerta de insumo | Operario, Diseñador | RF-10 | HU-03, HU-09 | 4.23 |
+| CU-10 | Supervisar producción | Encargada de Producción; Vendedor (solo consulta) | RF-11 | HU-10 | 4.24 |
+| CU-11 | Consultar bitácora de auditoría | Administrador; Encargada (solo por OT) | RF-12 | HU-12 | 4.21 |
+| CU-12 | Gestionar etapas de la OT (asignar, reasignar, omitir, desbloquear) | Encargada de Producción | RF-04, RF-06 | HU-08 | 4.24 |
+| CU-13 | Controlar estado de la OT (detener, reanudar, anular, marcar entregada) | Encargada de Producción; Vendedor (solo marcar entregada) | RF-06, RF-11 | HU-10 | 4.24 |
+| CU-14 | Detectar OT en riesgo | Verificador de atrasos (`<<sistema>>`) | RF-11 | HU-10 | 4.24 |
 
 **Especificación del caso de uso crítico CU-06 — Actualizar avance de etapa**
 
@@ -532,7 +539,8 @@ Los once casos de uso se dividen en tres diagramas, uno por subsistema, para que
 | Actor | Operario (o Diseñador en etapas de diseño) |
 | Precondiciones | Sesión activa; la etapa está asignada al actor y en estado DISPONIBLE o EN_CURSO; la OT no está DETENIDA |
 | Flujo básico | 1. El actor abre *Mi Trabajo* y selecciona la OT. 2. El sistema muestra la etapa, las instrucciones, los insumos requeridos y la siguiente área. 3. El actor pulsa **Iniciar**; el sistema cambia la etapa a EN_CURSO. 4. Al finalizar, el actor pulsa **Terminar** e ingresa los consumos reales. 5. El sistema registra la etapa como TERMINADA, descuenta el stock, habilita la siguiente etapa y notifica a su responsable. 6. El sistema muestra "Sigue: <etapa> en <área>". |
-| Flujos alternativos | 3a. Problema en la ejecución → **Reportar problema** con motivo → BLOQUEADA; se notifica a la Encargada y la OT queda DETENIDA hasta que la Encargada desbloquee la etapa y reanude la OT. 4a. Insumo insuficiente → extiende CU-09. 4b. Adjuntar foto o nota → extensión "Registrar evidencia". 5a. Última etapa → la OT pasa a TERMINADA. |
+| Puntos de extensión | *Etapa en curso* (entre los pasos 3 y 4); *Registrar consumos* (paso 4) |
+| Flujos alternativos | 3a. Problema en la ejecución → **Reportar problema** con motivo → BLOQUEADA; se notifica a la Encargada y la OT queda DETENIDA hasta que la Encargada desbloquee la etapa (CU-12) y reanude la OT (CU-13). 4a. Insumo insuficiente → CU-09 extiende este caso en el punto *Registrar consumos*. 4b. Adjuntar foto o nota → "Registrar evidencia" extiende este caso en el punto *Etapa en curso*. 5a. Última etapa → la OT pasa a TERMINADA. |
 | Excepciones | E1. Otro usuario actualizó la etapa → 409 "La etapa cambió; recarga". E2. La etapa no pertenece al actor → 404, sin revelar que existe (AM-05). E3. Sin conexión → la PWA informa y conserva el formulario. |
 | Postcondiciones | El estado de la etapa y de la OT queda consistente; el evento queda en la bitácora; el siguiente responsable está notificado |
 | Reglas | Solo transiciones de la Fig. 4.7; el consumo no puede dejar stock negativo |
@@ -544,7 +552,7 @@ Los once casos de uso se dividen en tres diagramas, uno por subsistema, para que
 | Actor | Vendedor (o Encargada de Producción) |
 | Precondiciones | Sesión activa con el permiso `ordenes.crear`; existe un tipo de trabajo activo con plantilla |
 | Flujo básico | 1. Selecciona el tipo de trabajo. 2. Ingresa título, referencia del cliente (solo institución), cantidad, especificaciones (tallas, medidas, colores), prioridad y fecha de compromiso. 3. El sistema valida, genera el código `OT-AAAA-NNNN`, crea las etapas desde la plantilla y calcula los requerimientos de insumo y la fecha estimada. 4. Si un insumo proyectado queda bajo el mínimo, crea una alerta. 5. Muestra el resumen con las etapas generadas. |
-| Alternativos | 3a. Fecha estimada > compromiso → advertencia "OT en riesgo" antes de confirmar. 3b. La Encargada ajusta etapas y responsables (HU-08). |
+| Alternativos | 3a. Fecha estimada > compromiso → advertencia "OT en riesgo" antes de confirmar. 3b. La Encargada ajusta etapas y responsables después de registrar la OT (CU-12, HU-08). |
 | Postcondiciones | OT en estado REGISTRADA (o EN_DISENO si requiere diseño); etapas en PENDIENTE y la primera en DISPONIBLE |
 
 ### 4.7 Tecnologías y herramientas de infraestructura (2.1.2.4)
@@ -665,7 +673,7 @@ El mapa de navegación es un árbol jerárquico de rutas. Cada nodo es una ruta 
 | P-03 | Detalle de orden y etapa | `detalle-orden.html` | Operario y Diseñador (avanzan su etapa), Vendedor (solo lectura), Encargada y Administrador (asignan y omiten) | HU-02, HU-03, HU-04 / CU-06, CU-09 |
 | P-04 | Órdenes y nueva orden de trabajo | `ordenes.html`, `ordenes-nueva.html` | Vendedor, Encargada, Administrador | HU-05 / CU-04 |
 | P-05 | Aprobación de diseño | `aprobacion-diseno.html` | Vendedor (resuelve), Diseñador (sube versiones) | HU-06 / CU-07 |
-| P-06 | Panel de supervisión | `panel.html` | Encargada, Administrador | HU-10 / CU-10 |
+| P-06 | Panel de supervisión | `panel.html` | Encargada, Administrador; Vendedor (solo lectura) | HU-10 / CU-10, CU-14 |
 | P-07 | Plantillas de proceso | `plantillas.html`, `plantilla.html` | Encargada, Administrador | HU-07 / CU-03 |
 | P-08 | Insumos y alertas | `insumos.html` | Encargada (gestiona); demás roles (consulta) | HU-09 / CU-08, CU-09 |
 | P-09 | Usuarios y roles | `usuarios.html` | Administrador | HU-11 / CU-02 |
@@ -1228,14 +1236,14 @@ Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia
 | HU-11 / RF-01 | CU-01, CU-02 | CP-07, CP-08, CP-09, CP-10, CP-28, CP-29, CP-30 | Unitaria, integración, seguridad | Política de claves, login, MFA, bloqueo, sesión, permisos |
 | HU-07 / RF-02 | CU-03 | CP-03, CP-28 | Unitaria, seguridad | Plantilla ordenada; solo Encargada/Admin la modifican |
 | HU-05 / RF-03, RF-04 | CU-04 | CP-04, CP-06, CP-11 | Unitaria, integración | Validación, generación de etapas, fecha estimada, evento de bitácora |
-| HU-08 / RF-04 | CU-04 (alternativo 3b) | CP-11, CP-27 | Integración, seguridad | Asignación y aislamiento por responsable |
+| HU-08 / RF-04 | CU-12 (y CU-04, alternativo 3b) | CP-01, CP-11, CP-12, CP-27 | Unitaria, integración, seguridad | Asignación, omisión y desbloqueo de etapas; aislamiento por responsable |
 | HU-01 / RF-05 | CU-05 | CP-20, CP-33, CP-34 | Rendimiento, usabilidad, E2E | Mi Trabajo rápido, comprensible y adaptable |
 | HU-02 / RF-06 | CU-06 | CP-01, CP-02, CP-12, CP-13, CP-19, CP-21, CP-27 | Unitaria, integración, rendimiento, seguridad | Máquina de estados, avance, cierre de OT, concurrencia, IDOR |
 | HU-04 / RF-07 | CU-06 (extensión) | CP-17, CP-25, CP-31 | Integración, seguridad | Evidencia almacenada, XSS y archivos maliciosos |
 | HU-06 / RF-08 | CU-07 | CP-16 | Integración | Aprobación, rechazo y segregación de funciones |
 | HU-09 / RF-09, RF-10 | CU-08, CU-09 | CP-05, CP-14, CP-15 | Unitaria, integración | Umbral, alerta automática única, alerta manual |
 | HU-03 / RF-10 | CU-09 | CP-15, CP-33 | Integración, usabilidad | Reporte desde la etapa |
-| HU-10 / RF-11 | CU-10 | CP-18, CP-23 | Integración, rendimiento | Atrasadas correctas; panel con volumen |
+| HU-10 / RF-11 | CU-10, CU-13, CU-14 | CP-01, CP-02, CP-18, CP-23 | Unitaria, integración, rendimiento | Atrasadas y en riesgo correctas; detener, reanudar y anular según la Fig. 4.8; panel con volumen |
 | HU-12 / RF-12 | CU-11 | CP-11, CP-13 | Integración | 100 % de cambios en la bitácora |
 | RNF-01 | — | CP-33, CP-35, CP-36 | Usabilidad, accesibilidad | ≤ 3 toques, SUS ≥ 70, WCAG AA |
 | RNF-02 | — | CP-22, CP-34 | E2E | Instalable y responsive |
@@ -1300,7 +1308,7 @@ Las pruebas de usabilidad se hacen con usuarios reales de Kotoduo (mínimo 5, un
 | CP-15 | HU-03 / CU-09 | Reporte manual de faltante | Operario con etapa EN_CURSO | `POST /api/v1/alertas` `{insumoId, etapaId, comentario}` | 201; alerta MANUAL con `reportada_por`; notificación ALERTA_INSUMO a los usuarios Encargada | [Completar] | Pendiente |
 | CP-16 | HU-06 / CU-07 | Aprobación de diseño y segregación | Diseño v1 PENDIENTE subido por el Diseñador | (a) El Vendedor rechaza sin comentario; (b) rechaza con comentario; (c) el Diseñador intenta aprobar su v2; (d) el Vendedor aprueba la v2 | (a) 400; (b) 200, RECHAZADO; (c) 403; (d) 200, APROBADO y la primera etapa de producción pasa a DISPONIBLE | [Completar] | Pendiente |
 | CP-17 | HU-04 / CU-06 | Evidencia con URL prefirmada | Etapa propia; emulador S3 activo | Solicitar URL (image/jpeg, 300 KB) → PUT al emulador → `POST /evidencias` con metadatos | URL con expiración de 300 s; documento en `evidencias_etapa` con `object_key` y `sha256` válidos | [Completar] | Pendiente |
-| CP-18 | HU-10 / CU-10 | Panel identifica atrasadas | 3 OT: compromiso ayer (activa), mañana, ayer (TERMINADA) | `GET /api/v1/panel/ordenes?filtro=atrasadas` | Devuelve solo la primera; `porcentaje_avance` correcto | [Completar] | Pendiente |
+| CP-18 | HU-10 / CU-10, CU-14 | Panel identifica atrasadas y en riesgo | 4 OT: compromiso ayer (activa), mañana, ayer (TERMINADA) y una activa con fecha estimada posterior al compromiso | `GET /api/v1/panel/ordenes?filtro=atrasadas`; luego ejecutar dos veces el Verificador de atrasos | Atrasadas: solo la primera, con `porcentaje_avance` correcto; la cuarta queda `en_riesgo` y la Encargada recibe una sola notificación (operación idempotente) | [Completar] | Pendiente |
 | CP-19 | HU-02 / CU-06 | Concurrencia sobre la misma etapa | Etapa EN_CURSO, version = 3 | Dos `POST /terminar` simultáneos (`Promise.all`) con version 3 | Una respuesta 200 y otra 409; la siguiente etapa se habilita una sola vez | [Completar] | Pendiente |
 
 **Tabla 8.3 — Pruebas de rendimiento (k6 / Lighthouse)**
