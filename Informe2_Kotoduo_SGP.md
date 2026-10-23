@@ -24,7 +24,7 @@
 | 2.1.3.6 | 5.4 | Guía de estilo, contraste WCAG 2.2 AA y estrategia responsive | 5 |
 | 2.1.3.7 | 5.5 | Registro de retroalimentación y cambios v1 → v2 | 5 |
 | 2.1.4.8 | 6.1 y 6.2 | Modelo ER, diccionario de datos y reglas de integridad | 10 |
-| 2.1.4.9 | 6.3 a 6.5 | Principios de implementación en PostgreSQL y MongoDB con documentación de referencia, criterios de verificación e integración por outbox | 5 |
+| 2.1.4.9 | 6.3 a 6.5 | Principios de implementación en PostgreSQL y MongoDB con documentación de referencia, verificación ejecutada de los borradores sobre los motores reales (Tabla 6.4) e integración por outbox | 5 |
 | 2.1.5.10 | 7.1 a 7.3 | RBAC, política de autenticación y política de autorización | 10 |
 | 2.1.5.11 | 7.4 | Modelo de amenazas STRIDE/OWASP con mitigación y verificación | 10 |
 | 2.1.5.12 | 7.5 a 7.7 | Estándares OWASP/ASVS, patrones de codificación segura con documentación de referencia y marco normativo chileno con ISO, CIS y NIST | 10 |
@@ -213,11 +213,11 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 | A12 | S1 – Fundaciones | API M1: login, Argon2id, JWT/refresh, MFA, bloqueo, usuarios | Endpoints `/auth`, `/usuarios` + pruebas | Integrante 1 | D12 | D13 | 1,5 d |
 | A13 | S1 – Fundaciones | Shell PWA, componentes de UI, pantalla de login | PWA instalable en staging | Integrante 2 | D11 | D12 | 2 d |
 | A14 | S1 – Fundaciones | API M2: plantillas de proceso | Endpoints `/plantillas` + pruebas | Integrante 1 | D14 | D14 | 1 d |
-| A15 | S1 – Fundaciones | UI de plantillas y administración de usuarios | Pantallas P-07 y P-09 | Integrante 2 | D13 | D14 | 2 d |
+| A15 | S1 – Fundaciones | UI de plantillas, administración de usuarios y perfil | Pantallas P-07, P-09 y P-12 | Integrante 2 | D13 | D14 | 2 d |
 | A16 | S2 – Flujo central | API M3: registro de OT, generación de etapas, asignación | Endpoints `/ordenes` + pruebas | Integrante 1 | D16 | D17 | 2 d |
 | A17 | S2 – Flujo central | UI de registro de OT y asignación | Pantalla P-04 | Integrante 2 | D16 | D17 | 2 d |
 | A18 | S2 – Flujo central | API M4: avance de etapa transaccional, outbox, notificaciones | Endpoints `/etapas` + relay outbox | Integrante 1 | D18 | D19 | 2 d |
-| A19 | S2 – Flujo central | UI Mi Trabajo y Detalle de orden (*mobile-first*) | Pantallas P-02 y P-03 | Integrante 2 | D18 | D19 | 2 d |
+| A19 | S2 – Flujo central | UI Mi Trabajo, Detalle de orden y Avisos (*mobile-first*) | Pantallas P-02, P-03 y P-11 | Integrante 2 | D18 | D19 | 2 d |
 | A20 | S3 – Insumos y diseño | API M5: insumos, movimientos, alertas, faltantes proyectados | Endpoints `/insumos`, `/alertas` | Integrante 1 | D21 | D22 | 2 d |
 | A21 | S3 – Insumos y diseño | API M6 y evidencias: URL prefirmadas R2 + `evidencias_etapa` | Endpoints `/diseno`, `/evidencias` | Integrante 1 | D23 | D24 | 2 d |
 | A22 | S3 – Insumos y diseño | UI de insumos, faltante, aprobación de diseño y evidencia | Pantallas P-05 y P-08 + diálogos | Integrante 2 | D21 | D22 | 2 d |
@@ -373,11 +373,11 @@ La vista lógica se presenta en siete figuras: un mapa del dominio (Fig. 4.2), t
 3. La lógica de transición vive en `EtapaOrden.puedeTransicionar()` y `OrdenTrabajo.puedeTransicionar()`, con una defensa en profundidad en la base de datos (trigger R2, sección 6.2).
 4. Los servicios no se llaman en cadena síncrona hacia MongoDB. `AuditoriaService` solo escribe en el outbox dentro de la misma transacción.
 
-**Figura 4.7 — Diagrama de estados de `EtapaOrden`** (`diagramas/4.2-vista-logica/fig-4.07-estados-etapa.puml`). Cada nodo es un estado y cada arco es una transición etiquetada con *evento [condición] / acción*. El estado compuesto *Abierta* agrupa los estados en que la etapa todavía puede avanzar. El camino principal es PENDIENTE→DISPONIBLE→EN_CURSO→TERMINADA. Una etapa pasa a DISPONIBLE cuando la anterior queda cerrada, sea TERMINADA u OMITIDA, de modo que omitir una etapa no traba la secuencia. La etapa de diseño (`es_etapa_diseno`) no se cierra con el botón **Terminar**: se cierra cuando el cliente aprueba el diseño. **Reportar problema** exige motivo (`ck_etapa_bloqueo`), avisa a la Encargada y detiene la OT, y solo la Encargada desbloquea la etapa. Si la OT se anula, toda etapa abierta pasa a OMITIDA. El mismo grafo se implementa en el dominio (TypeScript) y en el trigger `trg_etapa_transicion`, y se prueba en CP-01 y CP-02.
+**Figura 4.7 — Diagrama de estados de `EtapaOrden`** (`diagramas/4.2-vista-logica/fig-4.07-estados-etapa.puml`). Cada nodo es un estado y cada arco es una transición etiquetada con *evento [condición] / acción*. El estado compuesto *Abierta* agrupa los estados en que la etapa todavía puede avanzar. El camino principal es PENDIENTE→DISPONIBLE→EN_CURSO→TERMINADA. Una etapa pasa a DISPONIBLE cuando la anterior queda cerrada, sea TERMINADA u OMITIDA, de modo que omitir una etapa no traba la secuencia. La etapa de diseño (`es_etapa_diseno`) no se cierra con el botón **Terminar**: se cierra cuando el cliente aprueba el diseño. **Reportar problema** exige motivo (`ck_etapa_bloqueo`), avisa a la Encargada y detiene la OT, y solo la Encargada desbloquea la etapa. Si la OT se anula, toda etapa abierta pasa a OMITIDA. El mismo grafo se implementa en el dominio (TypeScript) y en el trigger `trg_etapa_transicion`, que además impide iniciar o terminar una etapa mientras la OT está DETENIDA, y se prueba en CP-01 y CP-02.
 
 ![Figura 4.7 — Diagrama de estados de EtapaOrden](figuras/4.2-vista-logica/fig-4.07-estados-etapa.png)
 
-**Figura 4.8 — Diagrama de estados de `OrdenTrabajo`** (`diagramas/4.2-vista-logica/fig-4.08-estados-orden.puml`). La OT nace en REGISTRADA o, si su tipo de trabajo requiere diseño, en EN_DISENO. Pasa a EN_PRODUCCION cuando el cliente aprueba el diseño o cuando se inicia su primera etapa, y a TERMINADA cuando todas sus etapas quedan cerradas (CP-13). Queda **DETENIDA** en dos casos: de forma automática, cuando una de sus etapas se bloquea, o de forma manual, cuando la Encargada la detiene con un motivo. Solo la Encargada la reanuda, y únicamente si no quedan etapas bloqueadas. El pseudoestado de historia (H) la devuelve al subestado que tenía antes de detenerse (EN_DISENO o EN_PRODUCCION). Mientras está DETENIDA no se inicia ni se termina ninguna etapa (Fig. 4.7). Mientras está activa puede anularse con motivo, y entonces sus etapas abiertas pasan a OMITIDA. El motivo de una detención o de una anulación queda en la bitácora. Las transiciones se validan en `OrdenTrabajo.puedeTransicionar()` y en el trigger `trg_orden_transicion`.
+**Figura 4.8 — Diagrama de estados de `OrdenTrabajo`** (`diagramas/4.2-vista-logica/fig-4.08-estados-orden.puml`). La OT nace en REGISTRADA o, si su tipo de trabajo requiere diseño, en EN_DISENO. Pasa a EN_PRODUCCION cuando el cliente aprueba el diseño o cuando se inicia su primera etapa, y a TERMINADA cuando todas sus etapas quedan cerradas (CP-13). Queda **DETENIDA** en dos casos: de forma automática, cuando una de sus etapas se bloquea, o de forma manual, cuando la Encargada la detiene con un motivo. Solo la Encargada la reanuda, y únicamente si no quedan etapas bloqueadas. El pseudoestado de historia (H) la devuelve al subestado que tenía antes de detenerse (EN_DISENO o EN_PRODUCCION). Mientras está DETENIDA no se inicia ni se termina ninguna etapa (Fig. 4.7). Mientras está activa puede anularse con motivo, y entonces sus etapas abiertas pasan a OMITIDA. El motivo de una detención o de una anulación queda en la bitácora. Las transiciones y sus condiciones (etapas cerradas para terminar, ninguna etapa bloqueada para reanudar) se validan en `OrdenTrabajo.puedeTransicionar()` y en el trigger `trg_orden_transicion`.
 
 ![Figura 4.8 — Diagrama de estados de OrdenTrabajo](figuras/4.2-vista-logica/fig-4.08-estados-orden.png)
 
@@ -561,7 +561,7 @@ Los catorce casos de uso se dividen en cuatro diagramas, uno por subsistema, par
 
 | Componente | Tecnología / herramienta | Uso en la solución | Justificación técnica | Necesidad futura considerada |
 |---|---|---|---|---|
-| Front-end | React 19 + TypeScript + Vite | SPA de las pantallas P-01 a P-10 | Ecosistema maduro, tipado estático compartido con la API, *build* rápido; amplia oferta de desarrolladores en Chile para mantenimiento | Componentes reutilizables si se agrega un portal para clientes |
+| Front-end | React 19 + TypeScript + Vite | SPA de las pantallas P-01 a P-12 | Ecosistema maduro, tipado estático compartido con la API, *build* rápido; amplia oferta de desarrolladores en Chile para mantenimiento | Componentes reutilizables si se agrega un portal para clientes |
 | Modalidad móvil | **PWA** (Web App Manifest + Service Worker con `vite-plugin-pwa`/Workbox) | Instalación en el teléfono, ícono propio, caché y notificaciones push | Cumple la expectativa de "app para el celular" sin publicar en tiendas (sin costo de cuentas de desarrollador ni revisiones), una sola base de código para Android, iOS y PC, y actualización inmediata. Push en iOS desde 16.4 con la PWA instalada (validado en A00) | Si se requiere hardware nativo, como un lector de códigos avanzado, la misma UI puede empaquetarse con Capacitor |
 | Estado / datos en cliente | TanStack Query | Caché y revalidación de llamadas API | Reduce peticiones y da sensación de inmediatez en redes 4G inestables del taller | Base para el modo offline de lectura |
 | Validación compartida | Zod (`packages/shared`) | Esquemas de DTO en el formulario y en la API | Una única fuente de verdad para las reglas de entrada (OWASP A03) | Generación de documentación OpenAPI desde los esquemas |
@@ -662,7 +662,7 @@ El mapa de navegación es un árbol jerárquico de rutas. Cada nodo es una ruta 
 | Ubicación | `anexos/prototipo/index.html` (Anexo D) |
 | Enlace al prototipo | Publicación en GitHub Pages: `https://<usuario>.github.io/sgp-prototipo/` [Completar al publicar] |
 | Credenciales | No aplica: la pantalla de login simula el acceso con un selector de rol. También se puede abrir una pantalla como un rol con `?rol=`, por ejemplo `panel.html?rol=ENCARGADA_PRODUCCION` |
-| Interacciones clave demostradas | IK-1 login, MFA para roles privilegiados y redirección por rol · IK-2 Mi Trabajo → detalle de OT · IK-3 Iniciar/Terminar etapa con cambio de estado y mensaje "Sigue: …"; Reportar problema deja la etapa Bloqueada con motivo obligatorio (Fig. 4.7) · IK-4 Reportar faltante (diálogo) · IK-5 Registrar OT con vista previa de etapas generadas · IK-6 Aprobar/Rechazar diseño con motivo obligatorio y segregación de funciones (R6) · IK-7 Panel con indicadores que filtran atrasadas, en riesgo y bloqueadas · IK-8 Plantilla de proceso con etapas ordenadas · IK-9 Insumos con ciclo de alerta (abierta → en gestión → cerrada) y registro de ingreso · IK-10 Navegación por rol (barra inferior en móvil, lateral en escritorio) y guarda "No tienes acceso" |
+| Interacciones clave demostradas | IK-1 login, MFA para roles privilegiados y redirección por rol · IK-2 Mi Trabajo → detalle de OT · IK-3 Iniciar/Terminar etapa con cambio de estado y mensaje "Sigue: …"; Reportar problema deja la etapa Bloqueada con motivo obligatorio (Fig. 4.7) · IK-4 Reportar faltante (diálogo) · IK-5 Registrar OT con vista previa de etapas generadas · IK-6 Aprobar/Rechazar diseño con motivo obligatorio y segregación de funciones (R6) · IK-7 Panel con indicadores que filtran atrasadas, en riesgo y bloqueadas · IK-8 Plantilla de proceso con etapas ordenadas · IK-9 Insumos con ciclo de alerta (abierta → en gestión → cerrada) y registro de ingreso · IK-10 Navegación por rol (barra inferior en móvil, lateral en escritorio) y guarda "No tienes acceso" · IK-11 Control de la OT en P-03: detener con motivo, reanudar, anular con motivo y marcar entregada (Fig. 4.8), con el historial de la orden para la Encargada |
 
 **Pantallas del prototipo (Tabla 5.1):**
 
@@ -670,7 +670,7 @@ El mapa de navegación es un árbol jerárquico de rutas. Cada nodo es una ruta 
 |---|---|---|---|---|
 | P-01 | Inicio de sesión y verificación MFA | `index.html`, `mfa.html` | Todos (MFA: Encargada, Administrador) | HU-11 / CU-01 |
 | P-02 | Mi Trabajo (incluye estados vacío, cargando y sin conexión) | `mi-trabajo.html` | Operario, Diseñador | HU-01 / CU-05 |
-| P-03 | Detalle de orden y etapa | `detalle-orden.html` | Operario y Diseñador (avanzan su etapa), Vendedor (solo lectura), Encargada y Administrador (asignan y omiten) | HU-02, HU-03, HU-04 / CU-06, CU-09 |
+| P-03 | Detalle de orden y etapa | `detalle-orden.html` | Operario y Diseñador (avanzan su etapa), Vendedor (lectura y marcar entregada), Encargada y Administrador (asignan, omiten, detienen, reanudan o anulan y ven el historial de la orden) | HU-02, HU-03, HU-04, HU-08, HU-10, HU-12 / CU-06, CU-09, CU-11, CU-12, CU-13 |
 | P-04 | Órdenes y nueva orden de trabajo | `ordenes.html`, `ordenes-nueva.html` | Vendedor, Encargada, Administrador | HU-05 / CU-04 |
 | P-05 | Aprobación de diseño | `aprobacion-diseno.html` | Vendedor (resuelve), Diseñador (sube versiones) | HU-06 / CU-07 |
 | P-06 | Panel de supervisión | `panel.html` | Encargada, Administrador; Vendedor (solo lectura) | HU-10 / CU-10, CU-14 |
@@ -913,12 +913,12 @@ El modelo tiene **16 tablas** en el esquema `sgp`, agrupadas por módulo:
 | Regla | Mecanismo | Verificación |
 |---|---|---|
 | R1. `actualizado_en` siempre vigente | Trigger `fn_set_actualizado_en` | — |
-| R2. Solo transiciones de estado válidas en `etapa_orden` (Fig. 4.7) y en `orden_trabajo` (Fig. 4.8); en la etapa, con incremento de `version` | Triggers `trg_etapa_transicion` y `trg_orden_transicion` (lanzan `check_violation`) | CP-02 |
+| R2. Solo transiciones de estado válidas en `etapa_orden` (Fig. 4.7) y en `orden_trabajo` (Fig. 4.8), con sus condiciones: la OT termina solo con todas sus etapas cerradas, se reanuda solo sin etapas bloqueadas y, mientras está DETENIDA, ninguna etapa se inicia ni se termina; en la etapa, con incremento de `version` | Triggers `trg_etapa_transicion` y `trg_orden_transicion` (lanzan `check_violation`) | CP-02 |
 | R3. Cada movimiento actualiza el stock; si queda ≤ mínimo, se crea **una** alerta automática | Trigger `trg_movimiento_insumo` + índice único parcial + `ON CONFLICT DO NOTHING` | CP-14, consulta 6 |
 | R4. Stock nunca negativo | `CHECK (stock_actual >= 0)` aborta la transacción completa | CP-14 |
 | R5. Bloqueo con motivo; terminada con fecha | `ck_etapa_bloqueo`, `ck_etapa_terminada` | CP-01 |
 | R6. Quien sube un diseño no puede aprobarlo | `ck_aprobacion_segregacion` | CP-16 |
-| R7. Registros inmutables (kardex, outbox) | `REVOKE UPDATE, DELETE` al rol `sgp_app` | CP-27 (revisión de privilegios) |
+| R7. Registros inmutables (kardex, outbox) | `REVOKE UPDATE, DELETE` al rol `sgp_app` | CP-32 (revisión de privilegios) |
 | R8. Mínimo privilegio en la conexión | Roles `sgp_app` (DML) y `sgp_relay` (solo `procesado_en` del outbox); la aplicación no usa el superusuario | Checklist ASVS (CP-32) |
 
 ### 6.3 Bases de implementación de la base de datos estructurada (2.1.4.9)
@@ -940,18 +940,42 @@ En esta etapa se fijan los **principios y buenas prácticas** con que se constru
 | Esquema versionado | Todo cambio de estructura es una migración revisada en PR y aplicada por el pipeline, nunca un cambio manual en producción. Cada migración se prueba primero en staging | A10, A11 | Documentación de `node-pg-migrate`: https://salsita.github.io/node-pg-migrate/ |
 | Respaldo y recuperación | Se usa la recuperación a un punto en el tiempo (PITR) del proveedor gestionado y se prueba una restauración antes del piloto | RNF-05, A29 | *Continuous Archiving and PITR*: https://www.postgresql.org/docs/16/continuous-archiving.html |
 
-**Criterios de verificación planificados.** La evidencia funcional se genera durante la construcción, sobre la base de datos de staging, y se adjunta como captura (Figura 6.6) y como reporte de pruebas (Anexo F):
+**Criterios de verificación.** Cada criterio se verifica dos veces: primero sobre el borrador del Anexo B en un ambiente local (Tabla 6.4, ya ejecutada) y luego, durante la construcción, sobre la base de datos de staging, con captura (Figura 6.6) y reporte de pruebas (Anexo F):
 
 | Comportamiento esperado | Regla | Caso de prueba |
 |---|---|---|
 | Una transición inválida (p. ej., PENDIENTE → TERMINADA en una etapa o TERMINADA → EN_PRODUCCION en una OT) es rechazada por la base de datos | R2 | CP-02 |
+| Una OT con etapas abiertas no pasa a TERMINADA, no se reanuda con una etapa bloqueada y, mientras está DETENIDA, no se inicia ninguna de sus etapas | R2 | CP-02 |
 | Terminar una etapa actualiza la etapa, habilita la siguiente y registra el evento outbox en una sola transacción | Transacción por caso de uso | CP-01, CP-11 |
 | Un consumo que dejaría stock negativo aborta la transacción completa | R4 | CP-14 |
 | Varios consumos bajo el mínimo generan **una sola** alerta automática abierta | R3 | CP-14 |
 | No se puede eliminar un insumo con movimientos | `RESTRICT` | CP-14 |
 | Quien sube un diseño no puede aprobarlo | R6 | CP-16 |
 | Dos terminaciones simultáneas de la misma etapa producen una sola transición | Concurrencia | CP-19 |
-| El rol de la aplicación no puede modificar el kardex ni el outbox | R7, R8 | CP-27, CP-32 |
+| El rol de la aplicación no puede modificar el kardex ni el outbox | R7, R8 | CP-32 |
+
+**Verificación anticipada de los borradores.** Para no esperar a la construcción, los borradores de los Anexos B y C se ejecutaron sobre los motores reales con el `docker-compose.yml` del repositorio (PostgreSQL 16.13 y MongoDB 9.0.4) el 22-10-2026. Se usó MongoDB 9.0 en local porque la versión 8.0 no arranca en kernels Linux 6.19 o superiores (SERVER-121912); la 9.0 expone la misma API y el diseño sigue apuntando a MongoDB 8 en Atlas. Cada fila resume una prueba sobre una base recién creada; las pruebas que modifican datos se revierten al terminar.
+
+**Tabla 6.4 — Resultados de la verificación local de los borradores**
+
+| Verificación | Regla | Resultado obtenido |
+|---|---|---|
+| Creación del esquema `sgp` deteniéndose ante el primer error | — | 16 tablas y 6 triggers creados sin errores |
+| Consultas de ejemplo del Anexo B: registro de OT, Mi Trabajo, avance de etapa, panel y faltantes proyectados | — | Ejecutadas sin errores |
+| Etapa PENDIENTE → TERMINADA | R2 | Rechazada: "Transición de etapa no permitida: PENDIENTE -> TERMINADA" |
+| OT a TERMINADA con etapas abiertas y luego con todas cerradas | R2 | Rechazada: "La orden no puede terminar: tiene etapas abiertas"; aceptada con todas las etapas cerradas |
+| OT TERMINADA → EN_PRODUCCION | R2 | Rechazada: "Transición de orden no permitida" |
+| Iniciar una etapa con la OT DETENIDA | R2 | Rechazada: "La orden está DETENIDA" |
+| Reanudar una OT con una etapa BLOQUEADA; luego desbloquear y reanudar | R2 | Rechazada: "tiene etapas bloqueadas"; aceptada después de desbloquear la etapa |
+| Dos consumos que dejan el stock bajo el mínimo | R3 | Una sola alerta automática abierta |
+| Consumo que dejaría el stock negativo | R4 | Rechazado; el kardex conserva sus 2 movimientos (transacción revertida) |
+| Eliminar un insumo con movimientos | `RESTRICT` | Bloqueado por integridad referencial |
+| Quien sube un diseño lo aprueba | R6 | Rechazado por `ck_aprobacion_segregacion` |
+| El rol `sgp_app` modifica el kardex, borra el outbox o crea una tabla | R7, R8 | "permission denied" en los tres casos |
+| Colecciones de MongoDB con validador e índices | 6.4 | 3 colecciones con validador en modo de rechazo; índices TTL de 24 meses (bitácora) y 90 días (notificaciones) |
+| Documento con un tipo de evento inexistente | 6.4 | Rechazado (código 121, *Document failed validation*) |
+| Reintento de la publicación de un evento ya procesado | 6.4, 6.5 | 0 documentos nuevos (*upsert* idempotente) |
+| Consulta de la bandeja de notificaciones | 6.4 | Resuelta con el índice `ix_bandeja` |
 
 > [Insertar captura de la ejecución en staging como Figura 6.6, una vez completado A11.]
 
@@ -983,6 +1007,8 @@ MongoDB (base `sgp_docs`) almacena la información **de esquema variable, alto v
 - Un documento que no cumple el validador (p. ej., un tipo de evento inexistente) es rechazado.
 - Reintentar la publicación de un evento ya procesado no crea un segundo documento (prueba de integración del relay, A23).
 - Las consultas de la bandeja y del historial de una orden usan su índice, verificado con `explain`.
+
+Los cuatro criterios ya se cumplieron sobre el borrador del Anexo C en el ambiente local (Tabla 6.4); en A18 y A21 se repiten sobre staging.
 
 > [Insertar captura de la ejecución en staging como Figura 6.7, una vez completados A18 y A21.]
 
@@ -1016,7 +1042,7 @@ El sistema gestiona principalmente información operativa, pero su indisponibili
 | Rol / perfil | Funciones permitidas | Información accesible | Restricciones |
 |---|---|---|---|
 | **Administrador** | Todo lo de la Encargada; crear, desactivar y restablecer usuarios; asignar roles; revocar sesiones; consultar la bitácora completa | Toda la información del sistema | MFA obligatorio; no puede eliminar registros de bitácora ni kardex; no se puede quitar a sí mismo el último rol Administrador (siempre existe al menos uno) |
-| **Encargada de Producción** | Gestionar plantillas, tipos de trabajo e insumos; ver todas las OT; asignar/reasignar responsables; omitir o desbloquear etapas; detener, reanudar o anular OT; gestionar alertas; ver el panel; consultar la bitácora por OT | Todas las OT, etapas, insumos, alertas y panel; usuarios (solo nombre y área) | MFA obligatorio; sin gestión de usuarios ni roles |
+| **Encargada de Producción** | Gestionar plantillas, tipos de trabajo e insumos; ver todas las OT; asignar/reasignar responsables; omitir o desbloquear etapas; detener, reanudar o anular OT; gestionar alertas; ver el panel; consultar la bitácora por OT; restablecer la clave de un operario | Todas las OT, etapas, insumos, alertas y panel; usuarios (solo nombre y área) | MFA obligatorio; sin gestión de usuarios ni roles (solo restablece claves de operarios) |
 | **Vendedor** | Crear OT; editar sus OT en estado REGISTRADA; registrar la respuesta del cliente al diseño; marcar una OT como ENTREGADA | Todas las OT (lectura) y su avance; versiones de diseño | No avanza etapas de producción; no gestiona insumos ni plantillas |
 | **Diseñador** | Ver y avanzar **sus** etapas de diseño; subir versiones de diseño; reportar faltantes | Sus etapas asignadas y las OT asociadas; stock (lectura) | No puede aprobar sus propios diseños (R6) |
 | **Operario** | Ver y avanzar **sus** etapas; registrar consumo; reportar faltante o problema; adjuntar evidencia | Solo las etapas asignadas a él y los datos de producción de esas OT; stock (lectura) | No ve el panel global, la bitácora ni etapas de otros; no edita OT |
@@ -1203,7 +1229,7 @@ Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia
 | A01 (D1) | Validar con Kotoduo su rol de responsable, la finalidad del registro de actividad (D1) y si incluirá las medidas de control en su Reglamento Interno | Acta de validación |
 | A07 (D8–D9) | Elaborar la matriz normativa y el registro de actividades de tratamiento | Sección 7.7 |
 | A11 (D12) | Cargar solo datos semilla ficticios en desarrollo y staging (D7) | Script de semillas |
-| A12, A15 (Sprint 1) | Construir el aviso de privacidad en el login y el perfil (D2) | Pantallas P-01 y P-09 |
+| A12, A15 (Sprint 1) | Construir el aviso de privacidad en el login y el perfil (D2) | Pantallas P-01 y P-12 |
 | A27 (D28–D29) | Firmar el acta de autorización del pentest (D9); aplicar NIST SP 800-115; verificar que los logs no contengan datos personales | Acta + informe CP-24 a CP-32 |
 | A29 (D30) | Aceptar los DPA de los proveedores antes de cargar datos reales; cargar desde el Excel solo las columnas necesarias (D5, D7) | Registro de transferencias |
 | A30 (D30) | Informar a los trabajadores sobre el tratamiento de sus datos y las reglas para las fotografías de evidencia (D2, D8) | Guía rápida + registro de asistencia |
@@ -1219,7 +1245,7 @@ Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia
 
 | Aspecto | Definición |
 |---|---|
-| Incluido | Módulos M1–M8 de la API, PWA (P-01 a P-10), triggers y vista de PostgreSQL, validadores de MongoDB, relay outbox, URL prefirmadas, cabeceras y configuración de despliegue |
+| Incluido | Módulos M1–M8 de la API, PWA (P-01 a P-12), triggers y vista de PostgreSQL, validadores de MongoDB, relay outbox, URL prefirmadas, cabeceras y configuración de despliegue |
 | Excluido | Infraestructura interna de los proveedores (Cloudflare, Render, Neon, Atlas), pruebas de carga de tipo estrés destructivo en producción, compatibilidad con navegadores sin soporte de Service Worker, funciones fuera de alcance (precios, contactos, Softland) |
 | Niveles | Unitarias → integración → sistema/E2E → aceptación (usabilidad con usuarios reales); no funcionales: rendimiento y seguridad |
 | Ambientes | Unitarias: local y CI. Integración: CI con Testcontainers (PostgreSQL 16 + MongoDB). E2E, rendimiento y seguridad: **staging**, con datos sintéticos (nunca en producción) |
@@ -1287,7 +1313,7 @@ Las pruebas de usabilidad se hacen con usuarios reales de Kotoduo (mínimo 5, un
 | ID | HU / CU | Descripción | Precondición | Pasos / datos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|---|---|
 | CP-01 | HU-02 / CU-06 | Transiciones válidas de la etapa | — | `EtapaOrden.puedeTransicionar` para DISPONIBLE→EN_CURSO, EN_CURSO→TERMINADA, EN_CURSO→BLOQUEADA, BLOQUEADA→EN_CURSO, DISPONIBLE→OMITIDA; `OrdenTrabajo.puedeTransicionar` para EN_PRODUCCION→DETENIDA, DETENIDA→EN_DISENO | `true` en los 7 casos | [Completar tras ejecución] | Pendiente |
-| CP-02 | HU-02 / CU-06 | Transiciones inválidas rechazadas | — | Etapa: PENDIENTE→TERMINADA, TERMINADA→EN_CURSO, DISPONIBLE→TERMINADA, EN_CURSO→OMITIDA con la OT activa; OT: TERMINADA→EN_PRODUCCION, DETENIDA→TERMINADA | `false`; en BD, el trigger lanza `check_violation` | [Completar] | Pendiente |
+| CP-02 | HU-02 / CU-06 | Transiciones inválidas rechazadas | — | Etapa: PENDIENTE→TERMINADA, TERMINADA→EN_CURSO, DISPONIBLE→TERMINADA, EN_CURSO→OMITIDA con la OT activa, DISPONIBLE→EN_CURSO con la OT DETENIDA; OT: TERMINADA→EN_PRODUCCION, DETENIDA→TERMINADA, EN_PRODUCCION→TERMINADA con etapas abiertas, DETENIDA→EN_PRODUCCION con una etapa BLOQUEADA | `false`; en BD, el trigger lanza `check_violation` | [Completar] | Pendiente |
 | CP-03 | HU-07 / CU-04 | Generación de etapas desde la plantilla | Plantilla "Uniforme" con 6 etapas | `generarEtapas(tipo, cantidad=30)` | 6 etapas con secuencia 1..6; la primera DISPONIBLE y el resto PENDIENTE; requerimientos = cantidad × cantidad_por_unidad (p. ej., tela 36 m) | [Completar] | Pendiente |
 | CP-04 | HU-05 / CU-04 | Fecha estimada de término | Etapas con 23 h totales; registro el lunes 09:00 | `calcularFechaEstimada(jornada=8)` | Miércoles de la misma semana (3 jornadas hábiles); omite sábado y domingo | [Completar] | Pendiente |
 | CP-05 | HU-09 / CU-08 | Umbral de stock mínimo | — | `estaBajoMinimo` con stock 2/mín 2; 2,01/2; 0/0 | `true`, `false`, `true` (la regla es ≤) | [Completar] | Pendiente |
@@ -1332,16 +1358,16 @@ Las pruebas de usabilidad se hacen con usuarios reales de Kotoduo (mínimo 5, un
 | CP-29 | AM-07 | Fuerza bruta | Usuario activo | 6 logins fallidos seguidos; luego uno correcto; 11 solicitudes en 60 s desde la misma IP | Desde el 5.º fallo: bloqueo de 15 min (el login correcto también falla con mensaje genérico); la solicitud 11.ª recibe 429 | [Completar] | Pendiente |
 | CP-30 | AM-08 | Reutilización de un refresh rotado | Sesión con refresh R1 | Refrescar con R1 (obtiene R2); volver a usar R1; luego usar R2 | Uso de R1 repetido: 401 y revocación de la familia; R2 también 401; evento SESIONES_REVOCADAS | [Completar] | Pendiente |
 | CP-31 | AM-09 | Archivo no permitido | Etapa propia | Solicitar URL para `text/html`; para jpeg de 20 MB; PUT con `Content-Type` distinto al firmado | 400, 400 y 403 (firma inválida en R2) | [Completar] | Pendiente |
-| CP-32 | AM-10, AM-11, AM-12 | Configuración, cabeceras y dependencias | Staging desplegado | ZAP *baseline*; `npm audit --audit-level=high`; revisión con la lista de cotejo ASVS (Anexo E); revisión de logs sin secretos | ZAP sin High/Medium; CSP, HSTS, `X-Content-Type-Options`, `frame-ancestors` presentes; 0 vulnerabilidades altas; ítems ASVS L2 seleccionados cumplidos | [Completar] | Pendiente |
+| CP-32 | AM-10, AM-11, AM-12 | Configuración, cabeceras y dependencias | Staging desplegado | ZAP *baseline*; `npm audit --audit-level=high`; revisión con la lista de cotejo ASVS (Anexo E); revisión de logs sin secretos; con el rol `sgp_app`, intentar modificar `movimiento_insumo`, borrar `outbox_evento` y crear una tabla | ZAP sin High/Medium; CSP, HSTS, `X-Content-Type-Options`, `frame-ancestors` presentes; 0 vulnerabilidades altas; ítems ASVS L2 seleccionados cumplidos; los tres intentos con `sgp_app` fallan por falta de privilegios (R7, R8) | [Completar] | Pendiente |
 
 **Tabla 8.5 — Pruebas de usabilidad y adaptabilidad**
 
 | ID | HU / CU | Descripción | Precondición | Pasos / datos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|---|---|
 | CP-33 | HU-01, HU-02, HU-03 / CU-05, CU-06, CU-09 | Autonomía del operario (criterio de éxito) | 5 participantes; staging con OT asignadas | Tareas T1–T3 sin ayuda, en el propio teléfono, cronometradas | ≥ 80 % de éxito sin ayuda; T1 en ≤ 3 toques y < 30 s | [Completar] | Pendiente |
-| CP-34 | RNF-02 | Diseño responsive | Build en staging | Playwright: capturas de P-01 a P-08 en 360×800, 390×844, 768×1024 y 1366×768; aserción de ausencia de *scroll* horizontal | 0 desbordes horizontales; navegación inferior en < 600 px y lateral en ≥ 1024 px | [Completar] | Pendiente |
+| CP-34 | RNF-02 | Diseño responsive | Build en staging | Playwright: capturas de P-01 a P-12 en 360×800, 390×844, 768×1024 y 1366×768; aserción de ausencia de *scroll* horizontal | 0 desbordes horizontales; navegación inferior en < 600 px y lateral en ≥ 1024 px | [Completar] | Pendiente |
 | CP-35 | RNF-01 | Satisfacción percibida | Tras CP-33 | Cuestionario SUS (10 ítems) | Puntaje SUS promedio ≥ 70 | [Completar] | Pendiente |
-| CP-36 | RNF-01 | Accesibilidad automatizada | Build en staging | `@axe-core/playwright` en P-01 a P-08 (reglas WCAG 2.2 A/AA) | 0 violaciones *serious* o *critical* | [Completar] | Pendiente |
+| CP-36 | RNF-01 | Accesibilidad automatizada | Build en staging | `@axe-core/playwright` en P-01 a P-12 (reglas WCAG 2.2 A/AA) | 0 violaciones *serious* o *critical* | [Completar] | Pendiente |
 
 **Resumen de ejecución (a completar):**
 
@@ -1385,8 +1411,8 @@ La estrategia equilibra **automatización** para todo lo repetible y regresivo (
    - una vista personal *mobile-first* que responde "qué hago ahora y qué sigue".
 
    La gestión reactiva de insumos se ataca en la causa, porque las alertas se generan al planificar y al consumir, y no al descubrir el faltante.
-2. **Arquitectura proporcional.** Un monolito modular con PWA y persistencia políglota equilibra simplicidad operativa para un equipo de dos personas, bajo costo (≈ US$ 7–10/mes) y capacidad de evolución. Las cinco vistas 4+1 describen la misma solución con nombres consistentes y se validan con los casos de uso CU-01 a CU-11.
-3. **Integridad en varias capas.** Las reglas críticas (transiciones, stock no negativo, alertas únicas, segregación en la aprobación de diseños) se aplican en el dominio **y** en PostgreSQL. La integración con MongoDB mediante outbox transaccional evita la pérdida de eventos de auditoría sin introducir transacciones distribuidas. El DDL y los validadores documentales se ejecutaron sobre los motores reales.
+2. **Arquitectura proporcional.** Un monolito modular con PWA y persistencia políglota equilibra simplicidad operativa para un equipo de dos personas, bajo costo (≈ US$ 7–10/mes) y capacidad de evolución. Las cinco vistas 4+1 describen la misma solución con nombres consistentes y se validan con los casos de uso CU-01 a CU-14.
+3. **Integridad en varias capas.** Las reglas críticas (transiciones, stock no negativo, alertas únicas, segregación en la aprobación de diseños) se aplican en el dominio **y** en PostgreSQL. La integración con MongoDB mediante outbox transaccional evita la pérdida de eventos de auditoría sin introducir transacciones distribuidas. Los borradores del DDL y de los validadores documentales se ejecutaron sobre los motores reales y cumplieron los 16 criterios verificables en la base de datos (Tabla 6.4).
 4. **Seguridad basada en riesgo.** Se identificaron 16 amenazas, de las cuales 8 son de riesgo alto (inyección, XSS, IDOR, escalada, fuerza bruta, robo de sesión, secretos, dependencias). Cada una tiene una mitigación concreta, un estándar de codificación exigible por la DoD y un caso de prueba que la verifica.
 5. **Riesgos y aspectos pendientes para la implementación:**
    - validar con la contraparte los supuestos marcados como "S" (A01), en especial el nivel de detalle de insumos y quién registra la aceptación del diseño;
@@ -1549,7 +1575,7 @@ Se descartó la doble escritura desde la API porque una caída entre ambas escri
 
 *Respuesta:* Es **defensa en profundidad** sobre las reglas cuya violación tendría más impacto en el negocio. La aplicación valida primero (`puedeTransicionar`) para dar mensajes claros al usuario. La base de datos garantiza la regla **ante cualquier cliente**: un error en una versión futura, un script de migración, una carga desde el Excel o una consulta manual de soporte.
 
-- Los triggers `trg_etapa_transicion` y `trg_orden_transicion` rechazan, por ejemplo, PENDIENTE→TERMINADA en una etapa o TERMINADA→EN_PRODUCCION en una OT (CP-02).
+- Los triggers `trg_etapa_transicion` y `trg_orden_transicion` rechazan, por ejemplo, PENDIENTE→TERMINADA en una etapa, TERMINADA→EN_PRODUCCION en una OT o cerrar una OT con etapas abiertas (CP-02, Tabla 6.4).
 - `CHECK (stock_actual >= 0)` aborta la transacción **completa** si un consumo deja stock negativo, de modo que no queda una etapa terminada con el kardex inconsistente (CP-14).
 - El índice único parcial `ux_alerta_auto_abierta` con `ON CONFLICT DO NOTHING` garantiza **una** alerta automática abierta por insumo aun con consumos concurrentes, algo que la aplicación no puede asegurar sin bloqueos adicionales.
 
