@@ -10,7 +10,7 @@
 <body class="app" data-nav="ordenes" data-titulo="OT-2026-0001" data-volver="inicio">
 <main>
   <header class="cabecera">
-    <div class="fila"><h1 style="margin:0">Camisetas sublimadas</h1><span class="chip t-info"><span data-i="flecha"></span>En producción</span></div>
+    <div class="fila"><h1 style="margin:0">Camisetas sublimadas</h1><span id="chip-ot" class="chip t-info"><span data-i="flecha"></span>En producción</span></div>
     <p class="meta" style="margin-top:6px">30 unidades · Club Deportivo Los Aromos · Uniforme deportivo sublimado · Entrega comprometida 26-11-2026 · Estimada 24-11-2026</p>
   </header>
 
@@ -53,6 +53,37 @@
 
         <p class="aviso info" data-rol="VENDEDOR DISENADOR"><span data-i="candado"></span><span>Solo lectura. Esta etapa la avanza su responsable.</span></p>
       </section>
+
+      <!-- Estado de la OT (Fig. 4.8, CU-13): la Encargada detiene, reanuda o anula; Vendedor, Encargada y Administrador marcan la entrega -->
+      <section class="card" aria-labelledby="t-control" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR VENDEDOR">
+        <h2 id="t-control" style="margin-top:0">Estado de la orden</h2>
+        <div id="aviso-ot" class="aviso adv" role="status" hidden><span data-i="alerta"></span><div><p id="aviso-ot-txt"></p><p id="aviso-ot-meta" class="meta"></p></div></div>
+        <div class="acciones" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR">
+          <button id="btn-detener" class="btn secundario" type="button" data-abrir="dlgDetener"><span data-i="alerta"></span>Detener orden</button>
+          <button id="btn-reanudar" class="btn" type="button" hidden><span data-i="play"></span>Reanudar orden</button>
+          <button id="btn-anular" class="btn peligro" type="button" data-abrir="dlgAnular"><span data-i="x"></span>Anular orden</button>
+        </div>
+        <div class="acciones">
+          <button id="btn-entregada" class="btn secundario" type="button" disabled aria-describedby="entregada-ayuda"><span data-i="camion"></span>Marcar entregada</button>
+        </div>
+        <p id="entregada-ayuda" class="ayuda">Se habilita cuando la orden está Terminada (todas sus etapas cerradas).</p>
+      </section>
+
+      <!-- Bitácora filtrada por esta OT (CU-11): la Encargada solo la consulta por orden; el Administrador también tiene la bitácora completa (P-10) -->
+      <section aria-labelledby="t-historial" data-rol="ENCARGADA_PRODUCCION ADMINISTRADOR">
+        <div class="seccion-titulo"><h2 id="t-historial">Historial de la orden</h2><a href="bitacora.html" class="meta" data-rol="ADMINISTRADOR">Bitácora completa</a></div>
+        <div class="tabla">
+          <table class="responsive">
+            <thead><tr><th>Fecha y hora</th><th>Usuario</th><th>Evento</th><th>Detalle</th></tr></thead>
+            <tbody id="historial">
+              <tr><td data-label="Fecha">20-11-2026 08:10</td><td data-label="Usuario">Sistema</td><td data-label="Evento">Etapa habilitada</td><td data-label="Detalle">Impresión de transfer → Disponible (Pedro)</td></tr>
+              <tr><td data-label="Fecha">20-11-2026 08:09</td><td data-label="Usuario">jorge.munoz</td><td data-label="Evento">Diseño aprobado</td><td data-label="Detalle">Versión 2 · respuesta del cliente</td></tr>
+              <tr><td data-label="Fecha">19-11-2026 11:20</td><td data-label="Usuario">marcela.vidal</td><td data-label="Evento">Responsable asignado</td><td data-label="Detalle">Sublimado → Ana Morales</td></tr>
+              <tr><td data-label="Fecha">18-11-2026 16:44</td><td data-label="Usuario">jorge.munoz</td><td data-label="Evento">Orden registrada</td><td data-label="Detalle">6 etapas generadas desde plantilla v1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
 
     <!-- Recorrido completo: estados de cada etapa; la Encargada asigna y omite (Tabla 7.1) -->
@@ -83,7 +114,7 @@
     </section>
   </div>
 
-  <aside class="proto"><strong>Solo prototipo.</strong> P-03 · ruta <code>/ordenes/:codigo</code> · Fig. 5.2 y 5.3 · HU-02 a HU-04 / CU-06, CU-09. Estados según la Fig. 4.7: Disponible → En curso → Terminada, o En curso → Bloqueada. Entra como Operario para avanzar la etapa, o como Encargada para asignar y omitir.</aside>
+  <aside class="proto"><strong>Solo prototipo.</strong> P-03 · ruta <code>/ordenes/:codigo</code> · Fig. 5.2 y 5.3 · HU-02 a HU-04, HU-08, HU-10, HU-12 / CU-06, CU-09, CU-11 a CU-13. Estados de la etapa según la Fig. 4.7: Disponible → En curso → Terminada, o En curso → Bloqueada. Estados de la orden según la Fig. 4.8: En producción ↔ Detenida, o Anulada. Entra como Operario para avanzar la etapa, o como Encargada para asignar, omitir, detener, reanudar o anular y ver el historial de la orden.</aside>
 </main>
 
 <dialog id="dlgTerminar" aria-labelledby="tt">
@@ -126,6 +157,22 @@
     <h2 id="to">¿Omitir esta etapa?</h2>
     <p>La etapa no se hará en esta orden y el recorrido saltará a la siguiente. Esta acción queda en la bitácora.</p>
     <div class="acciones"><button class="btn secundario" value="cancelar" formnovalidate>Cancelar</button><button class="btn peligro" value="ok"><span data-i="omitir"></span>Omitir</button></div>
+  </form>
+</dialog>
+<dialog id="dlgDetener" aria-labelledby="td">
+  <form method="dialog">
+    <h2 id="td">Detener orden</h2>
+    <label for="md">Motivo (obligatorio)</label><textarea id="md" rows="2" required aria-describedby="md-ayuda" placeholder="Ej.: el cliente pidió cambiar las tallas"></textarea>
+    <p id="md-ayuda" class="ayuda">Mientras esté detenida no se inicia ni se termina ninguna etapa. El motivo queda en la bitácora.</p>
+    <div class="acciones"><button class="btn secundario" value="cancelar" formnovalidate>Cancelar</button><button class="btn" value="ok"><span data-i="alerta"></span>Detener</button></div>
+  </form>
+</dialog>
+<dialog id="dlgAnular" aria-labelledby="ta">
+  <form method="dialog">
+    <h2 id="ta">¿Anular esta orden?</h2>
+    <label for="ma">Motivo (obligatorio)</label><textarea id="ma" rows="2" required aria-describedby="ma-ayuda"></textarea>
+    <p id="ma-ayuda" class="ayuda">Esta acción no se puede deshacer. Las etapas abiertas pasan a Omitida y el motivo queda en la bitácora.</p>
+    <div class="acciones"><button class="btn secundario" value="cancelar" formnovalidate>Cancelar</button><button class="btn peligro" value="ok"><span data-i="x"></span>Anular</button></div>
   </form>
 </dialog>
 
@@ -171,6 +218,37 @@
     $('paso2').querySelector('.chip').outerHTML = chipHtml('t-adv', 'alerta', 'Bloqueada');
     $('motivo-txt').textContent = $('mo').value;
     $('principal').hidden = true; $('secundarias').hidden = true; $('bloqueo').hidden = false;
+  });
+
+  // Estado de la OT (Fig. 4.8): cambio visual y fila nueva en el historial
+  var registrar = function (evento, detalle) {
+    var tr = document.createElement('tr');
+    [['Fecha', '20-11-2026 10:15'], ['Usuario', 'marcela.vidal'], ['Evento', evento], ['Detalle', detalle]].forEach(function (c) {
+      var td = document.createElement('td'); td.dataset.label = c[0]; td.textContent = c[1]; tr.appendChild(td);
+    });
+    $('historial').insertBefore(tr, $('historial').firstChild);
+  };
+  var avisoOt = function (texto, meta) {
+    $('aviso-ot-txt').textContent = texto; $('aviso-ot-meta').textContent = meta; $('aviso-ot').hidden = false;
+  };
+  $('dlgDetener').addEventListener('close', function () {
+    if (this.returnValue !== 'ok') return;
+    $('chip-ot').outerHTML = chipHtml('t-adv', 'alerta', 'Detenida').replace('<span', '<span id="chip-ot"');
+    avisoOt('Orden detenida: ' + $('md').value, 'Ninguna etapa puede iniciarse ni terminarse hasta reanudarla.');
+    $('btn-detener').hidden = true; $('btn-reanudar').hidden = false;
+    registrar('Orden detenida', 'En producción → Detenida · ' + $('md').value);
+  });
+  $('btn-reanudar').addEventListener('click', function () {
+    $('chip-ot').outerHTML = chipHtml('t-info', 'flecha', 'En producción').replace('<span', '<span id="chip-ot"');
+    $('aviso-ot').hidden = true; $('btn-reanudar').hidden = true; $('btn-detener').hidden = false;
+    registrar('Orden reanudada', 'Detenida → En producción (sin etapas bloqueadas)');
+  });
+  $('dlgAnular').addEventListener('close', function () {
+    if (this.returnValue !== 'ok') return;
+    $('chip-ot').outerHTML = chipHtml('t-tachado', 'x', 'Anulada').replace('<span', '<span id="chip-ot"');
+    avisoOt('Orden anulada: ' + $('ma').value, 'Las etapas abiertas pasaron a Omitida.');
+    ['btn-detener', 'btn-reanudar', 'btn-anular'].forEach(function (id) { $(id).hidden = true; });
+    registrar('Orden anulada', 'En producción → Anulada · ' + $('ma').value);
   });
 
   $('dlgFaltante').addEventListener('close', function () { if (this.returnValue === 'ok') $('aviso-faltante').hidden = false; });
