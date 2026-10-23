@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.11 — Paquetes del monorepo sgp-kotoduo (nivel superior)
+' Figura 4.12 — Paquetes del monorepo sgp-kotoduo (nivel superior)
 !include ../_comun/estilo.iuml
 set separator none
 skinparam packageStyle folder

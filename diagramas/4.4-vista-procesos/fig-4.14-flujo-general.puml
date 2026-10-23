@@ -1,6 +1,6 @@
 @startuml
-' Figura 4.13 — Flujo productivo: visión general (carriles = responsables)
-' Las actividades con doble borde lateral se detallan en las Fig. 4.14 y 4.15.
+' Figura 4.14 — Flujo productivo: visión general (carriles = responsables)
+' Las actividades con doble borde lateral se detallan en las Fig. 4.15 y 4.16.
 !include ../_comun/estilo.iuml
 skinparam swimlaneWidth same
 
@@ -8,7 +8,7 @@ skinparam swimlaneWidth same
 start
 :Registrar orden y, si corresponde,
 aprobar diseño con el cliente
-(Fig. 4.14); <<procedure>>
+(Fig. 4.15); <<procedure>>
 |Encargada de Producción|
 :Asignar o confirmar
 responsables de etapas;
@@ -18,7 +18,7 @@ y notificar al responsable;
 |Operario|
 repeat
   :Ejecutar etapa
-  (Fig. 4.15); <<procedure>>
+  (Fig. 4.16); <<procedure>>
 repeat while (¿Quedan etapas?) is (sí)
 -> no;
 |SGP-Kotoduo|

@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.20 — Casos de uso: actores, acceso y administración
+' Figura 4.21 — Casos de uso: actores, acceso y administración
 !include ../_comun/estilo.iuml
 skinparam actorStyle awesome
 left to right direction

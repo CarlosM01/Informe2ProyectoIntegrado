@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.16 — Secuencia CU-06 "Terminar etapa": tramo síncrono (una transacción)
+' Figura 4.17 — Secuencia CU-06 "Terminar etapa": tramo síncrono (una transacción)
 !include ../_comun/estilo.iuml
 autonumber
 hide footbox
@@ -45,6 +45,6 @@ end
 note over PG
   El trigger del movimiento actualiza el stock
   y crea una alerta si queda bajo el mínimo.
-  El evento del outbox se publica después (Fig. 4.17).
+  El evento del outbox se publica después (Fig. 4.18).
 end note
 @enduml

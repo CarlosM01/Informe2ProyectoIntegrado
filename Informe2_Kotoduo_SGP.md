@@ -18,7 +18,7 @@
 |---|---|---|---|
 | 2.1.1.1 | 3.1 | Fases, Sprints, actividades A00–A31, entregables, plazos en días y responsables | 5 |
 | 2.1.1.2 | 3.2 | Matriz de dependencias, prioridades, ruta crítica e impacto de retrasos | 5 |
-| 2.1.2.3 | 4.1 a 4.6 | Vistas lógica, desarrollo, procesos, física y escenarios (Figuras 4.1–4.22) | 5 |
+| 2.1.2.3 | 4.1 a 4.6 | Vistas lógica, desarrollo, procesos, física y escenarios (Figuras 4.1–4.23) | 5 |
 | 2.1.2.4 | 4.7 | Matriz de tecnologías con justificación y necesidad futura | 5 |
 | 2.1.3.5 | 5.1 a 5.3 | Perfiles, mapa de navegación y prototipo navegable (Anexo D) | 5 |
 | 2.1.3.6 | 5.4 | Guía de estilo, contraste WCAG 2.2 AA y estrategia responsive | 5 |
@@ -132,14 +132,14 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 
 | Necesidad / requerimiento de origen | Componente de la solución que responde | Evidencia en este informe |
 |---|---|---|
-| Trabajadores no saben la siguiente etapa ni el área (RF-05, RF-06; HU-01, HU-02) | M4 Mi Trabajo + máquina de estados de etapa + notificación push | Fig. 4.16, Fig. 4.7, CU-05/CU-06, pantallas P-02/P-03, CP-01, CP-12, CP-33 |
+| Trabajadores no saben la siguiente etapa ni el área (RF-05, RF-06; HU-01, HU-02) | M4 Mi Trabajo + máquina de estados de etapa + notificación push | Fig. 4.17, Fig. 4.7, CU-05/CU-06, pantallas P-02/P-03, CP-01, CP-12, CP-33 |
 | Proceso en Excel y memoria de una persona (RF-02, RF-04; HU-07) | M2 Plantillas de Proceso + generación automática de etapas | Fig. 4.3, tablas `plantilla_etapa` y `etapa_orden`, P-07, CP-03, CP-11 |
 | Información duplicada y dispersa (RF-03; HU-05) | M3 Órdenes de Trabajo como fuente única + PostgreSQL | Sección 6.1–6.3, P-04, CP-06, CP-11 |
-| Gestión reactiva de insumos (RF-09, RF-10; HU-03, HU-09) | M5 Insumos y Alertas: kardex con trigger de alerta y faltantes proyectados | Sección 6.2 (R3), Fig. 4.14, P-08, CP-05, CP-14, CP-15 |
-| Aceptación del diseño sin registro formal (RF-08; HU-06) | M6 Aprobación de Diseño con versiones y segregación de funciones | Fig. 4.14, tabla `aprobacion_diseno`, P-05, CP-16 |
+| Gestión reactiva de insumos (RF-09, RF-10; HU-03, HU-09) | M5 Insumos y Alertas: kardex con trigger de alerta y faltantes proyectados | Sección 6.2 (R3), Fig. 4.15, P-08, CP-05, CP-14, CP-15 |
+| Aceptación del diseño sin registro formal (RF-08; HU-06) | M6 Aprobación de Diseño con versiones y segregación de funciones | Fig. 4.15, tabla `aprobacion_diseno`, P-05, CP-16 |
 | Falta de visibilidad global del avance (RF-11; HU-10) | M7 Panel de Supervisión + vista `v_panel_ordenes` | P-06, CP-18, CP-23 |
 | Usuarios y permisos diferenciados (RF-01; HU-11) | M1 + RBAC compartido entre front-end y API | Secciones 7.1–7.3, CP-09, CP-10, CP-27, CP-28 |
-| Trazabilidad de cambios y responsables (RF-12; HU-12) | M8 Bitácora: outbox transaccional → MongoDB | Secciones 6.4–6.5, Fig. 4.17, CP-11 |
+| Trazabilidad de cambios y responsables (RF-12; HU-12) | M8 Bitácora: outbox transaccional → MongoDB | Secciones 6.4–6.5, Fig. 4.18, CP-11 |
 | App práctica para celular (RNF-01, RNF-02) | PWA *mobile-first* instalable | Secciones 4.7 y 5.4, CP-22, CP-34 |
 | Sin presupuesto definido (RNF-08) | Servicios gestionados con capa gratuita o de bajo costo; infraestructura como código como mejora ideal para cambiar de proveedor sin rediseñar | Sección 4.7 (Tablas 4.2 y 4.3) |
 
@@ -322,19 +322,19 @@ Se descartaron los microservicios: con dos desarrolladores, alrededor de 25 usua
 
 | Vista (Kruchten, 1995) | Pregunta que responde | Interesados | Diagramas | Figuras | Sección |
 |---|---|---|---|---|---|
-| Lógica | ¿Qué abstracciones y responsabilidades tiene el sistema? | Usuarios finales, analistas | Clases (dominio y servicios), estados | 4.2–4.7 | 4.2 |
-| Desarrollo | ¿Cómo se organiza el código y sus dependencias? | Programadores, jefe de proyecto | Componentes, paquetes | 4.8–4.12 | 4.3 |
-| Procesos | ¿Qué flujos, concurrencia y sincronización existen? | Integradores de sistemas | Actividades con carriles (BPMN), secuencia, tabla de procesos | 4.13–4.17 | 4.4 |
-| Física | ¿Dónde se ejecuta cada elemento y cómo se comunica? | Infraestructura y administración | Despliegue | 4.18–4.19 | 4.5 |
-| Escenarios (+1) | ¿Qué casos de uso validan y unen las cuatro vistas? | Todos, incluido el cliente | Casos de uso | 4.20–4.22 | 4.6 |
+| Lógica | ¿Qué abstracciones y responsabilidades tiene el sistema? | Usuarios finales, analistas | Clases (dominio y servicios), estados | 4.2–4.8 | 4.2 |
+| Desarrollo | ¿Cómo se organiza el código y sus dependencias? | Programadores, jefe de proyecto | Componentes, paquetes | 4.9–4.13 | 4.3 |
+| Procesos | ¿Qué flujos, concurrencia y sincronización existen? | Integradores de sistemas | Actividades con carriles (BPMN), secuencia, tabla de procesos | 4.14–4.18 | 4.4 |
+| Física | ¿Dónde se ejecuta cada elemento y cómo se comunica? | Infraestructura y administración | Despliegue | 4.19–4.20 | 4.5 |
+| Escenarios (+1) | ¿Qué casos de uso validan y unen las cuatro vistas? | Todos, incluido el cliente | Casos de uso | 4.21–4.23 | 4.6 |
 
 **Coherencia entre vistas.** El escenario CU-06 "Actualizar avance de etapa" recorre las cinco vistas:
 
 - **Lógica:** clase `EtapaOrden`, su máquina de estados y el método `EtapaService.terminar()` (Fig. 4.3, 4.6 y 4.7).
-- **Desarrollo:** se implementa en el componente M4 y en el paquete `modules/etapas` (Fig. 4.10–4.12).
-- **Procesos:** forma parte del bucle de producción (Fig. 4.13 y 4.15), se ejecuta en una transacción (Fig. 4.16) y genera trabajo asíncrono en el relay outbox (Fig. 4.17).
-- **Física:** se ejecuta en el contenedor de Render y persiste en Neon y Atlas (Fig. 4.18).
-- **Escenarios:** es el caso de uso central del taller (Fig. 4.22) y se valida con CP-01, CP-12, CP-19 y CP-27.
+- **Desarrollo:** se implementa en el componente M4 y en el paquete `modules/etapas` (Fig. 4.11–4.13).
+- **Procesos:** forma parte del bucle de producción (Fig. 4.14 y 4.16), se ejecuta en una transacción (Fig. 4.17) y genera trabajo asíncrono en el relay outbox (Fig. 4.18).
+- **Física:** se ejecuta en el contenedor de Render y persiste en Neon y Atlas (Fig. 4.19).
+- **Escenarios:** es el caso de uso central del taller (Fig. 4.23) y se valida con CP-01, CP-12, CP-19 y CP-27.
 
 **Figura 4.1 — Vista general de capas** (`diagramas/4.1-vista-general/fig-4.01-capas.puml`). Resume el recorrido de una petición: la PWA entra por el borde de Cloudflare, el middleware de seguridad la filtra y los módulos M1–M8 la resuelven contra PostgreSQL. El relay publica después los eventos en MongoDB y Web Push. Los archivos viajan directo de la PWA a R2.
 
@@ -342,7 +342,7 @@ Se descartaron los microservicios: con dos desarrolladores, alrededor de 25 usua
 
 ### 4.2 Vista lógica (2.1.2.3)
 
-La vista lógica se presenta en seis figuras: un mapa del dominio (Fig. 4.2), tres acercamientos por grupo de clases (Fig. 4.3–4.5), los servicios que coordinan esas clases (Fig. 4.6) y la máquina de estados de la etapa (Fig. 4.7).
+La vista lógica se presenta en siete figuras: un mapa del dominio (Fig. 4.2), tres acercamientos por grupo de clases (Fig. 4.3–4.5), los servicios que coordinan esas clases (Fig. 4.6) y las máquinas de estados de la etapa (Fig. 4.7) y de la orden de trabajo (Fig. 4.8).
 
 *Simbología común de los diagramas de clases:* cada rectángulo es una clase con atributos privados (`-`) y operaciones públicas (`+`). Los rombos rellenos (◆, composición) indican que la parte no existe sin el todo: una `EtapaOrden` no existe sin su `OrdenTrabajo` y una `PlantillaEtapa` no existe sin su `TipoTrabajo`. Los rombos vacíos (◇, agregación) indican pertenencia débil: los `MovimientoInsumo` se agregan al `Insumo`. Las flechas continuas son asociaciones navegables con multiplicidad (`1`, `0..1`, `*`, `1..*`). Las flechas punteadas son dependencias de uso. Los `enum` fijan los estados válidos.
 
@@ -370,28 +370,37 @@ La vista lógica se presenta en seis figuras: un mapa del dominio (Fig. 4.2), tr
 
 1. **`TipoTrabajo` + `PlantillaEtapa`** externalizan el conocimiento hoy concentrado en Bianca, Berny y René. La secuencia, el área, las instrucciones y la duración pasan a ser datos editables (RF-02).
 2. **`EtapaOrden` copia** nombre, área, instrucciones y duración desde la plantilla al crearse la OT. Así, modificar una plantilla no altera órdenes en curso, y se mantiene la referencia opcional `origen` para análisis.
-3. La lógica de transición vive en `EtapaOrden.puedeTransicionar()`, con una defensa en profundidad en la base de datos (trigger R2, sección 6.2).
+3. La lógica de transición vive en `EtapaOrden.puedeTransicionar()` y `OrdenTrabajo.puedeTransicionar()`, con una defensa en profundidad en la base de datos (trigger R2, sección 6.2).
 4. Los servicios no se llaman en cadena síncrona hacia MongoDB. `AuditoriaService` solo escribe en el outbox dentro de la misma transacción.
 
-**Figura 4.7 — Diagrama de estados de `EtapaOrden`** (`diagramas/4.2-vista-logica/fig-4.07-estados-etapa.puml`). Cada nodo es un estado y cada arco es una transición etiquetada con *evento [condición] / acción*. Las únicas transiciones válidas son PENDIENTE→DISPONIBLE→EN_CURSO→TERMINADA, con desvíos EN_CURSO⇄BLOQUEADA (motivo obligatorio) y la omisión de etapas que no aplican. El mismo grafo se implementa en el dominio (TypeScript) y en el trigger `trg_etapa_transicion`, y se prueba en CP-01 y CP-02.
+**Figura 4.7 — Diagrama de estados de `EtapaOrden`** (`diagramas/4.2-vista-logica/fig-4.07-estados-etapa.puml`). Cada nodo es un estado y cada arco es una transición etiquetada con *evento [condición] / acción*. El estado compuesto *Abierta* agrupa los estados en que la etapa todavía puede avanzar. El camino principal es PENDIENTE→DISPONIBLE→EN_CURSO→TERMINADA. Una etapa pasa a DISPONIBLE cuando la anterior queda cerrada, sea TERMINADA u OMITIDA, de modo que omitir una etapa no traba la secuencia. La etapa de diseño (`es_etapa_diseno`) no se cierra con el botón **Terminar**: se cierra cuando el cliente aprueba el diseño. **Reportar problema** exige motivo (`ck_etapa_bloqueo`), avisa a la Encargada y detiene la OT, y solo la Encargada desbloquea la etapa. Si la OT se anula, toda etapa abierta pasa a OMITIDA. El mismo grafo se implementa en el dominio (TypeScript) y en el trigger `trg_etapa_transicion`, y se prueba en CP-01 y CP-02.
 
 ![Figura 4.7 — Diagrama de estados de EtapaOrden](figuras/4.2-vista-logica/fig-4.07-estados-etapa.png)
+
+**Figura 4.8 — Diagrama de estados de `OrdenTrabajo`** (`diagramas/4.2-vista-logica/fig-4.08-estados-orden.puml`). La OT nace en REGISTRADA o, si su tipo de trabajo requiere diseño, en EN_DISENO. Pasa a EN_PRODUCCION cuando el cliente aprueba el diseño o cuando se inicia su primera etapa, y a TERMINADA cuando todas sus etapas quedan cerradas (CP-13). Queda **DETENIDA** en dos casos: de forma automática, cuando una de sus etapas se bloquea, o de forma manual, cuando la Encargada la detiene con un motivo. Solo la Encargada la reanuda, y únicamente si no quedan etapas bloqueadas. El pseudoestado de historia (H) la devuelve al subestado que tenía antes de detenerse (EN_DISENO o EN_PRODUCCION). Mientras está DETENIDA no se inicia ni se termina ninguna etapa (Fig. 4.7). Mientras está activa puede anularse con motivo, y entonces sus etapas abiertas pasan a OMITIDA. El motivo de una detención o de una anulación queda en la bitácora. Las transiciones se validan en `OrdenTrabajo.puedeTransicionar()` y en el trigger `trg_orden_transicion`.
+
+![Figura 4.8 — Diagrama de estados de OrdenTrabajo](figuras/4.2-vista-logica/fig-4.08-estados-orden.png)
+
+Las otras dos entidades con estado tienen ciclos lineales que no requieren diagrama:
+
+- **`AprobacionDiseno`:** PENDIENTE → APROBADO o RECHAZADO, y ambos son finales. Rechazar exige comentario, y quien subió el diseño no puede resolverlo (R6). Una nueva propuesta es una nueva versión (fila nueva), no un cambio de estado.
+- **`AlertaInsumo`:** ABIERTA → EN_GESTION → CERRADA (IK-9). CERRADA es final y exige `cerrada_en`.
 
 ### 4.3 Vista de desarrollo o implementación (2.1.2.3)
 
 *Simbología (UML 2) de los diagramas de componentes:* los componentes (rectángulos con ícono de componente) son unidades desplegables o reemplazables. El puerto "HTTPS /api/v1" es la interfaz provista por la API. Las flechas continuas son conectores de uso en tiempo de ejecución y las punteadas son dependencias de compilación. Los cilindros representan bases de datos y las nubes, servicios externos.
 
-**Figura 4.8 — Componentes: visión general** (`diagramas/4.3-vista-desarrollo/fig-4.08-componentes-general.puml`). Muestra los tres bloques del monorepo (PWA, `packages/shared` y API) y los servicios externos de los que dependen.
+**Figura 4.9 — Componentes: visión general** (`diagramas/4.3-vista-desarrollo/fig-4.09-componentes-general.puml`). Muestra los tres bloques del monorepo (PWA, `packages/shared` y API) y los servicios externos de los que dependen.
 
-![Figura 4.8 — Componentes: visión general](figuras/4.3-vista-desarrollo/fig-4.08-componentes-general.png)
+![Figura 4.9 — Componentes: visión general](figuras/4.3-vista-desarrollo/fig-4.09-componentes-general.png)
 
-**Figura 4.9 — Componentes de la PWA** (`diagramas/4.3-vista-desarrollo/fig-4.09-componentes-pwa.puml`). El *shell* carga los ocho módulos de funcionalidad; todos llaman a la API a través de un único cliente.
+**Figura 4.10 — Componentes de la PWA** (`diagramas/4.3-vista-desarrollo/fig-4.10-componentes-pwa.puml`). El *shell* carga los ocho módulos de funcionalidad; todos llaman a la API a través de un único cliente.
 
-![Figura 4.9 — Componentes de la PWA](figuras/4.3-vista-desarrollo/fig-4.09-componentes-pwa.png)
+![Figura 4.10 — Componentes de la PWA](figuras/4.3-vista-desarrollo/fig-4.10-componentes-pwa.png)
 
-**Figura 4.10 — Componentes de la API** (`diagramas/4.3-vista-desarrollo/fig-4.10-componentes-api.puml`). Toda petición pasa por el middleware de seguridad antes de llegar a un módulo. Solo existen tres dependencias entre módulos (M3→M2, M4→M5 y M6→M4), y todos acceden a los servicios externos a través de *Infra*.
+**Figura 4.11 — Componentes de la API** (`diagramas/4.3-vista-desarrollo/fig-4.11-componentes-api.puml`). Toda petición pasa por el middleware de seguridad antes de llegar a un módulo. Solo existen tres dependencias entre módulos (M3→M2, M4→M5 y M6→M4), y todos acceden a los servicios externos a través de *Infra*.
 
-![Figura 4.10 — Componentes de la API](figuras/4.3-vista-desarrollo/fig-4.10-componentes-api.png)
+![Figura 4.11 — Componentes de la API](figuras/4.3-vista-desarrollo/fig-4.11-componentes-api.png)
 
 *Organización:*
 
@@ -399,13 +408,13 @@ La vista lógica se presenta en seis figuras: un mapa del dominio (Fig. 4.2), tr
 - `packages/shared` contiene los **esquemas Zod** y el **mapa de permisos**, que comparten el front-end y la API. Con ello se evita que validaciones y permisos diverjan entre capas.
 - El componente *Infra* encapsula los clientes de PostgreSQL, MongoDB, R2 y Web Push. Así los módulos no dependen de proveedores concretos, y migrar de Neon a otro PostgreSQL solo cambia la configuración.
 
-**Figura 4.11 — Paquetes del monorepo** (`diagramas/4.3-vista-desarrollo/fig-4.11-paquetes-monorepo.puml`). Monorepo `sgp-kotoduo` con `apps/web`, `apps/api`, `packages/shared`, `db` (migraciones `node-pg-migrate`, validadores Mongo y semillas) y `tests` (unit, integration, e2e, perf). La PWA y la API solo comparten código a través de `packages/shared`.
+**Figura 4.12 — Paquetes del monorepo** (`diagramas/4.3-vista-desarrollo/fig-4.12-paquetes-monorepo.puml`). Monorepo `sgp-kotoduo` con `apps/web`, `apps/api`, `packages/shared`, `db` (migraciones `node-pg-migrate`, validadores Mongo y semillas) y `tests` (unit, integration, e2e, perf). La PWA y la API solo comparten código a través de `packages/shared`.
 
-![Figura 4.11 — Paquetes del monorepo](figuras/4.3-vista-desarrollo/fig-4.11-paquetes-monorepo.png)
+![Figura 4.12 — Paquetes del monorepo](figuras/4.3-vista-desarrollo/fig-4.12-paquetes-monorepo.png)
 
-**Figura 4.12 — Regla de dependencias por capas** (`diagramas/4.3-vista-desarrollo/fig-4.12-capas-dependencias.puml`). Las relaciones `<<import>>` siguen una única dirección: *routes → controller → service → repository → infra* en la API y *app → features → ui/lib* en la PWA. Esto permite probar los servicios con repositorios simulados y garantiza que solo la capa *repository* ejecute SQL, siempre parametrizado (sección 7.6).
+**Figura 4.13 — Regla de dependencias por capas** (`diagramas/4.3-vista-desarrollo/fig-4.13-capas-dependencias.puml`). Las relaciones `<<import>>` siguen una única dirección: *routes → controller → service → repository → infra* en la API y *app → features → ui/lib* en la PWA. Esto permite probar los servicios con repositorios simulados y garantiza que solo la capa *repository* ejecute SQL, siempre parametrizado (sección 7.6).
 
-![Figura 4.12 — Regla de dependencias por capas](figuras/4.3-vista-desarrollo/fig-4.12-capas-dependencias.png)
+![Figura 4.13 — Regla de dependencias por capas](figuras/4.3-vista-desarrollo/fig-4.13-capas-dependencias.png)
 
 | Convención | Regla |
 |---|---|
@@ -416,21 +425,21 @@ La vista lógica se presenta en seis figuras: un mapa del dominio (Fig. 4.2), tr
 
 ### 4.4 Vista de procesos (2.1.2.3)
 
-La vista de procesos muestra primero el flujo de negocio (diagramas de actividades, Fig. 4.13–4.15) y luego la interacción técnica del escenario crítico CU-06, separada en su tramo síncrono y su tramo asíncrono (diagramas de secuencia, Fig. 4.16–4.17).
+La vista de procesos muestra primero el flujo de negocio (diagramas de actividades, Fig. 4.14–4.16) y luego la interacción técnica del escenario crítico CU-06, separada en su tramo síncrono y su tramo asíncrono (diagramas de secuencia, Fig. 4.17–4.18).
 
 *Simbología de los diagramas de actividades:* equivalen a un BPMN de colaboración. Los carriles (Vendedor, Diseñador, Encargada de Producción, Operario y SGP-Kotoduo) corresponden a *lanes* y asignan la responsabilidad de cada actividad. Los rectángulos redondeados son actividades; los que tienen doble borde lateral son subprocesos detallados en otra figura. Los rombos son decisiones (*gateways* exclusivos) con guardas. `repeat … repeat while` modela bucles. Las barras `fork / end fork` modelan **concurrencia**.
 
-**Figura 4.13 — Flujo productivo: visión general** (`diagramas/4.4-vista-procesos/fig-4.13-flujo-general.puml`). Recorre la orden de punta a punta: registro y diseño, asignación, ejecución repetida de etapas, término y entrega.
+**Figura 4.14 — Flujo productivo: visión general** (`diagramas/4.4-vista-procesos/fig-4.14-flujo-general.puml`). Recorre la orden de punta a punta: registro y diseño, asignación, ejecución repetida de etapas, término y entrega.
 
-![Figura 4.13 — Flujo productivo: visión general](figuras/4.4-vista-procesos/fig-4.13-flujo-general.png)
+![Figura 4.14 — Flujo productivo: visión general](figuras/4.4-vista-procesos/fig-4.14-flujo-general.png)
 
-**Figura 4.14 — Subproceso: registro de la orden y aprobación de diseño** (`diagramas/4.4-vista-procesos/fig-4.14-subproceso-registro-diseno.puml`). El bucle entre Diseñador y Vendedor modela las rondas de aprobación del diseño con el cliente. Cada respuesta del cliente queda en la bitácora con la versión, el actor y el motivo (RF-12).
+**Figura 4.15 — Subproceso: registro de la orden y aprobación de diseño** (`diagramas/4.4-vista-procesos/fig-4.15-subproceso-registro-diseno.puml`). El bucle entre Diseñador y Vendedor modela las rondas de aprobación del diseño con el cliente. Cada respuesta del cliente queda en la bitácora con la versión, el actor y el motivo (RF-12).
 
-![Figura 4.14 — Subproceso: registro de la orden y aprobación de diseño](figuras/4.4-vista-procesos/fig-4.14-subproceso-registro-diseno.png)
+![Figura 4.15 — Subproceso: registro de la orden y aprobación de diseño](figuras/4.4-vista-procesos/fig-4.15-subproceso-registro-diseno.png)
 
-**Figura 4.15 — Subproceso: ejecución de una etapa** (`diagramas/4.4-vista-procesos/fig-4.15-subproceso-ejecucion-etapa.puml`). Se repite por cada etapa de la orden. El consumo y la evidencia pueden registrarse en paralelo, y la habilitación de la siguiente etapa ocurre en paralelo con el registro en la bitácora.
+**Figura 4.16 — Subproceso: ejecución de una etapa** (`diagramas/4.4-vista-procesos/fig-4.16-subproceso-ejecucion-etapa.puml`). Se repite por cada etapa de la orden. El consumo y la evidencia pueden registrarse en paralelo, y la habilitación de la siguiente etapa ocurre en paralelo con el registro en la bitácora.
 
-![Figura 4.15 — Subproceso: ejecución de una etapa](figuras/4.4-vista-procesos/fig-4.15-subproceso-ejecucion-etapa.png)
+![Figura 4.16 — Subproceso: ejecución de una etapa](figuras/4.4-vista-procesos/fig-4.16-subproceso-ejecucion-etapa.png)
 
 *Puntos de decisión relevantes:*
 
@@ -440,13 +449,13 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 
 *Simbología de los diagramas de secuencia:* las líneas de vida verticales representan participantes (actores, componentes y bases de datos). Las flechas continuas son mensajes síncronos y las punteadas, respuestas. Los fragmentos `alt` modelan alternativas excluyentes, `loop` modela repeticiones y `opt` un paso opcional.
 
-**Figura 4.16 — Secuencia CU-06 "Terminar etapa": tramo síncrono** (`diagramas/4.4-vista-procesos/fig-4.16-secuencia-terminar-etapa.puml`). La API autentica el JWT, verifica el permiso `etapas.avanzar_propias` y valida el cuerpo con Zod. Luego bloquea la fila de la etapa (`SELECT … FOR UPDATE`), verifica que el actor sea el responsable (404 si no lo es, para no revelar que la etapa existe) y que la versión coincida (409 si cambió: control de concurrencia optimista), y aplica todos los cambios en **una transacción ACID**: etapa terminada, consumos de insumo (que pueden disparar una alerta), siguiente etapa disponible y evento outbox.
+**Figura 4.17 — Secuencia CU-06 "Terminar etapa": tramo síncrono** (`diagramas/4.4-vista-procesos/fig-4.17-secuencia-terminar-etapa.puml`). La API autentica el JWT, verifica el permiso `etapas.avanzar_propias` y valida el cuerpo con Zod. Luego bloquea la fila de la etapa (`SELECT … FOR UPDATE`), verifica que el actor sea el responsable (404 si no lo es, para no revelar que la etapa existe) y que la versión coincida (409 si cambió: control de concurrencia optimista), y aplica todos los cambios en **una transacción ACID**: etapa terminada, consumos de insumo (que pueden disparar una alerta), siguiente etapa disponible y evento outbox.
 
-![Figura 4.16 — Secuencia CU-06: tramo síncrono](figuras/4.4-vista-procesos/fig-4.16-secuencia-terminar-etapa.png)
+![Figura 4.17 — Secuencia CU-06: tramo síncrono](figuras/4.4-vista-procesos/fig-4.17-secuencia-terminar-etapa.png)
 
-**Figura 4.17 — Secuencia del relay outbox: tramo asíncrono** (`diagramas/4.4-vista-procesos/fig-4.17-secuencia-relay-outbox.puml`). Cada 5 segundos el relay toma los eventos pendientes, los publica en MongoDB y envía el aviso push, sin alargar el tiempo de respuesta del operario. `FOR UPDATE SKIP LOCKED` y la escritura idempotente evitan duplicados si hay varias instancias.
+**Figura 4.18 — Secuencia del relay outbox: tramo asíncrono** (`diagramas/4.4-vista-procesos/fig-4.18-secuencia-relay-outbox.puml`). Cada 5 segundos el relay toma los eventos pendientes, los publica en MongoDB y envía el aviso push, sin alargar el tiempo de respuesta del operario. `FOR UPDATE SKIP LOCKED` y la escritura idempotente evitan duplicados si hay varias instancias.
 
-![Figura 4.17 — Secuencia del relay outbox: tramo asíncrono](figuras/4.4-vista-procesos/fig-4.17-secuencia-relay-outbox.png)
+![Figura 4.18 — Secuencia del relay outbox: tramo asíncrono](figuras/4.4-vista-procesos/fig-4.18-secuencia-relay-outbox.png)
 
 **Procesos de ejecución y concurrencia (Tabla 4.1):**
 
@@ -463,13 +472,13 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 
 *Simbología:* los nodos (cajas 3D) son dispositivos o entornos de ejecución y las nubes, proveedores. Los artefactos son los entregables desplegados (`dist/`, la imagen del contenedor y los *buckets*). Las líneas son rutas de comunicación etiquetadas con protocolo y puerto.
 
-**Figura 4.18 — Despliegue: topología de ejecución** (`diagramas/4.5-vista-fisica/fig-4.18-despliegue-ejecucion.puml`). Muestra dónde corre cada pieza en producción y cómo se comunican.
+**Figura 4.19 — Despliegue: topología de ejecución** (`diagramas/4.5-vista-fisica/fig-4.19-despliegue-ejecucion.puml`). Muestra dónde corre cada pieza en producción y cómo se comunican.
 
-![Figura 4.18 — Despliegue: topología de ejecución](figuras/4.5-vista-fisica/fig-4.18-despliegue-ejecucion.png)
+![Figura 4.19 — Despliegue: topología de ejecución](figuras/4.5-vista-fisica/fig-4.19-despliegue-ejecucion.png)
 
-**Figura 4.19 — Despliegue: integración continua, entrega y respaldos** (`diagramas/4.5-vista-fisica/fig-4.19-despliegue-cicd-respaldos.puml`). Separa del diagrama anterior las rutas que no atiende a usuarios: GitHub Actions despliega la web y la API, y ejecuta el respaldo nocturno cifrado hacia R2.
+**Figura 4.20 — Despliegue: integración continua, entrega y respaldos** (`diagramas/4.5-vista-fisica/fig-4.20-despliegue-cicd-respaldos.puml`). Separa del diagrama anterior las rutas que no atiende a usuarios: GitHub Actions despliega la web y la API, y ejecuta el respaldo nocturno cifrado hacia R2.
 
-![Figura 4.19 — Despliegue: integración continua, entrega y respaldos](figuras/4.5-vista-fisica/fig-4.19-despliegue-cicd-respaldos.png)
+![Figura 4.20 — Despliegue: integración continua, entrega y respaldos](figuras/4.5-vista-fisica/fig-4.20-despliegue-cicd-respaldos.png)
 
 *Topología:*
 
@@ -482,7 +491,7 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 
 **Ambientes:** *local* (Docker Compose con PostgreSQL y MongoDB), *staging* (rama Neon `staging`, servicio Render de *preview*) y *producción*.
 
-**Aprovisionamiento:** por el plazo acotado de construcción, los recursos de *staging* y producción se configuran desde los paneles de los proveedores. Cada uno se registra en un inventario del repositorio con su servicio, plan, región y variables de entorno. El ideal, planteado como mejora posterior, es declararlos como **infraestructura como código** para reproducir la topología de la Figura 4.18 con otro proveedor sin rediseñarla (sección 4.7, Tabla 4.3).
+**Aprovisionamiento:** por el plazo acotado de construcción, los recursos de *staging* y producción se configuran desde los paneles de los proveedores. Cada uno se registra en un inventario del repositorio con su servicio, plan, región y variables de entorno. El ideal, planteado como mejora posterior, es declararlos como **infraestructura como código** para reproducir la topología de la Figura 4.19 con otro proveedor sin rediseñarla (sección 4.7, Tabla 4.3).
 
 ### 4.6 Vista de escenarios o casos de uso (2.1.2.3)
 
@@ -490,17 +499,17 @@ Los once casos de uso se dividen en tres diagramas, uno por subsistema, para que
 
 *Simbología:* los actores (figuras) son roles externos al sistema y el rectángulo delimita la frontera de SGP-Kotoduo. Las elipses son casos de uso. Las líneas actor–caso indican participación. La flecha con triángulo indica generalización. `<<include>>` indica comportamiento obligatorio reutilizado y `<<extend>>`, comportamiento opcional bajo condición.
 
-**Figura 4.20 — Casos de uso: actores, acceso y administración** (`diagramas/4.6-vista-escenarios/fig-4.20-cu-acceso-administracion.puml`). Define la jerarquía de actores: todos los roles heredan de "Usuario autenticado" (y por tanto pueden iniciar sesión) y el Administrador hereda las capacidades de la Encargada.
+**Figura 4.21 — Casos de uso: actores, acceso y administración** (`diagramas/4.6-vista-escenarios/fig-4.21-cu-acceso-administracion.puml`). Define la jerarquía de actores: todos los roles heredan de "Usuario autenticado" (y por tanto pueden iniciar sesión) y el Administrador hereda las capacidades de la Encargada.
 
-![Figura 4.20 — Casos de uso: actores, acceso y administración](figuras/4.6-vista-escenarios/fig-4.20-cu-acceso-administracion.png)
+![Figura 4.21 — Casos de uso: actores, acceso y administración](figuras/4.6-vista-escenarios/fig-4.21-cu-acceso-administracion.png)
 
-**Figura 4.21 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión** (`diagramas/4.6-vista-escenarios/fig-4.21-cu-gestion-ordenes.puml`). Registrar una OT siempre genera sus etapas (`<<include>>`). El actor `<<sistema>>` "Planificador" representa el proceso programado de detección de atrasos.
+**Figura 4.22 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión** (`diagramas/4.6-vista-escenarios/fig-4.22-cu-gestion-ordenes.puml`). Registrar una OT siempre genera sus etapas (`<<include>>`). El actor `<<sistema>>` "Planificador" representa el proceso programado de detección de atrasos.
 
-![Figura 4.21 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión](figuras/4.6-vista-escenarios/fig-4.21-cu-gestion-ordenes.png)
+![Figura 4.22 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión](figuras/4.6-vista-escenarios/fig-4.22-cu-gestion-ordenes.png)
 
-**Figura 4.22 — Casos de uso: ejecución en el taller** (`diagramas/4.6-vista-escenarios/fig-4.22-cu-ejecucion-taller.puml`). Contiene el escenario crítico CU-06. Adjuntar evidencia o reportar un faltante extienden el avance de una etapa (`<<extend>>`), y todo avance notifica al siguiente responsable (`<<include>>`).
+**Figura 4.23 — Casos de uso: ejecución en el taller** (`diagramas/4.6-vista-escenarios/fig-4.23-cu-ejecucion-taller.puml`). Contiene el escenario crítico CU-06. Adjuntar evidencia o reportar un faltante extienden el avance de una etapa (`<<extend>>`), y todo avance notifica al siguiente responsable (`<<include>>`).
 
-![Figura 4.22 — Casos de uso: ejecución en el taller](figuras/4.6-vista-escenarios/fig-4.22-cu-ejecucion-taller.png)
+![Figura 4.23 — Casos de uso: ejecución en el taller](figuras/4.6-vista-escenarios/fig-4.23-cu-ejecucion-taller.png)
 
 | CU | Nombre | Actor principal | RF | HU |
 |---|---|---|---|---|
@@ -521,9 +530,9 @@ Los once casos de uso se dividen en tres diagramas, uno por subsistema, para que
 | Campo | Descripción |
 |---|---|
 | Actor | Operario (o Diseñador en etapas de diseño) |
-| Precondiciones | Sesión activa; la etapa está asignada al actor y en estado DISPONIBLE o EN_CURSO |
+| Precondiciones | Sesión activa; la etapa está asignada al actor y en estado DISPONIBLE o EN_CURSO; la OT no está DETENIDA |
 | Flujo básico | 1. El actor abre *Mi Trabajo* y selecciona la OT. 2. El sistema muestra la etapa, las instrucciones, los insumos requeridos y la siguiente área. 3. El actor pulsa **Iniciar**; el sistema cambia la etapa a EN_CURSO. 4. Al finalizar, el actor pulsa **Terminar** e ingresa los consumos reales. 5. El sistema registra la etapa como TERMINADA, descuenta el stock, habilita la siguiente etapa y notifica a su responsable. 6. El sistema muestra "Sigue: <etapa> en <área>". |
-| Flujos alternativos | 3a. Problema en la ejecución → **Reportar problema** con motivo → BLOQUEADA; se notifica a la Encargada. 4a. Insumo insuficiente → extiende CU-09. 4b. Adjuntar foto o nota → extensión "Registrar evidencia". 5a. Última etapa → la OT pasa a TERMINADA. |
+| Flujos alternativos | 3a. Problema en la ejecución → **Reportar problema** con motivo → BLOQUEADA; se notifica a la Encargada y la OT queda DETENIDA hasta que la Encargada desbloquee la etapa y reanude la OT. 4a. Insumo insuficiente → extiende CU-09. 4b. Adjuntar foto o nota → extensión "Registrar evidencia". 5a. Última etapa → la OT pasa a TERMINADA. |
 | Excepciones | E1. Otro usuario actualizó la etapa → 409 "La etapa cambió; recarga". E2. La etapa no pertenece al actor → 404, sin revelar que existe (AM-05). E3. Sin conexión → la PWA informa y conserva el formulario. |
 | Postcondiciones | El estado de la etapa y de la OT queda consistente; el evento queda en la bitácora; el siguiente responsable está notificado |
 | Reglas | Solo transiciones de la Fig. 4.7; el consumo no puede dejar stock negativo |
@@ -709,7 +718,7 @@ La retroalimentación se gestiona en dos rondas:
 | FB-01 | R0 / antecedentes | Contraparte Kotoduo (gerencia) | "Sería crear una app para el celular, así es más práctica para los trabajadores" | Incorporar | Diseño *mobile-first* como PWA instalable; navegación inferior en móvil (sección 4.7, 5.4) |
 | FB-02 | R0 / antecedentes | Contraparte Kotoduo | "Que sea un sistema fácil, práctico y amigable" | Incorporar | Inicio por rol con una sola tarea principal; botón primario único y contextual en P-03 (IK-3); lenguaje del taller |
 | FB-03 | R0 / antecedentes | Contraparte Kotoduo | Excluir "los contactos de clientes" y "temas de dinero" | Incorporar | P-04 sin teléfono, correo, precio ni pago; campo `referencia_cliente` limitado al nombre de la institución (sección 6.2) |
-| FB-04 | R0 / antecedentes | Contraparte Kotoduo | La aceptación del diseño es información relevante del proceso | Incorporar | Se agrega el módulo M6 y la pantalla P-05; la producción no se habilita sin diseño aprobado (Fig. 4.14) |
+| FB-04 | R0 / antecedentes | Contraparte Kotoduo | La aceptación del diseño es información relevante del proceso | Incorporar | Se agrega el módulo M6 y la pantalla P-05; la producción no se habilita sin diseño aprobado (Fig. 4.15) |
 | FB-05 | R0 / antecedentes | Contraparte Kotoduo | Trabajadores "sin quedar parados cuando no estén las personas a cargo" | Incorporar | El mensaje "Sigue: etapa — área — responsable" al terminar, y las instrucciones visibles en cada etapa, se convierten en el elemento central de P-03 |
 | FB-06 | R0 / antecedentes | Contraparte Kotoduo | Perfiles "administrador" y "de respuesta" | Incorporar con ajuste | Se refinan en 5 roles para respetar el mínimo privilegio; la equivalencia se valida en A01 (sección 7.1) |
 | FB-07 | R1 / [dd-mm] | [Operario 1] | [Completar tras la sesión A06] | [Incorporar / No incorporar] | [Cambio v1 → v2 y pantalla afectada] |
@@ -843,7 +852,7 @@ El modelo tiene **16 tablas** en el esquema `sgp`, agrupadas por módulo:
 | orden_trabajo | cantidad | INTEGER | NN, CK > 0 | Unidades a producir |
 | orden_trabajo | especificaciones | JSONB | NN, DF '{}', CK objeto | Tallas, medidas, colores |
 | orden_trabajo | prioridad | VARCHAR(10) | NN, CK ∈ {BAJA, NORMAL, ALTA, URGENTE} | Priorización en el panel |
-| orden_trabajo | estado | VARCHAR(20) | NN, CK ∈ {REGISTRADA, EN_DISENO, EN_PRODUCCION, DETENIDA, TERMINADA, ENTREGADA, ANULADA} | Ciclo de vida de la OT |
+| orden_trabajo | estado | VARCHAR(20) | NN, CK ∈ {REGISTRADA, EN_DISENO, EN_PRODUCCION, DETENIDA, TERMINADA, ENTREGADA, ANULADA}; trigger R2 | Ciclo de vida de la OT (Fig. 4.8) |
 | orden_trabajo | fecha_compromiso, fecha_estimada_termino | DATE | compromiso NN | Comprometida y calculada |
 | orden_trabajo | creado_por | UUID | NN, FK → usuario ON DELETE RESTRICT | Autor (trazabilidad) |
 | orden_trabajo | terminada_en | TIMESTAMPTZ | CK presente ⇔ estado ∈ {TERMINADA, ENTREGADA} | Cierre |
@@ -896,7 +905,7 @@ El modelo tiene **16 tablas** en el esquema `sgp`, agrupadas por módulo:
 | Regla | Mecanismo | Verificación |
 |---|---|---|
 | R1. `actualizado_en` siempre vigente | Trigger `fn_set_actualizado_en` | — |
-| R2. Solo transiciones de estado válidas en `etapa_orden`, con incremento de `version` | Trigger `trg_etapa_transicion` (lanza `check_violation`) | CP-02 |
+| R2. Solo transiciones de estado válidas en `etapa_orden` (Fig. 4.7) y en `orden_trabajo` (Fig. 4.8); en la etapa, con incremento de `version` | Triggers `trg_etapa_transicion` y `trg_orden_transicion` (lanzan `check_violation`) | CP-02 |
 | R3. Cada movimiento actualiza el stock; si queda ≤ mínimo, se crea **una** alerta automática | Trigger `trg_movimiento_insumo` + índice único parcial + `ON CONFLICT DO NOTHING` | CP-14, consulta 6 |
 | R4. Stock nunca negativo | `CHECK (stock_actual >= 0)` aborta la transacción completa | CP-14 |
 | R5. Bloqueo con motivo; terminada con fecha | `ck_etapa_bloqueo`, `ck_etapa_terminada` | CP-01 |
@@ -927,7 +936,7 @@ En esta etapa se fijan los **principios y buenas prácticas** con que se constru
 
 | Comportamiento esperado | Regla | Caso de prueba |
 |---|---|---|
-| Una transición inválida (p. ej., PENDIENTE → TERMINADA) es rechazada por la base de datos | R2 | CP-02 |
+| Una transición inválida (p. ej., PENDIENTE → TERMINADA en una etapa o TERMINADA → EN_PRODUCCION en una OT) es rechazada por la base de datos | R2 | CP-02 |
 | Terminar una etapa actualiza la etapa, habilita la siguiente y registra el evento outbox en una sola transacción | Transacción por caso de uso | CP-01, CP-11 |
 | Un consumo que dejaría stock negativo aborta la transacción completa | R4 | CP-14 |
 | Varios consumos bajo el mínimo generan **una sola** alerta automática abierta | R3 | CP-14 |
@@ -999,7 +1008,7 @@ El sistema gestiona principalmente información operativa, pero su indisponibili
 | Rol / perfil | Funciones permitidas | Información accesible | Restricciones |
 |---|---|---|---|
 | **Administrador** | Todo lo de la Encargada; crear, desactivar y restablecer usuarios; asignar roles; revocar sesiones; consultar la bitácora completa | Toda la información del sistema | MFA obligatorio; no puede eliminar registros de bitácora ni kardex; no se puede quitar a sí mismo el último rol Administrador (siempre existe al menos uno) |
-| **Encargada de Producción** | Gestionar plantillas, tipos de trabajo e insumos; ver todas las OT; asignar/reasignar responsables; omitir o desbloquear etapas; gestionar alertas; ver el panel; consultar la bitácora por OT | Todas las OT, etapas, insumos, alertas y panel; usuarios (solo nombre y área) | MFA obligatorio; sin gestión de usuarios ni roles |
+| **Encargada de Producción** | Gestionar plantillas, tipos de trabajo e insumos; ver todas las OT; asignar/reasignar responsables; omitir o desbloquear etapas; detener, reanudar o anular OT; gestionar alertas; ver el panel; consultar la bitácora por OT | Todas las OT, etapas, insumos, alertas y panel; usuarios (solo nombre y área) | MFA obligatorio; sin gestión de usuarios ni roles |
 | **Vendedor** | Crear OT; editar sus OT en estado REGISTRADA; registrar la respuesta del cliente al diseño; marcar una OT como ENTREGADA | Todas las OT (lectura) y su avance; versiones de diseño | No avanza etapas de producción; no gestiona insumos ni plantillas |
 | **Diseñador** | Ver y avanzar **sus** etapas de diseño; subir versiones de diseño; reportar faltantes | Sus etapas asignadas y las OT asociadas; stock (lectura) | No puede aprobar sus propios diseños (R6) |
 | **Operario** | Ver y avanzar **sus** etapas; registrar consumo; reportar faltante o problema; adjuntar evidencia | Solo las etapas asignadas a él y los datos de producción de esas OT; stock (lectura) | No ve el panel global, la bitácora ni etapas de otros; no edita OT |
@@ -1031,7 +1040,7 @@ El sistema gestiona principalmente información operativa, pero su indisponibili
 
 1. **Denegación por defecto:** toda ruta de la API declara su permiso. Una ruta sin `requierePermiso()` falla una prueba automatizada de inventario de rutas.
 2. **Autorización por propiedad (nivel de objeto):** el servicio verifica que el recurso pertenezca al actor, por ejemplo `etapa.responsable_id = actor.id`. Además, las consultas del Operario filtran en SQL por `responsable_id = $1`, de modo que nunca se cargan datos ajenos (prevención de IDOR, OWASP A01).
-3. **Autorización por estado:** una acción solo procede si el estado lo permite, por ejemplo no se termina una etapa PENDIENTE (Fig. 4.7).
+3. **Autorización por estado:** una acción solo procede si el estado lo permite, por ejemplo no se termina una etapa PENDIENTE ni se inicia una etapa de una OT DETENIDA (Fig. 4.7 y 4.8).
 
 La PWA oculta los botones no permitidos usando el **mismo mapa**, pero esa ocultación es solo usabilidad: la autoridad es siempre la API.
 
@@ -1049,6 +1058,7 @@ La PWA oculta los botones no permitidos usando el **mismo mapa**, pero esa ocult
 | `ordenes.ver_todas` | ✔ | ✔ | ✔ | — | — |
 | `ordenes.ver_asignadas` | ✔ | ✔ | ✔ | ◐ | ◐ |
 | `ordenes.anular` | ✔ | ✔ | — | — | — |
+| `ordenes.detener` (detener y reanudar) | ✔ | ✔ | — | — | — |
 | `ordenes.marcar_entregada` | ✔ | ✔ | ✔ | — | — |
 | `etapas.asignar` / `etapas.omitir` / `etapas.desbloquear` | ✔ | ✔ | — | — | — |
 | `etapas.avanzar_propias` (iniciar, terminar, bloquear) | ◐ | ◐ | — | ◐ | ◐ |
@@ -1071,7 +1081,7 @@ La PWA oculta los botones no permitidos usando el **mismo mapa**, pero esa ocult
 
 ### 7.4 Amenazas y medidas de mitigación (2.1.5.11)
 
-La metodología combina **STRIDE** (Shostack, 2014) sobre los flujos de la Fig. 4.18 con las categorías de **OWASP Top 10:2021**. El riesgo se calcula como probabilidad × impacto (Alto / Medio / Bajo).
+La metodología combina **STRIDE** (Shostack, 2014) sobre los flujos de la Fig. 4.19 con las categorías de **OWASP Top 10:2021**. El riesgo se calcula como probabilidad × impacto (Alto / Medio / Bajo).
 
 **Tabla 7.2 — Matriz de modelado de amenazas**
 
@@ -1268,14 +1278,14 @@ Las pruebas de usabilidad se hacen con usuarios reales de Kotoduo (mínimo 5, un
 
 | ID | HU / CU | Descripción | Precondición | Pasos / datos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|---|---|
-| CP-01 | HU-02 / CU-06 | Transiciones válidas de la etapa | — | `puedeTransicionar` para DISPONIBLE→EN_CURSO, EN_CURSO→TERMINADA, EN_CURSO→BLOQUEADA, BLOQUEADA→EN_CURSO | `true` en los 4 casos | [Completar tras ejecución] | Pendiente |
-| CP-02 | HU-02 / CU-06 | Transiciones inválidas rechazadas | — | PENDIENTE→TERMINADA, TERMINADA→EN_CURSO, DISPONIBLE→TERMINADA | `false`; en BD, el trigger lanza `check_violation` | [Completar] | Pendiente |
+| CP-01 | HU-02 / CU-06 | Transiciones válidas de la etapa | — | `EtapaOrden.puedeTransicionar` para DISPONIBLE→EN_CURSO, EN_CURSO→TERMINADA, EN_CURSO→BLOQUEADA, BLOQUEADA→EN_CURSO, DISPONIBLE→OMITIDA; `OrdenTrabajo.puedeTransicionar` para EN_PRODUCCION→DETENIDA, DETENIDA→EN_DISENO | `true` en los 7 casos | [Completar tras ejecución] | Pendiente |
+| CP-02 | HU-02 / CU-06 | Transiciones inválidas rechazadas | — | Etapa: PENDIENTE→TERMINADA, TERMINADA→EN_CURSO, DISPONIBLE→TERMINADA, EN_CURSO→OMITIDA con la OT activa; OT: TERMINADA→EN_PRODUCCION, DETENIDA→TERMINADA | `false`; en BD, el trigger lanza `check_violation` | [Completar] | Pendiente |
 | CP-03 | HU-07 / CU-04 | Generación de etapas desde la plantilla | Plantilla "Uniforme" con 6 etapas | `generarEtapas(tipo, cantidad=30)` | 6 etapas con secuencia 1..6; la primera DISPONIBLE y el resto PENDIENTE; requerimientos = cantidad × cantidad_por_unidad (p. ej., tela 36 m) | [Completar] | Pendiente |
 | CP-04 | HU-05 / CU-04 | Fecha estimada de término | Etapas con 23 h totales; registro el lunes 09:00 | `calcularFechaEstimada(jornada=8)` | Miércoles de la misma semana (3 jornadas hábiles); omite sábado y domingo | [Completar] | Pendiente |
 | CP-05 | HU-09 / CU-08 | Umbral de stock mínimo | — | `estaBajoMinimo` con stock 2/mín 2; 2,01/2; 0/0 | `true`, `false`, `true` (la regla es ≤) | [Completar] | Pendiente |
 | CP-06 | HU-05 / CU-04 | Validación de la OT | — | `NuevaOrdenSchema` con cantidad 0; título de 200 caracteres; campo extra `precio`; caso válido | Error en los 3 primeros (incluido el campo no permitido); éxito en el válido | [Completar] | Pendiente |
 | CP-07 | HU-11 / CU-01 | Política de contraseñas | Lista de claves comprometidas cargada | `validarPoliticaClave`: "abc12345678" (11), "contraseña123" (comprometida), "tinta plotter azul 2026" | Rechaza, rechaza, acepta | [Completar] | Pendiente |
-| CP-08 | HU-11 / CU-02 | Mapa de permisos | — | Verificar `PERMISOS_POR_ROL` contra la Tabla 7.1 (prueba tabular de 24 permisos × 5 roles) | 120 aserciones coinciden; Operario sin `ordenes.crear`; Diseñador sin `diseno.resolver` | [Completar] | Pendiente |
+| CP-08 | HU-11 / CU-02 | Mapa de permisos | — | Verificar `PERMISOS_POR_ROL` contra la Tabla 7.1 (prueba tabular de 25 permisos × 5 roles) | 125 aserciones coinciden; Operario sin `ordenes.crear`; Diseñador sin `diseno.resolver` | [Completar] | Pendiente |
 
 **Tabla 8.2 — Pruebas de integración (Supertest + Testcontainers)**
 
@@ -1284,7 +1294,7 @@ Las pruebas de usabilidad se hacen con usuarios reales de Kotoduo (mínimo 5, un
 | CP-09 | HU-11 / CU-01 | Login correcto de operario | Usuario `operario.sub` activo | `POST /api/v1/auth/login` con credenciales válidas | 200 con `accessToken` (JWT, `exp` = 10 min); cookie `__Host-sgp_rt` con `HttpOnly`, `Secure`, `SameSite=Strict`; evento LOGIN_EXITOSO en la bitácora | [Completar] | Pendiente |
 | CP-10 | HU-11 / CU-01 | MFA obligatorio para la Encargada | `encargada.prod` con MFA | Login → `POST /auth/mfa` con código TOTP válido y luego inválido | Primer paso: 200 `{mfaRequerido: true}` sin tokens; código válido: 200 con tokens; inválido: 401 | [Completar] | Pendiente |
 | CP-11 | HU-05, HU-12 / CU-04 | Registro de OT end-to-end en datos | Vendedor autenticado | `POST /api/v1/ordenes` (tipo 1, cantidad 30) | 201 con `codigo` OT-AAAA-NNNN; 6 etapas en PostgreSQL; ≤ 5 s después, documento ORDEN_REGISTRADA en `bitacora_eventos` con `_id = evt-n` | [Completar] | Pendiente |
-| CP-12 | HU-02 / CU-06 | Terminar etapa habilita la siguiente | Etapa 2 EN_CURSO asignada al operario | `POST /api/v1/etapas/{id}/terminar` `{version, consumos:[{insumoId:3, cantidad:0.6}]}` | 200 `{siguienteEtapa:"Sublimado", area:"Sublimación"}`; etapa 3 DISPONIBLE; stock descontado; notificación ETAPA_DISPONIBLE para el responsable de la etapa 3 | [Completar] | Pendiente |
+| CP-12 | HU-02 / CU-06 | Terminar etapa habilita la siguiente | Etapa 2 EN_CURSO asignada al operario | `POST /api/v1/etapas/{id}/terminar` `{version, consumos:[{insumoId:3, cantidad:0.6}]}` | 200 `{siguienteEtapa:"Sublimado", area:"Sublimación"}`; etapa 3 DISPONIBLE; stock descontado; notificación ETAPA_DISPONIBLE para el responsable de la etapa 3; variante con la etapa 3 OMITIDA: se habilita la etapa 4 | [Completar] | Pendiente |
 | CP-13 | HU-02 / CU-06 | Terminar la última etapa cierra la OT | Etapa 6 EN_CURSO | Terminar la etapa 6 | OT en estado TERMINADA con `terminada_en`; evento ORDEN_ESTADO_CAMBIADO | [Completar] | Pendiente |
 | CP-14 | HU-09 / CU-08 | Alerta automática única | Papel: stock 4, mínimo 2 | Dos consumos: −2,5 y −0,5; luego un consumo de −2 | Una sola alerta AUTOMATICA abierta; el tercer consumo (stock negativo) devuelve 409 y revierte la transacción completa | [Completar] | Pendiente |
 | CP-15 | HU-03 / CU-09 | Reporte manual de faltante | Operario con etapa EN_CURSO | `POST /api/v1/alertas` `{insumoId, etapaId, comentario}` | 201; alerta MANUAL con `reportada_por`; notificación ALERTA_INSUMO a los usuarios Encargada | [Completar] | Pendiente |
@@ -1507,14 +1517,14 @@ World Wide Web Consortium. (2023). *Web Content Accessibility Guidelines (WCAG) 
 
 - **Escala:** unos 25 usuarios y cerca de 30 OT por semana. Un solo proceso Node.js con un pool de 10 conexiones cubre el umbral de RNF-03 (p95 < 500 ms con 40 VU, CP-20).
 - **Equipo y costo:** son dos desarrolladores y no hay presupuesto definido (RNF-08). Los microservicios agregarían despliegues independientes, observabilidad distribuida y consistencia eventual en todas partes sin aportar valor al cliente.
-- **Evolución:** el monolito es **modular**. M1–M8 tienen límites explícitos (Fig. 4.10), con dependencias en una sola dirección (Fig. 4.12), y la integración asíncrona ya pasa por el outbox. Si en el futuro M5 se integrara con proveedores, se podría extraer sin reescribir el resto.
+- **Evolución:** el monolito es **modular**. M1–M8 tienen límites explícitos (Fig. 4.11), con dependencias en una sola dirección (Fig. 4.13), y la integración asíncrona ya pasa por el outbox. Si en el futuro M5 se integrara con proveedores, se podría extraer sin reescribir el resto.
 
 La coherencia se demuestra recorriendo el escenario CU-06 por todas las vistas:
 
 - **Lógica:** `EtapaOrden` y `EtapaService.terminar` (Fig. 4.3, 4.6 y 4.7).
-- **Desarrollo:** se implementa en el componente M4, paquete `modules/etapas` (Fig. 4.10–4.12).
-- **Procesos:** está en el bucle de producción, con concurrencia en el *fork* y trabajo del relay (Fig. 4.13, 4.15–4.17 y Tabla 4.1).
-- **Física:** se ejecuta en el contenedor de Render y persiste en Neon y Atlas (Fig. 4.18).
+- **Desarrollo:** se implementa en el componente M4, paquete `modules/etapas` (Fig. 4.11–4.13).
+- **Procesos:** está en el bucle de producción, con concurrencia en el *fork* y trabajo del relay (Fig. 4.14, 4.16–4.18 y Tabla 4.1).
+- **Física:** se ejecuta en el contenedor de Render y persiste en Neon y Atlas (Fig. 4.19).
 - **Verificación:** CP-01, CP-12, CP-19 y CP-27.
 
 Los nombres de módulos, entidades y roles son idénticos en todas las vistas.
@@ -1531,7 +1541,7 @@ Se descartó la doble escritura desde la API porque una caída entre ambas escri
 
 *Respuesta:* Es **defensa en profundidad** sobre las reglas cuya violación tendría más impacto en el negocio. La aplicación valida primero (`puedeTransicionar`) para dar mensajes claros al usuario. La base de datos garantiza la regla **ante cualquier cliente**: un error en una versión futura, un script de migración, una carga desde el Excel o una consulta manual de soporte.
 
-- El trigger `trg_etapa_transicion` rechaza, por ejemplo, PENDIENTE→TERMINADA (CP-02).
+- Los triggers `trg_etapa_transicion` y `trg_orden_transicion` rechazan, por ejemplo, PENDIENTE→TERMINADA en una etapa o TERMINADA→EN_PRODUCCION en una OT (CP-02).
 - `CHECK (stock_actual >= 0)` aborta la transacción **completa** si un consumo deja stock negativo, de modo que no queda una etapa terminada con el kardex inconsistente (CP-14).
 - El índice único parcial `ux_alerta_auto_abierta` con `ON CONFLICT DO NOTHING` garantiza **una** alerta automática abierta por insumo aun con consumos concurrentes, algo que la aplicación no puede asegurar sin bloqueos adicionales.
 

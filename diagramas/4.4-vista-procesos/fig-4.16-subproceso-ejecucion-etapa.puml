@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.15 — Subproceso: ejecución de una etapa (se repite por cada etapa)
+' Figura 4.16 — Subproceso: ejecución de una etapa (se repite por cada etapa)
 !include ../_comun/estilo.iuml
 skinparam swimlaneWidth same
 

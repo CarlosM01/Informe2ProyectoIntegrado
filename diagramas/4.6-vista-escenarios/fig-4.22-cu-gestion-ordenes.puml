@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.21 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión
+' Figura 4.22 — Casos de uso: gestión de órdenes, diseño, insumos y supervisión
 !include ../_comun/estilo.iuml
 skinparam actorStyle awesome
 left to right direction

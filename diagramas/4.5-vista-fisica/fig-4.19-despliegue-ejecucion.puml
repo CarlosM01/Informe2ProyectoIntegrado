@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.18 — Despliegue: topología de ejecución en producción
+' Figura 4.19 — Despliegue: topología de ejecución en producción
 !include ../_comun/estilo.iuml
 
 node "Smartphone del trabajador\n(Android 10+ / iOS 16.4+)" as MOV {

@@ -33,6 +33,7 @@ class OrdenTrabajo {
   + etapaActual() : EtapaOrden
   + calcularFechaEstimada(jornadaHoras : int) : Date
   + porcentajeAvance() : int
+  + puedeTransicionar(destino : EstadoOrden) : Boolean
 }
 class EtapaOrden {
   - id : UUID

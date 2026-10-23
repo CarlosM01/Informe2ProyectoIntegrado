@@ -1,9 +1,9 @@
 @startuml
-' Figura 4.10 — Componentes de la API REST (apps/api)
+' Figura 4.11 — Componentes de la API REST (apps/api)
 !include ../_comun/estilo.iuml
 skinparam componentStyle uml2
 
-component "Cliente API\nde la PWA (Fig. 4.9)" as CLI <<ref>>
+component "Cliente API\nde la PWA (Fig. 4.10)" as CLI <<ref>>
 
 package "apps/api — API REST (Node.js + Express)" {
   portin "HTTPS /api/v1" as REST

@@ -17,11 +17,11 @@ Repositorio del **Informe N.º 2** del Proyecto Integrado (Unidad 2, INACAP). Co
 │   ├── _comun/estilo.iuml       #   Estilo compartido por todas las figuras
 │   ├── render.sh                #   Regenera todas las imágenes en figuras/
 │   ├── 4.1-vista-general/       #   Fig. 4.1
-│   ├── 4.2-vista-logica/        #   Fig. 4.2–4.7 (4+1: lógica)
-│   ├── 4.3-vista-desarrollo/    #   Fig. 4.8–4.12 (4+1: desarrollo)
-│   ├── 4.4-vista-procesos/      #   Fig. 4.13–4.17 (4+1: procesos)
-│   ├── 4.5-vista-fisica/        #   Fig. 4.18–4.19 (4+1: física)
-│   ├── 4.6-vista-escenarios/    #   Fig. 4.20–4.22 (4+1: escenarios)
+│   ├── 4.2-vista-logica/        #   Fig. 4.2–4.8 (4+1: lógica)
+│   ├── 4.3-vista-desarrollo/    #   Fig. 4.9–4.13 (4+1: desarrollo)
+│   ├── 4.4-vista-procesos/      #   Fig. 4.14–4.18 (4+1: procesos)
+│   ├── 4.5-vista-fisica/        #   Fig. 4.19–4.20 (4+1: física)
+│   ├── 4.6-vista-escenarios/    #   Fig. 4.21–4.23 (4+1: escenarios)
 │   ├── 5.2-navegacion/          #   Fig. 5.1–5.3
 │   └── 6.1-modelo-datos/        #   Fig. 6.1–6.5
 ├── figuras/                     # Imágenes PNG renderizadas (mismas carpetas y nombres)

@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.12 — Regla de dependencias por capas (API y PWA)
+' Figura 4.13 — Regla de dependencias por capas (API y PWA)
 ' Todas las flechas son <<import>>.
 !include ../_comun/estilo.iuml
 set separator none

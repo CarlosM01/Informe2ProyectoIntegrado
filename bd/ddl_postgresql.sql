@@ -280,17 +280,23 @@ CREATE TRIGGER trg_ot_actualizado       BEFORE UPDATE ON orden_trabajo
 CREATE TRIGGER trg_insumo_actualizado   BEFORE UPDATE ON insumo
     FOR EACH ROW EXECUTE FUNCTION fn_set_actualizado_en();
 
--- R2. Máquina de estados de etapa_orden: solo transiciones permitidas
+-- R2. Máquina de estados de etapa_orden (Fig. 4.7): solo transiciones permitidas.
+-- EN_CURSO y BLOQUEADA solo pasan a OMITIDA cuando la OT fue anulada.
 CREATE FUNCTION fn_validar_transicion_etapa() RETURNS trigger LANGUAGE plpgsql AS $$
+DECLARE
+    v_estado_ot VARCHAR(20);
 BEGIN
     IF NEW.estado = OLD.estado THEN
         RETURN NEW;
     END IF;
+    SELECT estado INTO v_estado_ot FROM orden_trabajo WHERE id = NEW.orden_id;
     IF NOT (
         (OLD.estado = 'PENDIENTE'  AND NEW.estado IN ('DISPONIBLE','OMITIDA')) OR
         (OLD.estado = 'DISPONIBLE' AND NEW.estado IN ('EN_CURSO','OMITIDA'))   OR
         (OLD.estado = 'EN_CURSO'   AND NEW.estado IN ('TERMINADA','BLOQUEADA')) OR
-        (OLD.estado = 'BLOQUEADA'  AND NEW.estado = 'EN_CURSO')
+        (OLD.estado = 'BLOQUEADA'  AND NEW.estado = 'EN_CURSO')               OR
+        (OLD.estado IN ('EN_CURSO','BLOQUEADA') AND NEW.estado = 'OMITIDA'
+             AND v_estado_ot = 'ANULADA')
     ) THEN
         RAISE EXCEPTION 'Transición de etapa no permitida: % -> %', OLD.estado, NEW.estado
             USING ERRCODE = 'check_violation';
@@ -301,6 +307,29 @@ END $$;
 
 CREATE TRIGGER trg_etapa_transicion BEFORE UPDATE OF estado ON etapa_orden
     FOR EACH ROW EXECUTE FUNCTION fn_validar_transicion_etapa();
+
+-- R2. Máquina de estados de orden_trabajo (Fig. 4.8). DETENIDA vuelve al subestado
+-- previo (EN_DISENO o EN_PRODUCCION); la aplicación elige el destino.
+CREATE FUNCTION fn_validar_transicion_orden() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+    IF NEW.estado = OLD.estado THEN
+        RETURN NEW;
+    END IF;
+    IF NOT (
+        (OLD.estado = 'REGISTRADA'    AND NEW.estado IN ('EN_PRODUCCION','ANULADA'))               OR
+        (OLD.estado = 'EN_DISENO'     AND NEW.estado IN ('EN_PRODUCCION','DETENIDA','ANULADA'))    OR
+        (OLD.estado = 'EN_PRODUCCION' AND NEW.estado IN ('DETENIDA','TERMINADA','ANULADA'))        OR
+        (OLD.estado = 'DETENIDA'      AND NEW.estado IN ('EN_DISENO','EN_PRODUCCION','ANULADA'))   OR
+        (OLD.estado = 'TERMINADA'     AND NEW.estado = 'ENTREGADA')
+    ) THEN
+        RAISE EXCEPTION 'Transición de orden no permitida: % -> %', OLD.estado, NEW.estado
+            USING ERRCODE = 'check_violation';
+    END IF;
+    RETURN NEW;
+END $$;
+
+CREATE TRIGGER trg_orden_transicion BEFORE UPDATE OF estado ON orden_trabajo
+    FOR EACH ROW EXECUTE FUNCTION fn_validar_transicion_orden();
 
 -- R3. Kardex: cada movimiento actualiza el stock y genera alerta automática bajo mínimo
 CREATE FUNCTION fn_aplicar_movimiento_insumo() RETURNS trigger LANGUAGE plpgsql AS $$

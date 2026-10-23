@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.17 — Secuencia del relay outbox: tramo asíncrono (cada 5 s)
+' Figura 4.18 — Secuencia del relay outbox: tramo asíncrono (cada 5 s)
 !include ../_comun/estilo.iuml
 autonumber
 hide footbox

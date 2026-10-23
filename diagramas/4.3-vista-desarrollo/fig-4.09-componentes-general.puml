@@ -1,11 +1,11 @@
 @startuml
-' Figura 4.8 — Componentes: visión general (detalle en Fig. 4.9 y 4.10)
+' Figura 4.9 — Componentes: visión general (detalle en Fig. 4.10 y 4.11)
 !include ../_comun/estilo.iuml
 skinparam componentStyle uml2
 left to right direction
 
 package "apps/web — PWA" as WEB {
-  component "Módulos de UI\n(Fig. 4.9)" as UI
+  component "Módulos de UI\n(Fig. 4.10)" as UI
   component "Cliente API" as CLI
   component "Service Worker" as SW
 }
@@ -17,7 +17,7 @@ package "packages/shared" as SH {
 
 package "apps/api — API REST" as API {
   portin "HTTPS /api/v1" as REST
-  component "Módulos M1–M8\n(Fig. 4.10)" as MOD
+  component "Módulos M1–M8\n(Fig. 4.11)" as MOD
   component "Infra\n(clientes externos)" as INFRA
 }
 

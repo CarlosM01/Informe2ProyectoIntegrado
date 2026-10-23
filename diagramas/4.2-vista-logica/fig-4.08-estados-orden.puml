@@ -1,0 +1,28 @@
+@startuml
+' Figura 4.8 — Máquina de estados de OrdenTrabajo
+' (implementada en OrdenTrabajo.puedeTransicionar() y en el trigger trg_orden_transicion)
+!include ../_comun/estilo.iuml
+hide empty description
+
+state "Activa" as Activa {
+  state "En proceso" as Proceso {
+    state EN_DISENO
+    state EN_PRODUCCION
+    EN_DISENO --> EN_DISENO : diseño RECHAZADO\n[motivo obligatorio]\n/ nueva versión
+    EN_DISENO --> EN_PRODUCCION : diseño APROBADO\n/ etapa de diseño TERMINADA
+  }
+  state c <<choice>>
+  [*] --> c : Vendedor registra la OT
+  c --> REGISTRADA : [tipo sin diseño]
+  c --> EN_DISENO : [tipo requiere diseño]
+  REGISTRADA --> EN_PRODUCCION : primera etapa iniciada
+  Proceso -right-> DETENIDA : etapa BLOQUEADA (automático)\no Encargada "Detener"\n[motivo obligatorio]
+  DETENIDA --> Proceso[H] : Encargada "Reanudar"\n[ninguna etapa BLOQUEADA]
+}
+
+EN_PRODUCCION --> TERMINADA : última etapa cerrada\n[todas TERMINADA u OMITIDA]\n/ terminada_en := ahora
+TERMINADA --> ENTREGADA : "Marcar entregada"
+Activa --> ANULADA : "Anular"\n[motivo obligatorio]\n/ etapas abiertas → OMITIDA
+ENTREGADA --> [*]
+ANULADA --> [*]
+@enduml

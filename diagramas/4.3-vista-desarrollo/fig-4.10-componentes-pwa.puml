@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.9 — Componentes de la PWA (apps/web)
+' Figura 4.10 — Componentes de la PWA (apps/web)
 !include ../_comun/estilo.iuml
 skinparam componentStyle uml2
 
@@ -22,7 +22,7 @@ package "apps/web — PWA (React + TypeScript)" {
 }
 
 component "packages/shared\n(Zod + permisos)" as SH <<ref>>
-component "API REST\n(Fig. 4.10)" as API <<ref>>
+component "API REST\n(Fig. 4.11)" as API <<ref>>
 cloud "Cloudflare R2" as R2
 cloud "Servicio Web Push" as PUSH
 

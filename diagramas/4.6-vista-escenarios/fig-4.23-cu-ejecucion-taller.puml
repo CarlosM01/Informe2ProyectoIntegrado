@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.22 — Casos de uso: ejecución en el taller (escenario crítico CU-06)
+' Figura 4.23 — Casos de uso: ejecución en el taller (escenario crítico CU-06)
 !include ../_comun/estilo.iuml
 skinparam actorStyle awesome
 left to right direction

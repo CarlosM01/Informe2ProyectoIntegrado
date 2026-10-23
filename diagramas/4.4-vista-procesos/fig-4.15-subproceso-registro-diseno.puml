@@ -1,5 +1,5 @@
 @startuml
-' Figura 4.14 — Subproceso: registro de la orden y aprobación de diseño
+' Figura 4.15 — Subproceso: registro de la orden y aprobación de diseño
 !include ../_comun/estilo.iuml
 skinparam swimlaneWidth same
 
