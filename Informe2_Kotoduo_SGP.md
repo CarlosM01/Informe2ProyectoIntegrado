@@ -15,12 +15,7 @@
 
 ## Guía de lectura
 
-El informe se organiza en dos niveles, para que pueda leerse de corrido sin perder el detalle:
-
-- **Cuerpo (capítulos 1 a 9):** presenta las decisiones, su justificación, los diagramas y tablas de resumen.
-- **Anexos (capítulo 13):** reúnen las tablas extensas de consulta (plan de actividades, dependencias, tecnologías, diccionario de datos, amenazas, patrones de codificación segura y casos de prueba) y los artefactos externos (diagramas, scripts de base de datos y prototipo). Cada resumen del cuerpo indica qué tabla del anexo lo detalla.
-
-Los capítulos 10 a 12 contienen las referencias, la preparación para la defensa oral y el manifiesto de uso de inteligencia artificial.
+Los capítulos 1 a 9 explican las decisiones de diseño con sus diagramas y tablas de resumen. Los anexos (capítulo 12) reúnen las tablas largas de consulta, y cada resumen indica qué anexo lo detalla.
 
 **Códigos usados en el informe**
 
@@ -40,43 +35,29 @@ Los capítulos 10 a 12 contienen las referencias, la preparación para la defens
 | AM-nn | Amenaza del modelo de amenazas | Sección 7.4 y Anexo K |
 | CP-nn | Caso de prueba | Capítulo 8 y Anexo L |
 
-## Tabla de contenidos
-
-1. Introducción
-2. Síntesis de la solución propuesta
-3. Planificación del proyecto
-4. Arquitectura de la solución
-5. Diseño de interfaces de usuario
-6. Diseño e implementación del modelo de datos
-7. Seguridad y estándares de programación segura
-8. Plan de pruebas
-9. Conclusiones
-10. Referencias
-11. Preparación para la defensa oral
-12. Manifiesto de uso de inteligencia artificial
-13. Anexos
-
 ---
 
 ## 1. Introducción
 
-Kotoduo es una agencia publicitaria de Temuco que fabrica ropa deportiva, corporativa y escolar, letreros, souvenirs y papelería. Sus procesos incluyen bordado industrial, sublimación, impresión en gran formato, grabado e instalación. Atiende a colegios, clubes deportivos, municipalidades, fundaciones y empresas. El diagnóstico de la Unidad 1 identificó el problema central confirmado por la contraparte: **los trabajadores no saben con certeza en qué proceso va una fabricación ni a qué área corresponde continuar**. La producción se detiene cuando no están las personas a cargo (Bianca, Berny, René), lo que genera atrasos permanentes. Hoy el seguimiento depende de un Excel y de la memoria de la encargada de producción. La información está duplicada entre ERP, Softland, formularios, correo y WhatsApp, sin integración. A esto se suma una gestión reactiva de insumos, como tinta de plotter o papel de sublimación agotados, que solo se detecta cuando el trabajo ya debía comenzar.
+Kotoduo es una agencia publicitaria de Temuco. Fabrica ropa deportiva, corporativa y escolar, letreros, souvenirs y papelería, con procesos de bordado, sublimación, impresión en gran formato, grabado e instalación. Sus clientes son colegios, clubes deportivos, municipalidades, fundaciones y empresas.
 
-Este informe traduce ese diagnóstico en un **diseño de software verificable**. Cubre la planificación Scrum de la construcción, la arquitectura según el modelo 4+1 de Kruchten, la tecnología e infraestructura, el diseño de interfaces con prototipo navegable, el modelo de datos estructurado y no estructurado, la seguridad y el plan de pruebas. Cada decisión se justifica frente a tres criterios de éxito expresados por el cliente:
+El diagnóstico de la Unidad 1 dejó un problema central, confirmado por la contraparte: **los trabajadores no saben con certeza en qué proceso va una fabricación ni a qué área le toca seguir**. Cuando faltan las personas a cargo (Bianca, Berny o René), la producción se detiene. El seguimiento vive en un Excel y en la memoria de la encargada de producción, y la información se repite entre el ERP, Softland, formularios, correo y WhatsApp. Además, los insumos se gestionan tarde: la falta de tinta o de papel de sublimación se descubre cuando el trabajo ya debía empezar.
 
-1. **Autonomía del trabajador:** el trabajador sabe qué hacer después sin depender de una persona encargada.
-2. **Simplicidad:** un sistema "fácil, práctico y amigable", accesible desde el celular.
-3. **Alcance acotado:** sin contactos de clientes, sin dinero y con presupuesto no definido.
+Este informe convierte ese diagnóstico en un diseño que se puede verificar: planificación, arquitectura 4+1, tecnologías, interfaces con prototipo, modelo de datos, seguridad y plan de pruebas. Cada decisión se justifica con tres criterios que pidió el cliente:
 
-La expectativa de "una app para el celular" se interpreta como un **requisito de acceso y usabilidad** y no como una tecnología impuesta. Por eso se opta por una Aplicación Web Progresiva (PWA) instalable, cuya justificación se presenta en la sección 4.7.
+1. **Autonomía:** el trabajador sabe qué hacer después sin depender de una encargada.
+2. **Simplicidad:** un sistema "fácil, práctico y amigable", que se use desde el celular.
+3. **Alcance acotado:** sin contactos de clientes, sin temas de dinero y sin un presupuesto definido.
+
+La petición de "una app para el celular" se entiende como una necesidad de acceso y facilidad de uso, no como una tecnología obligada. Por eso la solución es una aplicación web progresiva (PWA) instalable (sección 4.7).
 
 ## 2. Síntesis de la solución propuesta
 
-**SGP-Kotoduo** es un sistema web progresivo de apoyo a la producción. Centraliza cada trabajo desde su ingreso hasta su entrega, lo modela como una **orden de trabajo (OT)** compuesta por **etapas** generadas a partir de **plantillas de proceso** por tipo de trabajo, e indica a cada trabajador su **siguiente actividad, área e instrucciones**. Además, anticipa faltantes de insumos y deja trazabilidad de cada acción.
+**SGP-Kotoduo** es una aplicación web progresiva que acompaña cada trabajo desde su ingreso hasta la entrega. Cada trabajo es una **orden de trabajo (OT)** con **etapas** que se generan desde una **plantilla de proceso** según el tipo de trabajo. Así, cada trabajador ve su siguiente actividad, el área y las instrucciones. El sistema también avisa antes de que falte un insumo y registra quién hizo cada cambio.
 
-**Alcance de la versión 1.0:** registro y seguimiento de OT, plantillas de proceso, avance de etapas desde el móvil, aprobación de diseño, insumos con alertas, panel de supervisión, bitácora de auditoría y control de acceso por roles. **Fuera de alcance** (por decisión del cliente o por delimitación): datos de contacto de clientes, precios, pagos y facturación, integración con Softland o el ERP, compras automáticas a proveedores y remuneraciones.
+**Alcance de la versión 1.0:** registro y seguimiento de OT, plantillas de proceso, avance de etapas desde el celular, aprobación de diseño, insumos con alertas, panel de supervisión, bitácora de auditoría y control de acceso por roles. **Queda fuera,** por decisión del cliente o para acotar el proyecto: contactos de clientes, precios, pagos y facturación, integración con Softland o el ERP, compras automáticas y remuneraciones.
 
-**Usuarios:** Administrador, Encargada de Producción, Vendedor, Diseñador y Operario. Estos roles formalizan los perfiles "administrador" y "de respuesta" mencionados por la contraparte.
+**Usuarios:** Administrador, Encargada de Producción, Vendedor, Diseñador y Operario. Estos cinco roles formalizan los perfiles "administrador" y "de respuesta" que mencionó la contraparte.
 
 **Módulos:**
 
@@ -93,7 +74,7 @@ La expectativa de "una app para el celular" se interpreta como un **requisito de
 
 ### 2.1 Línea base de requerimientos (Informe N.º 1)
 
-La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Origen" distingue lo **confirmado (C)** por la contraparte de lo que se trabaja como **supuesto (S)**, pendiente de validación en la actividad A01.
+Estos son los requerimientos priorizados en la Unidad 1. La columna "Origen" separa lo **confirmado (C)** por la contraparte de lo que todavía es un **supuesto (S)**, que se valida en la actividad A01.
 
 | ID | Requerimiento funcional | Origen | Prioridad (MoSCoW) |
 |---|---|---|---|
@@ -137,30 +118,15 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 | HU-11 | Como **Administrador** quiero gestionar usuarios y roles para controlar el acceso | RF-01 |
 | HU-12 | Como **Administrador** quiero consultar la bitácora para saber quién cambió qué y cuándo | RF-12 |
 
-### 2.2 Trazabilidad necesidad → componente → evidencia
-
-| Necesidad / requerimiento de origen | Componente de la solución que responde | Evidencia en este informe |
-|---|---|---|
-| Trabajadores no saben la siguiente etapa ni el área (RF-05, RF-06; HU-01, HU-02) | M4 Mi Trabajo + máquina de estados de etapa + notificación push | Fig. 4.17, Fig. 4.7, CU-05/CU-06, pantallas P-02/P-03, CP-01, CP-12, CP-33 |
-| Proceso en Excel y memoria de una persona (RF-02, RF-04; HU-07) | M2 Plantillas de Proceso + generación automática de etapas | Fig. 4.3, tablas `plantilla_etapa` y `etapa_orden`, P-07, CP-03, CP-11 |
-| Información duplicada y dispersa (RF-03; HU-05) | M3 Órdenes de Trabajo como fuente única + PostgreSQL | Sección 6.1–6.3, P-04, CP-06, CP-11 |
-| Gestión reactiva de insumos (RF-09, RF-10; HU-03, HU-09) | M5 Insumos y Alertas: kardex con trigger de alerta y faltantes proyectados | Sección 6.2 (R3), Fig. 4.15, P-08, CP-05, CP-14, CP-15 |
-| Aceptación del diseño sin registro formal (RF-08; HU-06) | M6 Aprobación de Diseño con versiones y segregación de funciones | Fig. 4.15, tabla `aprobacion_diseno`, P-05, CP-16 |
-| Falta de visibilidad global del avance (RF-11; HU-10) | M7 Panel de Supervisión + vista `v_panel_ordenes` | P-06, CP-18, CP-23 |
-| Usuarios y permisos diferenciados (RF-01; HU-11) | M1 + RBAC compartido entre front-end y API | Secciones 7.1–7.3, CP-09, CP-10, CP-27, CP-28 |
-| Trazabilidad de cambios y responsables (RF-12; HU-12) | M8 Bitácora: outbox transaccional → MongoDB | Secciones 6.4–6.5, Fig. 4.18, CP-11 |
-| App práctica para celular (RNF-01, RNF-02) | PWA *mobile-first* instalable | Secciones 4.7 y 5.4, CP-22, CP-34 |
-| Sin presupuesto definido (RNF-08) | Servicios gestionados con capa gratuita o de bajo costo; infraestructura como código como mejora ideal para cambiar de proveedor sin rediseñar | Sección 4.7 (Tablas 4.2 y 4.3) |
-
 ---
 
 ## 3. Planificación del proyecto
 
 ### 3.1 Actividades, fases, plazos y responsables
 
-**Metodología.** Se adopta **Scrum** (Schwaber & Sutherland, 2020). Los requerimientos están parcialmente confirmados (sección 2.1) y la contraparte debe validar flujos, roles y alcance de insumos. Un enfoque iterativo con revisiones frecuentes reduce el riesgo de construir sobre supuestos erróneos. Kanban se descartó como marco principal porque el proyecto tiene hitos académicos fijos que requieren compromisos por iteración. El tablero Kanban se usa, en cambio, para visualizar cada Sprint Backlog.
+**Metodología: Scrum** (Schwaber & Sutherland, 2020). Parte de los requerimientos todavía son supuestos, y la contraparte debe validar flujos, roles y el alcance de los insumos. Iterar con revisiones frecuentes evita construir sobre supuestos equivocados. Kanban no se eligió como marco principal porque el curso tiene hitos fijos que piden compromisos por iteración; sí se usa su tablero para seguir cada Sprint Backlog.
 
-**Desarrollo asistido por IA y supuesto de capacidad.** La construcción dispone de aproximadamente un mes (20 días hábiles). El equipo usa asistentes de codificación basados en IA para generar código, migraciones, pruebas automatizadas y documentación técnica a partir del contrato OpenAPI, el DDL y las HU. Con estas herramientas, escribir código deja de ser la restricción del proyecto. El cuello de botella pasa a ser la **verificación**: revisión humana de cada PR, ejecución y análisis de pruebas, pruebas de seguridad, validación con el cliente y pruebas de usabilidad con trabajadores reales. Por eso, las duraciones del plan detallado (Anexo H, Tabla H.1) se estiman según el esfuerzo de verificación de cada actividad, no según el esfuerzo de escribir el código. Las actividades de prueba conservan una mayor proporción del tiempo de cada Sprint. El riesgo de que el código generado introduzca defectos se controla con la Definition of Done: ningún incremento se acepta sin revisión humana, pruebas en verde y análisis de seguridad.
+**Supuesto de capacidad.** La construcción dura un mes (20 días hábiles) y el equipo usa asistentes de IA para generar código, migraciones, pruebas y documentación. Con eso, el cuello de botella deja de ser escribir código y pasa a ser **verificarlo**: revisar cada PR, ejecutar pruebas, validar con el cliente y probar con trabajadores reales. Por eso las duraciones del plan se estiman según el esfuerzo de verificación, y la Definition of Done no acepta código sin revisión humana, pruebas en verde y análisis de seguridad.
 
 **Configuración del marco:**
 
@@ -168,22 +134,22 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 |---|---|
 | Product Owner | Representante de Kotoduo (por validar: Koto o Bianca). **Integrante 2** actúa como PO proxy: mantiene y prioriza el backlog entre reuniones con el cliente |
 | Scrum Master | **Integrante 1**: facilita los eventos, gestiona impedimentos y vigila el burndown |
-| Equipo de desarrollo | Integrante 1 (back-end, datos, seguridad, infraestructura) y Integrante 2 (UX/UI, front-end, pruebas) |
-| Duración del Sprint | Sprint 0: 10 días hábiles (diseño). Sprints 1–4: 5 días hábiles (1 semana) cada uno; la construcción completa dura 20 días hábiles (≈ 1 mes) |
-| Capacidad | ≈ 4 h/día por integrante, dedicadas principalmente a especificar, revisar y verificar el código generado con asistencia de IA; velocidad objetivo de 21–26 story points (SP) por Sprint semanal, limitada por la capacidad de verificación |
-| Plazos | **Relativos, en días hábiles (D1…D30)** desde el inicio del proyecto; sin fechas calendario fijas |
-| Eventos | Planning (día 1 de cada Sprint, 2 h); Daily asíncrona (15 min, mensaje en canal del equipo); Review con el cliente y Retrospectiva (día 5 de cada Sprint) |
+| Equipo de desarrollo | Integrante 1 (back-end, datos, seguridad, infraestructura) e Integrante 2 (UX/UI, front-end, pruebas) |
+| Duración del Sprint | Sprint 0: 10 días hábiles (diseño). Sprints 1–4: 5 días hábiles cada uno; la construcción dura 20 días hábiles (≈ 1 mes) |
+| Capacidad | ≈ 4 h/día por integrante, dedicadas sobre todo a especificar, revisar y verificar; velocidad objetivo de 21–26 story points (SP) por Sprint |
+| Plazos | Relativos, en días hábiles (D1…D30) desde el inicio del proyecto |
+| Eventos | Planning (día 1 de cada Sprint, 2 h); Daily asíncrona (15 min por el canal del equipo); Review con el cliente y Retrospectiva (día 5) |
 | Definition of Ready | HU con criterios de aceptación, maqueta asociada, dependencias resueltas y estimación en SP |
-| Definition of Done | Código (incluido el generado con asistencia de IA) revisado por el otro integrante (PR), pruebas unitarias e integración en verde en CI, sin hallazgos High en análisis de seguridad, desplegado en staging y validado por el PO proxy |
+| Definition of Done | Código revisado por el otro integrante (PR), pruebas unitarias y de integración en verde en CI, sin hallazgos High en el análisis de seguridad, desplegado en staging y validado por el PO proxy |
 
-**Asignación por capacidades.** Se asigna a cada integrante un responsable principal por actividad para no diluir la responsabilidad.
+**Responsables.** Cada actividad tiene un solo responsable principal, para que la responsabilidad no se diluya.
 
 | Integrante | Rol | Capacidad considerada | Responsabilidad principal |
 |---|---|---|---|
 | Integrante 1 | Scrum Master / Arquitecto / Back-end | Modelado de datos, programación de servicios, seguridad e infraestructura cloud | A00, A03, A05, A07, A09–A12, A14, A16, A18, A20, A21, A24, A26, A27, A29 |
 | Integrante 2 | PO proxy / UX-UI / Front-end / QA | Levantamiento con usuarios, diseño de interfaces, desarrollo web y diseño de pruebas | A01, A02, A04, A06, A08, A13, A15, A17, A19, A22, A23, A25, A28, A30, A31 |
 
-**Product Backlog priorizado (Tabla 3.1).**
+**Tabla 3.1 — Product Backlog priorizado**
 
 | Orden | Ítem | Descripción | SP | Prioridad | Sprint |
 |---|---|---|---|---|---|
@@ -203,7 +169,9 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 | 14 | TE-02 | Habilitador: pruebas no funcionales, endurecimiento y piloto | 8 | Alta | S4 |
 | | | **Total** | **89** | | |
 
-**Plan por Sprint (Tabla 3.2).** Resume el cronograma de 30 días hábiles y sustituye a la carta Gantt. El detalle de las 32 actividades (A00–A31), con su entregable, responsable, día de inicio, día de término y duración, está en el **Anexo H (Tabla H.1)**.
+La Tabla 3.2 resume el cronograma de 30 días hábiles y reemplaza a la carta Gantt. El detalle de las 32 actividades (A00–A31), con entregable, responsable, inicio, término y duración, está en el Anexo H (Tabla H.1).
+
+**Tabla 3.2 — Plan por Sprint**
 
 | | Sprint 0 (D1–D10) | Sprint 1 (D11–D15) | Sprint 2 (D16–D20) | Sprint 3 (D21–D25) | Sprint 4 (D26–D30) |
 |---|---|---|---|---|---|
@@ -214,60 +182,58 @@ La tabla consolida los requerimientos priorizados en la Unidad 1. La columna "Or
 | **Incremento** | Informe N.º 2 + prototipo | Login + MFA + plantillas | Flujo productivo completo | Alertas, aprobación y evidencias | Piloto en producción |
 | **Review con cliente** | D10 (**Hito H1**) | D15 | D20 | D25 | D30 (**Hito H2**) |
 
-Los días D15, D20 y D25 se reservan para Sprint Review y Retrospectiva por la mañana y para **buffer de contingencia** por la tarde. Cada Sprint de construcción tiene así 4 días de trabajo planificado y una holgura explícita de medio día. Los días 1 de cada Sprint (D11, D16, D21, D26) comienzan con la Sprint Planning de 2 h. En el Sprint 4, las actividades de prueba (A26–A28) ocupan la mayor parte del tiempo porque son el cuello de botella del proyecto. El día D30 concentra el despliegue y la capacitación por la mañana, y la Review final por la tarde.
+Cada Sprint de construcción empieza con la Planning (D11, D16, D21 y D26). El día 5 queda para la Review y la Retrospectiva en la mañana, y para un buffer de contingencia en la tarde. En el Sprint 4, las pruebas (A26–A28) ocupan la mayor parte del tiempo, porque son el cuello de botella. El D30 concentra el despliegue y la capacitación en la mañana y la Review final en la tarde.
 
-**Tablero del Sprint 2 (estado planificado al día D18; Tabla 3.3).**
+El burndown del release (Tabla 3.3) compara al cierre de cada Sprint los SP restantes reales con la línea ideal.
 
-| Por hacer | En progreso | En revisión / QA | Hecho |
-|---|---|---|---|
-| HU-02 UI "Terminar etapa" (A19) | HU-02 API avance de etapa (A18) | HU-05 UI registro OT (A17) | HU-05 API registro OT (A16) |
-| HU-01 UI Mi Trabajo (A19) | | HU-08 UI asignación (A17) | HU-08 API asignación (A16) |
+**Tabla 3.3 — Burndown ideal del release**
 
-**Burndown planificado del release (Tabla 3.4).** Se actualiza al cierre de cada Sprint, comparando el valor real contra el ideal.
+| Momento | SP restantes (ideal) |
+|---|---|
+| Inicio S1 (D11) | 89 |
+| Fin S1 (D15) | 68 |
+| Fin S2 (D20) | 42 |
+| Fin S3 (D25) | 21 |
+| Fin S4 (D30) | 0 |
 
-| Momento | SP restantes (ideal) | SP restantes (real) |
-|---|---|---|
-| Inicio S1 (D11) | 89 | [Completar] |
-| Fin S1 (D15) | 68 | [Completar] |
-| Fin S2 (D20) | 42 | [Completar] |
-| Fin S3 (D25) | 21 | [Completar] |
-| Fin S4 (D30) | 0 | [Completar] |
-
-El Sprint 2 concentra 26 SP, por encima de la velocidad media, porque contiene el flujo de valor central. La mitigación es que HU-08 (5 SP) puede pasar al Sprint 3 sin bloquear HU-01/HU-02, ya que la asignación puede hacerse temporalmente por datos semilla.
+El Sprint 2 lleva 26 SP, sobre la velocidad media, porque contiene el flujo central. Si se atrasa, HU-08 (5 SP) pasa al Sprint 3 sin bloquear HU-01 ni HU-02: mientras tanto, las etapas se asignan con datos semilla.
 
 ### 3.2 Dependencias y prioridades entre tareas
 
-Tipos de dependencia: **FC** (fin-comienzo, la sucesora comienza al terminar la predecesora) y **CC** (comienzo-comienzo, la sucesora puede comenzar cuando comienza la predecesora, porque comparten un contrato ya definido, como el OpenAPI de A03). La prioridad responde al valor para el cliente, al riesgo técnico y a la posición en la ruta crítica, no al orden cronológico.
+Se usan dos tipos de dependencia:
 
-La matriz completa, con la predecesora, el tipo de dependencia, la prioridad, la justificación del orden y el efecto de un retraso de cada una de las 32 actividades, está en el **Anexo H (Tabla H.2)**. La Tabla 3.5 resume las dependencias que más condicionan el plan.
+- **FC (fin-comienzo):** la sucesora empieza cuando termina la predecesora.
+- **CC (comienzo-comienzo):** la sucesora puede empezar junto con la predecesora porque ambas comparten un contrato ya definido, como el OpenAPI de A03.
 
-**Tabla 3.5 — Dependencias que condicionan la planificación**
+La prioridad depende del valor para el cliente, del riesgo técnico y de si la actividad está en la ruta crítica, no del orden cronológico. La Tabla 3.4 muestra las dependencias que más condicionan el plan; la matriz completa de las 32 actividades está en el Anexo H (Tabla H.2).
+
+**Tabla 3.4 — Dependencias que condicionan la planificación**
 
 | Actividad | Depende de | Por qué tiene prioridad | Efecto si se retrasa |
 |---|---|---|---|
 | A01 Validar la línea base con Kotoduo | — | Todo el diseño descansa en supuestos que el cliente debe validar | Cada día retrasa A02–A04; riesgo de diseñar flujos incorrectos |
-| A03 Arquitectura y contrato OpenAPI | A00, A01 | Define los módulos, el contrato API y la tecnología de los que dependen datos, seguridad y pruebas; el contrato permite que el front-end avance en paralelo (dependencias CC) | Ruta crítica: +n d desplaza H1 en n d |
+| A03 Arquitectura y contrato OpenAPI | A00, A01 | Define módulos, contrato API y tecnología, de los que dependen datos, seguridad y pruebas; el contrato deja avanzar al front-end en paralelo (CC) | Ruta crítica: +n d desplaza H1 en n d |
 | A12 API de autenticación y usuarios | A07, A11 | Toda la API exige identidad y permisos | Ruta crítica: +1 d consume el buffer D15 y desplaza S2 en medio día |
 | A18 Avance de etapa transaccional | A16 | Es el corazón de RF-05/RF-06 | Ruta crítica; el problema principal del cliente queda sin resolver |
-| A27 Pruebas de seguridad | A24, A23 | Deben cubrir la superficie completa antes de producción | No se autoriza pasar a producción (control de salida) |
+| A27 Pruebas de seguridad | A24, A23 | Deben cubrir toda la superficie antes de producción | No se autoriza pasar a producción (control de salida) |
 | A29 Despliegue en producción | A26, A27, A28 | Solo se despliega lo que pasó las pruebas (DoD) | Desplaza H2 |
 
-**Ruta crítica** (cadena del recurso back-end, 0 días de holgura salvo los buffers de Sprint):
-A00 (2 d) → A03 (3 d) → A05 (2 d) → A07 (2 d) → A09 (1 d) → A10 (1 d) → A11 (0,5 d) → A12 (1,5 d) → A14 (1 d) → [Review y buffer D15] → A16 (2 d) → A18 (2 d) → [Review y buffer D20] → A20 (2 d) → A21 (2 d) → [Review y buffer D25] → A24 (1 d) → A26 (1 d) → A27 (2 d) → A29 (0,5 d) → A31 (0,5 d) = **30 días hábiles** (10 de diseño + 20 de construcción).
+**Ruta crítica.** Sigue la cadena del back-end y no tiene holgura, salvo los buffers de cada Sprint:
+A00 (2 d) → A03 (3 d) → A05 (2 d) → A07 (2 d) → A09 (1 d) → A10 (1 d) → A11 (0,5 d) → A12 (1,5 d) → A14 (1 d) → [Review y buffer D15] → A16 (2 d) → A18 (2 d) → [Review y buffer D20] → A20 (2 d) → A21 (2 d) → [Review y buffer D25] → A24 (1 d) → A26 (1 d) → A27 (2 d) → A29 (0,5 d) → A31 (0,5 d) = **30 días hábiles** (10 de diseño y 20 de construcción).
 
-**Gestión de retrasos:** un retraso de hasta medio día por Sprint se absorbe con el buffer del día 5. Si es mayor, el PO proxy reduce el alcance del Sprint y mueve al siguiente el ítem de menor prioridad (HU-04 y HU-08 son los candidatos definidos). Así se protegen los hitos H1 y H2 sin comprometer la DoD.
+**Si hay retrasos:** el buffer del día 5 absorbe hasta medio día por Sprint. Si el retraso es mayor, el PO proxy mueve al Sprint siguiente el ítem de menor prioridad (HU-04 o HU-08). Así se protegen los hitos H1 y H2 sin relajar la DoD.
 
 ---
 
 ## 4. Arquitectura de la solución
 
-> **Criterio de legibilidad.** Ningún diagrama intenta mostrar todo el sistema. Cada vista parte de una **visión general** sin detalle y luego presenta **acercamientos** por tema. Los elementos en gris (`«ref»`) se detallan en otra figura y solo se muestran para dar contexto.
-
 ### 4.1 Descripción general de la arquitectura 4+1
 
-SGP-Kotoduo adopta un **monolito modular en capas con cliente PWA** (Figura 4.1). El front-end es una SPA/PWA estática. El back-end es una API REST única organizada en los módulos M1–M8, cada uno con capas *routes → controller → service → repository*. La persistencia es **políglota**: PostgreSQL para los datos transaccionales con integridad referencial y MongoDB para eventos, evidencias y notificaciones de esquema variable. Ambas se integran mediante un **outbox transaccional**.
+SGP-Kotoduo es un **monolito modular en capas con un cliente PWA** (Figura 4.1). El front-end es una aplicación estática. El back-end es una sola API REST dividida en los módulos M1–M8, y cada módulo tiene las capas *routes → controller → service → repository*. Los datos viven en dos bases: PostgreSQL guarda lo transaccional, con integridad referencial, y MongoDB guarda eventos, evidencias y notificaciones, que cambian de forma. Las dos se conectan con un **outbox transaccional** (sección 6.5).
 
-Se descartaron los microservicios: con dos desarrolladores, alrededor de 25 usuarios y cerca de 30 OT por semana, su costo operativo (despliegues, observabilidad distribuida, consistencia eventual generalizada) no aporta valor. Los límites de módulo permiten extraer servicios en el futuro, por ejemplo M5 si se integra con proveedores.
+Los microservicios no se justifican aquí. Con dos desarrolladores, unos 25 usuarios y cerca de 30 OT por semana, sumarían despliegues, monitoreo y coordinación sin aportar valor al cliente. Los límites entre módulos permiten separar alguno más adelante, por ejemplo M5 si se integra con proveedores.
+
+Cada vista parte de un diagrama general y sigue con acercamientos por tema. Los elementos en gris (`«ref»`) se detallan en otra figura.
 
 | Vista (Kruchten, 1995) | Pregunta que responde | Interesados | Diagramas | Figuras | Sección |
 |---|---|---|---|---|---|
@@ -277,91 +243,87 @@ Se descartaron los microservicios: con dos desarrolladores, alrededor de 25 usua
 | Física | ¿Dónde se ejecuta cada elemento y cómo se comunica? | Infraestructura y administración | Despliegue | 4.19–4.20 | 4.5 |
 | Escenarios (+1) | ¿Qué casos de uso validan y unen las cuatro vistas? | Todos, incluido el cliente | Casos de uso | 4.21–4.24 | 4.6 |
 
-**Coherencia entre vistas.** El escenario CU-06 "Actualizar avance de etapa" recorre las cinco vistas:
+**Las cinco vistas describen la misma solución.** Basta seguir el caso de uso CU-06 "Actualizar avance de etapa":
 
-- **Lógica:** clase `EtapaOrden`, su máquina de estados y el método `EtapaService.terminar()` (Fig. 4.3, 4.6 y 4.7).
-- **Desarrollo:** se implementa en el componente M4 y en el paquete `modules/etapas` (Fig. 4.11–4.13).
-- **Procesos:** forma parte del bucle de producción (Fig. 4.14 y 4.16), se ejecuta en una transacción (Fig. 4.17) y genera trabajo asíncrono en el relay outbox (Fig. 4.18).
-- **Física:** se ejecuta en el contenedor de Render y persiste en Neon y Atlas (Fig. 4.19).
-- **Escenarios:** es el caso de uso central del taller (Fig. 4.23) y se valida con CP-01, CP-12, CP-19 y CP-27.
+- **Lógica:** la clase `EtapaOrden`, su máquina de estados y `EtapaService.terminar()` (Fig. 4.3, 4.6 y 4.7).
+- **Desarrollo:** el componente M4 y el paquete `modules/etapas` (Fig. 4.11–4.13).
+- **Procesos:** el bucle de producción (Fig. 4.14 y 4.16), una transacción (Fig. 4.17) y el trabajo asíncrono del relay (Fig. 4.18).
+- **Física:** corre en el contenedor de Render y guarda en Neon y Atlas (Fig. 4.19).
+- **Escenarios:** es el caso de uso central del taller (Fig. 4.23).
 
-**Figura 4.1 — Vista general de capas.** Resume el recorrido de una petición: la PWA entra por el borde de Cloudflare, el middleware de seguridad la filtra y los módulos M1–M8 la resuelven contra PostgreSQL. El relay publica después los eventos en MongoDB y Web Push. Los archivos viajan directo de la PWA a R2.
+**Figura 4.1 — Vista general de capas.** Una petición entra desde la PWA por Cloudflare, pasa el middleware de seguridad y la resuelve un módulo contra PostgreSQL. Después, el relay publica los eventos en MongoDB y envía avisos push. Los archivos van directo de la PWA a R2.
 
 ![Figura 4.1 — Vista general de capas](figuras/4.1-vista-general/fig-4.01-capas.png)
 
 ### 4.2 Vista lógica
 
-La vista lógica se presenta en siete figuras: un mapa del dominio (Fig. 4.2), tres acercamientos por grupo de clases (Fig. 4.3–4.5), los servicios que coordinan esas clases (Fig. 4.6) y las máquinas de estados de la etapa (Fig. 4.7) y de la orden de trabajo (Fig. 4.8).
+La vista lógica tiene siete figuras: un mapa del dominio (Fig. 4.2), tres acercamientos (Fig. 4.3–4.5), los servicios (Fig. 4.6) y las máquinas de estados de la etapa y de la OT (Fig. 4.7 y 4.8).
 
-*Simbología común de los diagramas de clases:* cada rectángulo es una clase con atributos privados (`-`) y operaciones públicas (`+`). Los rombos rellenos (◆, composición) indican que la parte no existe sin el todo: una `EtapaOrden` no existe sin su `OrdenTrabajo` y una `PlantillaEtapa` no existe sin su `TipoTrabajo`. Los rombos vacíos (◇, agregación) indican pertenencia débil: los `MovimientoInsumo` se agregan al `Insumo`. Las flechas continuas son asociaciones navegables con multiplicidad (`1`, `0..1`, `*`, `1..*`). Las flechas punteadas son dependencias de uso. Los `enum` fijan los estados válidos.
-
-**Figura 4.2 — Modelo de dominio: visión general.** Muestra las 13 clases del dominio sin atributos, agrupadas en tres paquetes. Cada paquete indica la figura donde se detalla.
+**Figura 4.2 — Modelo de dominio: visión general.** Las 13 clases del dominio, sin atributos, en tres paquetes. Cada paquete indica la figura que lo detalla.
 
 ![Figura 4.2 — Modelo de dominio: visión general](figuras/4.2-vista-logica/fig-4.02-dominio-general.png)
 
-**Figura 4.3 — Dominio: procesos y órdenes de trabajo.** Es el núcleo del sistema: el tipo de trabajo define sus etapas estándar y cada orden se compone de sus propias etapas y de las versiones del diseño.
+**Figura 4.3 — Dominio: procesos y órdenes de trabajo.** Es el núcleo del sistema. El tipo de trabajo define sus etapas estándar, y cada orden tiene sus propias etapas y versiones de diseño.
 
 ![Figura 4.3 — Dominio: procesos y órdenes de trabajo](figuras/4.2-vista-logica/fig-4.03-dominio-ordenes.png)
 
-**Figura 4.4 — Dominio: insumos, consumo y alertas.** Separa el consumo estándar por plantilla (`PlantillaInsumo`) del requerimiento concreto de cada etapa (`RequerimientoInsumo`). El stock se explica por el kardex de movimientos.
+**Figura 4.4 — Dominio: insumos, consumo y alertas.** Separa el consumo estándar de la plantilla (`PlantillaInsumo`) de lo que necesita cada etapa concreta (`RequerimientoInsumo`). El stock resulta de sumar los movimientos del kardex.
 
 ![Figura 4.4 — Dominio: insumos, consumo y alertas](figuras/4.2-vista-logica/fig-4.04-dominio-insumos.png)
 
-**Figura 4.5 — Dominio: usuarios, roles y áreas.** Un usuario puede tener varios roles y pertenecer a un área. Los cinco códigos de rol son la base del RBAC (sección 7.1).
+**Figura 4.5 — Dominio: usuarios, roles y áreas.** Un usuario puede tener varios roles y pertenece a un área. Los cinco roles son la base del control de acceso (sección 7.1).
 
 ![Figura 4.5 — Dominio: usuarios, roles y áreas](figuras/4.2-vista-logica/fig-4.05-dominio-acceso.png)
 
-**Figura 4.6 — Servicios de aplicación.** Cada servicio coordina una entidad del dominio. `EtapaService` delega el consumo en `InsumoService`. Todos los servicios que cambian estado (órdenes, etapas, insumos y aprobaciones de diseño), además de `AuthService` con los eventos de seguridad, registran el evento en `AuditoriaService`, que notifica de forma diferida mediante el relay outbox.
+**Figura 4.6 — Servicios de aplicación.** Cada servicio coordina una entidad. `EtapaService` le pide a `InsumoService` que registre los consumos. Los servicios que cambian estado, y también `AuthService`, registran sus eventos en `AuditoriaService`, que los publica después mediante el outbox.
 
 ![Figura 4.6 — Servicios de aplicación](figuras/4.2-vista-logica/fig-4.06-servicios-aplicacion.png)
 
 *Decisiones de diseño:*
 
-1. **`TipoTrabajo` + `PlantillaEtapa`** externalizan el conocimiento hoy concentrado en Bianca, Berny y René. La secuencia, el área, las instrucciones y la duración pasan a ser datos editables (RF-02).
-2. **`EtapaOrden` copia** nombre, área, instrucciones y duración desde la plantilla al crearse la OT. Así, modificar una plantilla no altera órdenes en curso, y se mantiene la referencia opcional `origen` para análisis.
-3. La lógica de transición vive en `EtapaOrden.puedeTransicionar()` y `OrdenTrabajo.puedeTransicionar()`, con una defensa en profundidad en la base de datos (trigger R2, sección 6.2).
-4. Los servicios no se llaman en cadena síncrona hacia MongoDB. `AuditoriaService` solo escribe en el outbox dentro de la misma transacción.
+1. **`TipoTrabajo` y `PlantillaEtapa` sacan el conocimiento de la cabeza de tres personas.** La secuencia, el área, las instrucciones y la duración pasan a ser datos editables (RF-02).
+2. **`EtapaOrden` copia los datos de la plantilla al crear la OT.** Si alguien edita la plantilla, las órdenes en curso no cambian.
+3. **Las reglas de transición viven en el dominio** (`puedeTransicionar()`) y se repiten en la base de datos como segunda barrera (trigger R2, sección 6.2).
+4. **Ningún servicio espera a MongoDB.** `AuditoriaService` solo escribe en el outbox, dentro de la misma transacción.
 
-**Figura 4.7 — Diagrama de estados de `EtapaOrden`.** Cada nodo es un estado y cada arco es una transición etiquetada con *evento [condición] / acción*. El estado compuesto *Abierta* agrupa los estados en que la etapa todavía puede avanzar. El camino principal es PENDIENTE→DISPONIBLE→EN_CURSO→TERMINADA. Una etapa pasa a DISPONIBLE cuando la anterior queda cerrada, sea TERMINADA u OMITIDA, de modo que omitir una etapa no traba la secuencia. La etapa de diseño (`es_etapa_diseno`) no se cierra con el botón **Terminar**: se cierra cuando el cliente aprueba el diseño. **Reportar problema** exige motivo (`ck_etapa_bloqueo`), avisa a la Encargada y detiene la OT, y solo la Encargada desbloquea la etapa. Si la OT se anula, toda etapa abierta pasa a OMITIDA. El mismo grafo se implementa en el dominio (TypeScript) y en el trigger `trg_etapa_transicion`, que además impide iniciar o terminar una etapa mientras la OT está DETENIDA, y se prueba en CP-01 y CP-02.
+**Figura 4.7 — Diagrama de estados de `EtapaOrden`.** El camino normal es PENDIENTE → DISPONIBLE → EN_CURSO → TERMINADA. Una etapa queda DISPONIBLE cuando la anterior se cierra, sea TERMINADA u OMITIDA, así que omitir una etapa no traba la secuencia. La etapa de diseño no se cierra con el botón **Terminar**, sino cuando el cliente aprueba el diseño. **Reportar problema** pide un motivo, avisa a la Encargada y detiene la OT; solo la Encargada puede desbloquear la etapa. Si la OT se anula, toda etapa abierta pasa a OMITIDA. El mismo grafo está en el dominio y en el trigger `trg_etapa_transicion`.
 
 ![Figura 4.7 — Diagrama de estados de EtapaOrden](figuras/4.2-vista-logica/fig-4.07-estados-etapa.png)
 
-**Figura 4.8 — Diagrama de estados de `OrdenTrabajo`.** La OT nace en REGISTRADA o, si su tipo de trabajo requiere diseño, en EN_DISENO. Pasa a EN_PRODUCCION cuando el cliente aprueba el diseño o cuando se inicia su primera etapa, y a TERMINADA cuando todas sus etapas quedan cerradas (CP-13). Queda **DETENIDA** en dos casos: de forma automática, cuando una de sus etapas se bloquea, o de forma manual, cuando la Encargada la detiene con un motivo. Solo la Encargada la reanuda, y únicamente si no quedan etapas bloqueadas. El pseudoestado de historia (H) la devuelve al subestado que tenía antes de detenerse (EN_DISENO o EN_PRODUCCION). Mientras está DETENIDA no se inicia ni se termina ninguna etapa (Fig. 4.7). Mientras está activa puede anularse con motivo, y entonces sus etapas abiertas pasan a OMITIDA. El motivo de una detención o de una anulación queda en la bitácora. Las transiciones y sus condiciones (etapas cerradas para terminar, ninguna etapa bloqueada para reanudar) se validan en `OrdenTrabajo.puedeTransicionar()` y en el trigger `trg_orden_transicion`.
+**Figura 4.8 — Diagrama de estados de `OrdenTrabajo`.** La OT nace REGISTRADA, o EN_DISENO si su tipo de trabajo requiere diseño. Pasa a EN_PRODUCCION cuando el cliente aprueba el diseño o se inicia la primera etapa, y a TERMINADA cuando todas sus etapas están cerradas. Queda **DETENIDA** si se bloquea una etapa o si la Encargada la detiene con un motivo. Solo la Encargada la reanuda, y únicamente si no quedan etapas bloqueadas; el estado de historia (H) la devuelve al subestado que tenía. Mientras está activa se puede anular con un motivo. Estas reglas se validan en el dominio y en el trigger `trg_orden_transicion`.
 
 ![Figura 4.8 — Diagrama de estados de OrdenTrabajo](figuras/4.2-vista-logica/fig-4.08-estados-orden.png)
 
-Las otras dos entidades con estado tienen ciclos lineales que no requieren diagrama:
+Las otras dos entidades con estado tienen ciclos lineales y no necesitan diagrama:
 
-- **`AprobacionDiseno`:** PENDIENTE → APROBADO o RECHAZADO, y ambos son finales. Rechazar exige comentario, y quien subió el diseño no puede resolverlo (R6). Una nueva propuesta es una nueva versión (fila nueva), no un cambio de estado.
-- **`AlertaInsumo`:** ABIERTA → EN_GESTION → CERRADA (IK-9). CERRADA es final y exige `cerrada_en`.
+- **`AprobacionDiseno`:** PENDIENTE → APROBADO o RECHAZADO, ambos finales. Rechazar exige un comentario, y quien subió el diseño no puede resolverlo (R6). Una nueva propuesta es una nueva versión.
+- **`AlertaInsumo`:** ABIERTA → EN_GESTION → CERRADA.
 
 ### 4.3 Vista de desarrollo o implementación
 
-*Simbología (UML 2) de los diagramas de componentes:* los componentes (rectángulos con ícono de componente) son unidades desplegables o reemplazables. El puerto "HTTPS /api/v1" es la interfaz provista por la API. Las flechas continuas son conectores de uso en tiempo de ejecución y las punteadas son dependencias de compilación. Los cilindros representan bases de datos y las nubes, servicios externos.
-
-**Figura 4.9 — Componentes: visión general.** Muestra los tres bloques del monorepo (PWA, `packages/shared` y API) y los servicios externos de los que dependen.
+**Figura 4.9 — Componentes: visión general.** Los tres bloques del monorepo (PWA, `packages/shared` y API) y los servicios externos que usan.
 
 ![Figura 4.9 — Componentes: visión general](figuras/4.3-vista-desarrollo/fig-4.09-componentes-general.png)
 
-**Figura 4.10 — Componentes de la PWA.** El *shell* carga los ocho módulos de funcionalidad; todos llaman a la API a través de un único cliente.
+**Figura 4.10 — Componentes de la PWA.** El *shell* carga ocho módulos de pantalla, y todos llaman a la API a través de un único cliente.
 
 ![Figura 4.10 — Componentes de la PWA](figuras/4.3-vista-desarrollo/fig-4.10-componentes-pwa.png)
 
-**Figura 4.11 — Componentes de la API.** Toda petición pasa por el middleware de seguridad antes de llegar a un módulo. Solo existen tres dependencias entre módulos (M3→M2, M4→M5 y M6→M4), y todos acceden a los servicios externos a través de *Infra*.
+**Figura 4.11 — Componentes de la API.** Toda petición pasa por el middleware de seguridad antes de llegar a un módulo. Entre módulos hay solo tres dependencias (M3→M2, M4→M5 y M6→M4), y todos llegan a los servicios externos a través de *Infra*.
 
 ![Figura 4.11 — Componentes de la API](figuras/4.3-vista-desarrollo/fig-4.11-componentes-api.png)
 
-*Organización:*
+Tres decisiones ordenan el código:
 
-- La PWA tiene un módulo de UI por cada módulo de negocio (`mi-trabajo` ↔ M4) y un **cliente API** único.
-- `packages/shared` contiene los **esquemas Zod** y el **mapa de permisos**, que comparten el front-end y la API. Con ello se evita que validaciones y permisos diverjan entre capas.
-- El componente *Infra* encapsula los clientes de PostgreSQL, MongoDB, R2 y Web Push. Así los módulos no dependen de proveedores concretos, y migrar de Neon a otro PostgreSQL solo cambia la configuración.
+- La PWA tiene un módulo de pantalla por cada módulo de negocio (`mi-trabajo` ↔ M4).
+- `packages/shared` guarda los esquemas de validación (Zod) y el mapa de permisos que usan tanto la PWA como la API. Así las reglas no se desalinean entre capas.
+- *Infra* encapsula los clientes de PostgreSQL, MongoDB, R2 y Web Push. Cambiar Neon por otro PostgreSQL solo cambia la configuración.
 
-**Figura 4.12 — Paquetes del monorepo.** Monorepo `sgp-kotoduo` con `apps/web`, `apps/api`, `packages/shared`, `db` (migraciones `node-pg-migrate`, validadores Mongo y semillas) y `tests` (unit, integration, e2e, perf). La PWA y la API solo comparten código a través de `packages/shared`.
+**Figura 4.12 — Paquetes del monorepo.** `apps/web`, `apps/api`, `packages/shared`, `db` (migraciones y semillas) y `tests` (unitarias, integración, E2E y rendimiento). La PWA y la API solo comparten código por `packages/shared`.
 
 ![Figura 4.12 — Paquetes del monorepo](figuras/4.3-vista-desarrollo/fig-4.12-paquetes-monorepo.png)
 
-**Figura 4.13 — Regla de dependencias por capas.** Las relaciones `<<import>>` siguen una única dirección: *routes → controller → service → repository → infra* en la API y *app → features → ui/lib* en la PWA. Esto permite probar los servicios con repositorios simulados y garantiza que solo la capa *repository* ejecute SQL, siempre parametrizado (sección 7.6).
+**Figura 4.13 — Regla de dependencias por capas.** Las dependencias van en un solo sentido: *routes → controller → service → repository → infra* en la API y *app → features → ui/lib* en la PWA. Así los servicios se prueban con repositorios simulados, y solo la capa *repository* ejecuta SQL, siempre parametrizado.
 
 ![Figura 4.13 — Regla de dependencias por capas](figuras/4.3-vista-desarrollo/fig-4.13-capas-dependencias.png)
 
@@ -374,39 +336,37 @@ Las otras dos entidades con estado tienen ciclos lineales que no requieren diagr
 
 ### 4.4 Vista de procesos
 
-La vista de procesos muestra primero el flujo de negocio (diagramas de actividades, Fig. 4.14–4.16) y luego la interacción técnica del escenario crítico CU-06, separada en su tramo síncrono y su tramo asíncrono (diagramas de secuencia, Fig. 4.17–4.18).
+Primero se muestra el flujo de negocio con diagramas de actividades por carriles, equivalentes a un BPMN (Fig. 4.14–4.16). Después, el caso crítico CU-06 en dos diagramas de secuencia: la parte síncrona y la asíncrona (Fig. 4.17 y 4.18).
 
-*Simbología de los diagramas de actividades:* equivalen a un BPMN de colaboración. Los carriles (Vendedor, Diseñador, Encargada de Producción, Operario y SGP-Kotoduo) corresponden a *lanes* y asignan la responsabilidad de cada actividad. Los rectángulos redondeados son actividades; los que tienen doble borde lateral son subprocesos detallados en otra figura. Los rombos son decisiones (*gateways* exclusivos) con guardas. `repeat … repeat while` modela bucles. Las barras `fork / end fork` modelan **concurrencia**.
-
-**Figura 4.14 — Flujo productivo: visión general.** Recorre la orden de punta a punta: registro y diseño, asignación, ejecución repetida de etapas, término y entrega.
+**Figura 4.14 — Flujo productivo: visión general.** La orden de punta a punta: registro y diseño, asignación, ejecución de etapas, término y entrega.
 
 ![Figura 4.14 — Flujo productivo: visión general](figuras/4.4-vista-procesos/fig-4.14-flujo-general.png)
 
-**Figura 4.15 — Subproceso: registro de la orden y aprobación de diseño.** El bucle entre Diseñador y Vendedor modela las rondas de aprobación del diseño con el cliente. Cada respuesta del cliente queda en la bitácora con la versión, el actor y el motivo (RF-12).
+**Figura 4.15 — Subproceso: registro de la orden y aprobación de diseño.** El bucle entre Diseñador y Vendedor representa las rondas de aprobación con el cliente. Cada respuesta queda en la bitácora con la versión, quién respondió y el motivo.
 
 ![Figura 4.15 — Subproceso: registro de la orden y aprobación de diseño](figuras/4.4-vista-procesos/fig-4.15-subproceso-registro-diseno.png)
 
-**Figura 4.16 — Subproceso: ejecución de una etapa.** Se repite por cada etapa de la orden. El consumo y la evidencia pueden registrarse en paralelo, y la habilitación de la siguiente etapa ocurre en paralelo con el registro en la bitácora.
+**Figura 4.16 — Subproceso: ejecución de una etapa.** Se repite por cada etapa. El consumo y la evidencia se pueden registrar en paralelo, y la siguiente etapa se habilita mientras se escribe la bitácora.
 
 ![Figura 4.16 — Subproceso: ejecución de una etapa](figuras/4.4-vista-procesos/fig-4.16-subproceso-ejecucion-etapa.png)
 
-*Puntos de decisión relevantes:*
+Tres decisiones del flujo atacan problemas del diagnóstico:
 
-1. **Insumos proyectados bajo el mínimo:** la alerta se emite al registrar la OT, antes de producir. Esto ataca la causa del caso "sin tinta el lunes".
-2. **Diseño requerido:** la producción no se habilita sin aprobación, lo que formaliza la "aceptación del diseño" mencionada por el cliente.
-3. **Insumo insuficiente durante la etapa:** el operario reporta y continúa cuando la Encargada resuelve, sin necesidad de buscarla físicamente.
+1. **La alerta de insumo se emite al registrar la OT,** antes de producir. Esto evita el caso de quedarse "sin tinta el lunes".
+2. **Sin diseño aprobado no hay producción.** Formaliza la "aceptación del diseño" que mencionó el cliente.
+3. **Si falta un insumo durante la etapa, el operario lo reporta desde el celular** y sigue cuando la Encargada lo resuelve, sin tener que ir a buscarla.
 
-*Simbología de los diagramas de secuencia:* las líneas de vida verticales representan participantes (actores, componentes y bases de datos). Las flechas continuas son mensajes síncronos y las punteadas, respuestas. Los fragmentos `alt` modelan alternativas excluyentes, `loop` modela repeticiones y `opt` un paso opcional.
-
-**Figura 4.17 — Secuencia CU-06 "Terminar etapa": tramo síncrono.** La API autentica el JWT, verifica el permiso `etapas.avanzar_propias` y valida el cuerpo con Zod. Luego bloquea la fila de la etapa (`SELECT … FOR UPDATE`), verifica que el actor sea el responsable (404 si no lo es, para no revelar que la etapa existe) y que la versión coincida (409 si cambió: control de concurrencia optimista), y aplica todos los cambios en **una transacción ACID**: etapa terminada, consumos de insumo (que pueden disparar una alerta), siguiente etapa disponible y evento outbox.
+**Figura 4.17 — Secuencia CU-06 "Terminar etapa": tramo síncrono.** La API comprueba quién llama y si tiene permiso, y valida los datos. Luego bloquea la fila de la etapa, revisa que sea del operario (si no, responde 404 para no revelar que existe) y que nadie la haya cambiado antes (si cambió, responde 409). Todo se guarda en **una sola transacción**: la etapa terminada, los consumos (que pueden generar una alerta), la siguiente etapa disponible y el evento del outbox.
 
 ![Figura 4.17 — Secuencia CU-06: tramo síncrono](figuras/4.4-vista-procesos/fig-4.17-secuencia-terminar-etapa.png)
 
-**Figura 4.18 — Secuencia del relay outbox: tramo asíncrono.** Cada 5 segundos el relay toma los eventos pendientes, los publica en MongoDB y envía el aviso push, sin alargar el tiempo de respuesta del operario. `FOR UPDATE SKIP LOCKED` y la escritura idempotente evitan duplicados si hay varias instancias.
+**Figura 4.18 — Secuencia del relay outbox: tramo asíncrono.** Cada 5 segundos, el relay toma los eventos pendientes, los publica en MongoDB y envía el aviso push. El operario no espera por esto. `FOR UPDATE SKIP LOCKED` y la escritura idempotente evitan duplicados si corren varias instancias.
 
 ![Figura 4.18 — Secuencia del relay outbox: tramo asíncrono](figuras/4.4-vista-procesos/fig-4.18-secuencia-relay-outbox.png)
 
-**Procesos de ejecución y concurrencia (Tabla 4.1):**
+La Tabla 4.1 resume los procesos que corren en el sistema y cómo se sincronizan.
+
+**Tabla 4.1 — Procesos de ejecución y concurrencia**
 
 | Proceso / hilo | Dónde corre | Disparador | Concurrencia y sincronización |
 |---|---|---|---|
@@ -419,48 +379,42 @@ La vista de procesos muestra primero el flujo de negocio (diagramas de actividad
 
 ### 4.5 Vista física o de despliegue
 
-*Simbología:* los nodos (cajas 3D) son dispositivos o entornos de ejecución y las nubes, proveedores. Los artefactos son los entregables desplegados (`dist/`, la imagen del contenedor y los *buckets*). Las líneas son rutas de comunicación etiquetadas con protocolo y puerto.
-
-**Figura 4.19 — Despliegue: topología de ejecución.** Muestra dónde corre cada pieza en producción y cómo se comunican.
+**Figura 4.19 — Despliegue: topología de ejecución.** Dónde corre cada pieza en producción y cómo se comunican.
 
 ![Figura 4.19 — Despliegue: topología de ejecución](figuras/4.5-vista-fisica/fig-4.19-despliegue-ejecucion.png)
 
-**Figura 4.20 — Despliegue: integración continua, entrega y respaldos.** Separa del diagrama anterior las rutas que no atiende a usuarios: GitHub Actions despliega la web y la API, y ejecuta el respaldo nocturno cifrado hacia R2.
+**Figura 4.20 — Despliegue: integración continua, entrega y respaldos.** Las rutas que no atienden usuarios: GitHub Actions despliega la web y la API, y hace el respaldo nocturno cifrado hacia R2.
 
 ![Figura 4.20 — Despliegue: integración continua, entrega y respaldos](figuras/4.5-vista-fisica/fig-4.20-despliegue-cicd-respaldos.png)
 
-*Topología:*
+Así funciona la topología:
 
-1. Los **smartphones** de los trabajadores ejecutan la PWA instalada y los **PC de oficina** la usan en el navegador.
-2. Todo el tráfico entra por **Cloudflare**, que provee DNS, TLS 1.3, WAF y limitación de tasa en el borde. `sgp.kotoduo.cl` sirve la PWA desde **Cloudflare Pages** y `api.sgp.kotoduo.cl` enruta al **Web Service de Render**, un contenedor Docker con Node.js 24 LTS que ejecuta la API y los trabajos programados.
-3. La API se conecta por TLS a **PostgreSQL 16 en Neon** (`sslmode=verify-full`) y a **MongoDB 8 en Atlas** (con lista de IP permitidas). Los tres están co-ubicados en la región este de EE. UU. para minimizar la latencia API↔BD.
-4. Los archivos se suben y se consultan **directamente** entre el dispositivo (teléfono o PC) y **Cloudflare R2** mediante URL prefirmadas de 5 minutos. La API nunca recibe el binario, lo que reduce la carga y la superficie de ataque.
-5. **GitHub Actions** ejecuta CI/CD y el respaldo nocturno.
-6. Ambos dominios comparten el sitio `kotoduo.cl`, lo que habilita cookies `SameSite=Strict` (sección 7.2).
+1. Los trabajadores usan la PWA instalada en su **celular**; en la oficina, la abren en el navegador del **PC**.
+2. Todo el tráfico entra por **Cloudflare**, que aporta DNS, TLS 1.3, firewall de aplicaciones (WAF) y límite de peticiones. `sgp.kotoduo.cl` sirve la PWA desde **Cloudflare Pages** y `api.sgp.kotoduo.cl` lleva a la API, un contenedor Docker con Node.js 24 LTS en **Render**.
+3. La API se conecta por TLS a **PostgreSQL 16 en Neon** y a **MongoDB 8 en Atlas**. Los tres servicios están en la misma región (este de EE. UU.) para bajar la latencia.
+4. Los archivos se suben y se descargan **directo** entre el dispositivo y **Cloudflare R2**, con URL firmadas que duran 5 minutos. La API nunca recibe el archivo, lo que reduce su carga y su superficie de ataque.
+5. **GitHub Actions** ejecuta la integración continua, los despliegues y el respaldo nocturno.
+6. Los dos dominios comparten `kotoduo.cl`, lo que permite usar cookies `SameSite=Strict` (sección 7.2).
 
-**Ambientes:** *local* (Docker Compose con PostgreSQL y MongoDB), *staging* (rama Neon `staging`, servicio Render de *preview*) y *producción*.
-
-**Aprovisionamiento:** por el plazo acotado de construcción, los recursos de *staging* y producción se configuran desde los paneles de los proveedores. Cada uno se registra en un inventario del repositorio con su servicio, plan, región y variables de entorno. El ideal, planteado como mejora posterior, es declararlos como **infraestructura como código** para reproducir la topología de la Figura 4.19 con otro proveedor sin rediseñarla (sección 4.7, Tabla 4.3).
+**Ambientes:** *local* (Docker Compose con PostgreSQL y MongoDB), *staging* (rama `staging` de Neon y servicio de *preview* en Render) y *producción*. Por el plazo, staging y producción se configuran desde los paneles de cada proveedor, y cada recurso queda anotado en un inventario del repositorio (servicio, plan, región y variables). Declararlos como infraestructura como código queda como mejora posterior (sección 4.7).
 
 ### 4.6 Vista de escenarios o casos de uso
 
-Los catorce casos de uso se dividen en cuatro diagramas, uno por subsistema, para que cada interesado vea solo los que le conciernen.
+Los catorce casos de uso se reparten en cuatro diagramas, uno por subsistema, para que cada interesado vea solo lo suyo. Los actores de cada diagrama coinciden con la matriz de permisos (Tabla 7.1).
 
-*Simbología:* los actores (figuras) son roles externos al sistema y el rectángulo delimita la frontera de SGP-Kotoduo. Las elipses son casos de uso. Las líneas actor–caso indican participación. La flecha con triángulo indica generalización. `<<include>>` indica comportamiento obligatorio reutilizado y `<<extend>>`, comportamiento opcional bajo condición, que se inserta en un punto de extensión declarado en el caso base. Una etiqueta sobre una línea actor–caso restringe la participación de ese actor. Los actores de cada diagrama coinciden con la matriz de permisos (Tabla 7.1).
-
-**Figura 4.21 — Casos de uso: actores, acceso y administración.** Define la jerarquía de actores: todos los roles heredan de "Usuario" (y por tanto pueden iniciar sesión) y el Administrador hereda las capacidades de la Encargada. La Encargada consulta la bitácora solo por OT; el Administrador la consulta completa.
+**Figura 4.21 — Casos de uso: actores, acceso y administración.** Todos los roles heredan de "Usuario" y pueden iniciar sesión. El Administrador hereda lo que hace la Encargada. La Encargada consulta la bitácora solo por OT; el Administrador, completa.
 
 ![Figura 4.21 — Casos de uso: actores, acceso y administración](figuras/4.6-vista-escenarios/fig-4.21-cu-acceso-administracion.png)
 
-**Figura 4.22 — Casos de uso: gestión de órdenes, diseño e insumos.** Registrar una OT siempre genera sus etapas (`<<include>>`). En la aprobación de diseño, el Diseñador sube versiones y el Vendedor registra la respuesta del cliente; nunca la misma persona (R6).
+**Figura 4.22 — Casos de uso: gestión de órdenes, diseño e insumos.** Registrar una OT siempre genera sus etapas (`<<include>>`). El Diseñador sube las versiones y el Vendedor registra la respuesta del cliente; nunca la misma persona (R6).
 
 ![Figura 4.22 — Casos de uso: gestión de órdenes, diseño e insumos](figuras/4.6-vista-escenarios/fig-4.22-cu-gestion-ordenes.png)
 
-**Figura 4.23 — Casos de uso: ejecución en el taller.** Contiene el escenario crítico CU-06, que declara dos puntos de extensión: *Etapa en curso* y *Registrar consumos*. Registrar evidencia extiende el primero y reportar un faltante (CU-09) extiende el segundo (`<<extend>>`). Todo avance notifica al siguiente responsable (`<<include>>`).
+**Figura 4.23 — Casos de uso: ejecución en el taller.** Contiene el caso crítico CU-06. Adjuntar evidencia y reportar un faltante (CU-09) lo extienden de forma opcional (`<<extend>>`), y todo avance avisa al siguiente responsable (`<<include>>`).
 
 ![Figura 4.23 — Casos de uso: ejecución en el taller](figuras/4.6-vista-escenarios/fig-4.23-cu-ejecucion-taller.png)
 
-**Figura 4.24 — Casos de uso: supervisión y control de la producción.** Reúne las acciones de la Encargada que mueven las máquinas de estados de la etapa y de la OT (Fig. 4.7 y 4.8): gestionar etapas (CU-12) y controlar el estado de la OT (CU-13). El Vendedor consulta el panel y marca la OT como entregada, sin otras acciones. El actor `<<sistema>>` "Verificador de atrasos" es el proceso programado de la vista de procesos, que cada 15 minutos detecta las OT en riesgo (CU-14) y avisa a la Encargada.
+**Figura 4.24 — Casos de uso: supervisión y control de la producción.** Reúne las acciones de la Encargada que mueven las máquinas de estados (Fig. 4.7 y 4.8): gestionar etapas (CU-12) y controlar la OT (CU-13). El Vendedor solo consulta el panel y marca la OT como entregada. El "Verificador de atrasos" es el proceso programado que cada 15 minutos detecta OT en riesgo (CU-14).
 
 ![Figura 4.24 — Casos de uso: supervisión y control de la producción](figuras/4.6-vista-escenarios/fig-4.24-cu-supervision-control.png)
 
@@ -487,26 +441,16 @@ Los catorce casos de uso se dividen en cuatro diagramas, uno por subsistema, par
 |---|---|
 | Actor | Operario (o Diseñador en etapas de diseño) |
 | Precondiciones | Sesión activa; la etapa está asignada al actor y en estado DISPONIBLE o EN_CURSO; la OT no está DETENIDA |
-| Flujo básico | 1. El actor abre *Mi Trabajo* y selecciona la OT. 2. El sistema muestra la etapa, las instrucciones, los insumos requeridos y la siguiente área. 3. El actor pulsa **Iniciar**; el sistema cambia la etapa a EN_CURSO. 4. Al finalizar, el actor pulsa **Terminar** e ingresa los consumos reales. 5. El sistema registra la etapa como TERMINADA, descuenta el stock, habilita la siguiente etapa y notifica a su responsable. 6. El sistema muestra "Sigue: <etapa> en <área>". |
+| Flujo básico | 1. El actor abre *Mi Trabajo* y elige la OT. 2. El sistema muestra la etapa, las instrucciones, los insumos y la siguiente área. 3. El actor pulsa **Iniciar** y la etapa pasa a EN_CURSO. 4. Al terminar, pulsa **Terminar** e ingresa los consumos reales. 5. El sistema cierra la etapa, descuenta el stock, habilita la siguiente etapa y avisa a su responsable. 6. Muestra "Sigue: <etapa> en <área>". |
 | Puntos de extensión | *Etapa en curso* (entre los pasos 3 y 4); *Registrar consumos* (paso 4) |
-| Flujos alternativos | 3a. Problema en la ejecución → **Reportar problema** con motivo → BLOQUEADA; se notifica a la Encargada y la OT queda DETENIDA hasta que la Encargada desbloquee la etapa (CU-12) y reanude la OT (CU-13). 4a. Insumo insuficiente → CU-09 extiende este caso en el punto *Registrar consumos*. 4b. Adjuntar foto o nota → "Registrar evidencia" extiende este caso en el punto *Etapa en curso*. 5a. Última etapa → la OT pasa a TERMINADA. |
-| Excepciones | E1. Otro usuario actualizó la etapa → 409 "La etapa cambió; recarga". E2. La etapa no pertenece al actor → 404, sin revelar que existe (AM-05). E3. Sin conexión → la PWA informa y conserva el formulario. |
-| Postcondiciones | El estado de la etapa y de la OT queda consistente; el evento queda en la bitácora; el siguiente responsable está notificado |
+| Flujos alternativos | 3a. Hay un problema → **Reportar problema** con motivo; la etapa queda BLOQUEADA y la OT DETENIDA hasta que la Encargada las libere (CU-12, CU-13). 4a. Falta insumo → se reporta (CU-09). 4b. Adjuntar foto o nota. 5a. Era la última etapa → la OT pasa a TERMINADA. |
+| Excepciones | E1. Otro usuario cambió la etapa → 409 "La etapa cambió; recarga". E2. La etapa no es del actor → 404, sin revelar que existe (AM-05). E3. Sin conexión → la PWA avisa y conserva el formulario. |
+| Postcondiciones | La etapa y la OT quedan consistentes; el evento está en la bitácora; el siguiente responsable recibió el aviso |
 | Reglas | Solo transiciones de la Fig. 4.7; el consumo no puede dejar stock negativo |
-
-**Especificación del caso de uso crítico CU-04 — Registrar orden de trabajo**
-
-| Campo | Descripción |
-|---|---|
-| Actor | Vendedor (o Encargada de Producción) |
-| Precondiciones | Sesión activa con el permiso `ordenes.crear`; existe un tipo de trabajo activo con plantilla |
-| Flujo básico | 1. Selecciona el tipo de trabajo. 2. Ingresa título, referencia del cliente (solo institución), cantidad, especificaciones (tallas, medidas, colores), prioridad y fecha de compromiso. 3. El sistema valida, genera el código `OT-AAAA-NNNN`, crea las etapas desde la plantilla y calcula los requerimientos de insumo y la fecha estimada. 4. Si un insumo proyectado queda bajo el mínimo, crea una alerta. 5. Muestra el resumen con las etapas generadas. |
-| Alternativos | 3a. Fecha estimada > compromiso → advertencia "OT en riesgo" antes de confirmar. 3b. La Encargada ajusta etapas y responsables después de registrar la OT (CU-12, HU-08). |
-| Postcondiciones | OT en estado REGISTRADA (o EN_DISENO si requiere diseño); etapas en PENDIENTE y la primera en DISPONIBLE |
 
 ### 4.7 Tecnologías y herramientas de infraestructura
 
-La Tabla 4.2 resume la tecnología por capa. La matriz completa, con el uso de cada herramienta en la solución, su justificación técnica y la necesidad futura considerada, está en el **Anexo I (Tabla I.1)**.
+La Tabla 4.2 resume la tecnología por capa. El Anexo I (Tabla I.1) detalla cada herramienta con su uso, su justificación y la necesidad futura que cubre.
 
 **Tabla 4.2 — Tecnologías por capa**
 
@@ -520,38 +464,11 @@ La Tabla 4.2 resume la tecnología por capa. La matriz completa, con el uso de c
 | Hosting y red | Cloudflare Pages, DNS, proxy y WAF; Render (contenedor Docker) | TLS, CDN y WAF sin costo; plan básico de Render para evitar la suspensión por inactividad |
 | Entrega y calidad | GitHub Actions + Environments; Docker y Docker Compose; `pino`, Sentry y UptimeRobot | CI con pruebas, SAST y aprobación manual a producción; ambiente local idéntico a producción; observabilidad gratuita |
 | Gestión y documentación | GitHub Projects; PlantUML | Backlog, HU, PR y CI en una sola herramienta; diagramas versionables |
-| Infraestructura como código (ideal) | OpenTofu + Trivy | Fuera del alcance comprometido; primera mejora tras el piloto (ver más abajo) |
+| Infraestructura como código (ideal) | OpenTofu + Trivy | Fuera del alcance comprometido; primera mejora tras el piloto |
 
-**Costo mensual estimado de operación** (valores referenciales a validar al contratar, RNF-08): Cloudflare Pages, R2 y WAF US$ 0; Render Starter ≈ US$ 7; Neon Free US$ 0 (Launch ≈ US$ 19 si se superan 0,5 GB); Atlas M0 US$ 0 (M10 si se superan 512 MB); GitHub, Sentry y UptimeRobot US$ 0. **Total inicial ≈ US$ 7–10/mes**, compatible con la ausencia de presupuesto definido. El crecimiento previsto (~1.500 OT/año, ~12.000 etapas/año) cabe en las capas iniciales por al menos dos años.
+**Costo mensual estimado** (valores de referencia, RNF-08): Render Starter ≈ US$ 7; Cloudflare Pages, R2 y WAF, Neon Free, Atlas M0, GitHub, Sentry y UptimeRobot, US$ 0. **Total inicial: ≈ US$ 7–10 al mes.** Si se superan las capas gratuitas, Neon Launch cuesta ≈ US$ 19 y Atlas M10 tiene costo propio. Con el crecimiento previsto (~1.500 OT y ~12.000 etapas al año), las capas iniciales alcanzan para al menos dos años.
 
-**Infraestructura como código y portabilidad entre proveedores (práctica ideal)**
-
-Kotoduo no tiene un presupuesto definido (RNF-08), y los precios y las capas gratuitas de los servicios cloud cambian con el tiempo. Lo ideal es que la infraestructura no quede amarrada a un proveedor y se declare en archivos versionados con **OpenTofu**, la bifurcación de código abierto de Terraform que mantiene la Linux Foundation (licencia MPL 2.0). Así, si un proveedor sube sus precios, elimina su capa gratuita o Kotoduo obtiene créditos en otra nube, bastaría con cambiar el módulo afectado y volver a desplegar la misma arquitectura.
-
-**Alcance dentro del plazo.** Como la construcción dura un mes (sección 3.1), la IaC **no forma parte del alcance comprometido**. Se plantea como práctica ideal y como primera mejora después del piloto. Dentro del plazo solo se asegura lo que la hace posible sin costo adicional: el principio 2 (interfaces estándar), que ya forma parte del diseño, y el inventario de recursos de la sección 4.5, que sirve de punto de partida para escribir los módulos.
-
-*Principios de diseño de la IaC, para cuando se adopte:*
-
-1. **Módulos por rol, no por proveedor.** La configuración se divide en seis módulos: borde y DNS, front-end, cómputo de la API, base de datos estructurada, base de datos no estructurada y almacenamiento de archivos. Cada módulo entrega las mismas salidas sin importar quién lo implemente: URL de la API, cadenas de conexión y nombre del *bucket*. Cambiar de proveedor significa reemplazar la implementación de un módulo; los demás módulos y la aplicación no cambian.
-2. **La aplicación depende de interfaces estándar.** La API solo conoce una imagen Docker, el protocolo de PostgreSQL, el protocolo de MongoDB, la API de S3 y su configuración por variables de entorno (factor III de *The Twelve-Factor App*). Esta es la condición que hace útil la IaC: sin ella, cambiar de proveedor obligaría a reescribir código.
-3. **Mismos módulos para cada ambiente.** *Staging* y producción se crean desde los mismos módulos, con distintos tamaños y nombres. *Staging* reproduce producción fielmente, lo que da validez a las pruebas de integración y rendimiento (8.4 y 8.5).
-4. **Cambios revisados como el código.** Cada PR que modifica `infra/` ejecuta en CI la validación de sintaxis, el análisis de configuración insegura con Trivy y un *plan*, que muestra qué recursos se crearán, modificarán o destruirán. Aplicar ese plan en producción requiere la misma aprobación manual de GitHub Environments que el despliegue de la API.
-5. **Estado remoto y cifrado.** El estado de OpenTofu registra los recursos creados y puede contener secretos. Por eso se guarda en un *bucket* privado compatible con S3 y se cifra del lado del cliente con el cifrado de estado nativo de OpenTofu. Ese *bucket* es el único recurso que se crea una vez de forma manual. Los tokens de los proveedores se guardan en los secretos de GitHub Environments, nunca en el repositorio (sección 7.5).
-
-**Tabla 4.3 — Módulos de infraestructura y proveedores intercambiables**
-
-| Módulo | Proveedor inicial | Alternativa en AWS | Alternativa en Google Cloud | Proveedor de OpenTofu inicial |
-|---|---|---|---|---|
-| Borde y DNS | Cloudflare DNS, proxy y WAF | Route 53 + CloudFront + AWS WAF | Cloud DNS + Cloud Load Balancing + Cloud Armor | `cloudflare/cloudflare` (oficial) |
-| Front-end (PWA estática) | Cloudflare Pages | S3 + CloudFront o Amplify Hosting | Firebase Hosting | `cloudflare/cloudflare` (oficial) |
-| Cómputo de la API (contenedor) | Render Web Service | ECS Fargate o Lightsail Containers | Cloud Run | `render-oss/render` (oficial) |
-| BD estructurada (PostgreSQL 16) | Neon | RDS for PostgreSQL | Cloud SQL for PostgreSQL | `kislerdm/neon` (comunitario, patrocinado por Neon) |
-| BD no estructurada (MongoDB 8) | MongoDB Atlas | MongoDB Atlas desplegado en AWS | MongoDB Atlas desplegado en Google Cloud | `mongodb/mongodbatlas` (oficial) |
-| Archivos (API S3) | Cloudflare R2 | Amazon S3 | Cloud Storage (API XML interoperable con S3) | `cloudflare/cloudflare` (oficial) |
-
-La base de datos no estructurada se mantiene en Atlas con cualquier nube, porque Atlas puede desplegarse sobre AWS, Google Cloud o Azure. Amazon DocumentDB se descartó como reemplazo porque es compatible con la API de MongoDB solo en parte, y el diseño de la sección 6.4 depende de los índices TTL y del *aggregation pipeline*.
-
-**Límites de la portabilidad.** La IaC hace reproducible la infraestructura, pero no traslada los datos ni iguala las diferencias entre servicios. Una migración real requiere además tres pasos. Primero, trasladar los datos con las herramientas nativas de respaldo de cada motor y copiar los objetos del *bucket*. Segundo, actualizar los registros DNS. Tercero, adaptar las funciones sin equivalente directo, como el *branching* de Neon o las reglas del WAF. Estos pasos se documentan como procedimiento de migración en el repositorio y se ensayan junto con la restauración de respaldos (AM-15). Además, el proveedor de Neon es comunitario y el de Render es reciente: si alguno dejara de mantenerse, se reemplaza solo su módulo.
+**Necesidad futura: no quedar amarrado a un proveedor.** Kotoduo no tiene presupuesto definido, y los precios y capas gratuitas de la nube cambian. Lo ideal es declarar la infraestructura en archivos versionados con **OpenTofu**, la versión abierta de Terraform que mantiene la Linux Foundation. Así, cambiar de proveedor sería reemplazar un módulo y volver a desplegar. Como la construcción dura un mes, esto no entra en el alcance comprometido. Lo que sí se asegura desde ya es lo que lo hace posible: la API depende solo de interfaces estándar (Docker, PostgreSQL, MongoDB, S3 y variables de entorno) y existe el inventario de recursos de la sección 4.5. El Anexo I describe los principios de esa IaC y los proveedores intercambiables (Tabla I.2).
 
 ---
 
@@ -567,13 +484,13 @@ La base de datos no estructurada se mantiene en Atlas con cualquier nube, porque
 | Encargada de Producción | PC y celular; supervisa varias áreas | Ver el estado global, actuar sobre atrasos e insumos, estandarizar procesos (HU-07–HU-10) | Panel → filtro "Atrasadas" → OT → reasignar; Insumos → alerta → registrar ingreso → cerrar alerta; Plantillas → editar etapas | P-06, P-07, P-08 |
 | Administrador | PC de oficina | Controlar accesos y auditar (HU-11, HU-12) | Admin → Usuarios → crear/asignar rol/restablecer clave; Bitácora → filtrar por OT | P-09, P-10 |
 
-Principios aplicados a todos los perfiles: **tarea principal en primer plano** (la pantalla de inicio depende del rol), **lenguaje del taller** ("Terminar etapa", no "Actualizar estado") y **acciones de un toque** con confirmación solo para acciones irreversibles.
+Tres principios valen para todos los perfiles: la pantalla de inicio muestra la tarea principal de cada rol, los botones usan el lenguaje del taller ("Terminar etapa", no "Actualizar estado") y las acciones toman un toque, con confirmación solo cuando no se pueden deshacer.
 
 ### 5.2 Navegación y organización de contenidos
 
-El mapa de navegación es un árbol jerárquico de rutas. Cada nodo es una ruta de la PWA y sus hijos son pantallas o acciones accesibles desde ella. Se presenta en tres figuras: el nivel superior y dos acercamientos por grupo de perfiles.
+El mapa de navegación es un árbol de rutas de la PWA. Se presenta en tres figuras: el nivel superior y dos acercamientos por grupo de perfiles.
 
-**Figura 5.1 — Mapa de navegación: nivel superior.** Tras el inicio de sesión, cada rol entra a su propia pantalla de inicio.
+**Figura 5.1 — Mapa de navegación: nivel superior.** Después del login, cada rol entra a su propia pantalla de inicio.
 
 ![Figura 5.1 — Mapa de navegación: nivel superior](figuras/5.2-navegacion/fig-5.01-navegacion-general.png)
 
@@ -590,20 +507,28 @@ El mapa de navegación es un árbol jerárquico de rutas. Cada nodo es una ruta 
 | Inicio por rol | Tras el login: Operario/Diseñador → `/mi-trabajo`; Vendedor → `/ordenes`; Encargada/Administrador → `/panel` |
 | Navegación principal | **Móvil:** barra inferior con 3–4 destinos según el rol (íconos + texto). **Escritorio:** barra lateral izquierda |
 | Profundidad máxima | 3 niveles (p. ej., Panel → OT → Etapa); botón "Volver" siempre visible |
-| Guardas de ruta | Las rutas no permitidas para el rol no se muestran en el menú y, si se acceden por URL, muestran "No tienes acceso". La API aplica la autorización real (sección 7.3) |
-| URL compartibles | `/ordenes/ot-2026-0001` permite compartir el enlace por el canal interno sin exponer datos: requiere sesión |
+| Guardas de ruta | Las rutas no permitidas para el rol no aparecen en el menú y, si se abren por URL, muestran "No tienes acceso". La API aplica la autorización real (sección 7.3) |
+| URL compartibles | `/ordenes/ot-2026-0001` se puede compartir por el canal interno sin exponer datos: requiere sesión |
 
 ### 5.3 Prototipo interactivo funcional
 
-| Elemento | Información |
-|---|---|
-| Herramienta utilizada | Maqueta navegable en HTML5 + CSS3 con *design tokens* y JavaScript mínimo (solo navegación por rol, diálogos y cambio de estado visual). Sin back-end; los datos y los nombres de clientes son ficticios, y la maqueta no menciona a la empresa para poder publicarse |
-| Ubicación | Anexo D (maqueta navegable entregada junto con el informe) |
-| Enlace al prototipo | Publicación en GitHub Pages: `https://<usuario>.github.io/sgp-prototipo/` [Completar al publicar] |
-| Credenciales | No aplica: la pantalla de login simula el acceso con un selector de rol. |
-| Interacciones clave demostradas | IK-1 login, MFA para roles privilegiados y redirección por rol · IK-2 Mi Trabajo → detalle de OT · IK-3 Iniciar/Terminar etapa con cambio de estado y mensaje "Sigue: …"; Reportar problema deja la etapa Bloqueada con motivo obligatorio (Fig. 4.7) · IK-4 Reportar faltante (diálogo) · IK-5 Registrar OT con vista previa de etapas generadas · IK-6 Aprobar/Rechazar diseño con motivo obligatorio y segregación de funciones (R6) · IK-7 Panel con indicadores que filtran atrasadas, en riesgo y bloqueadas · IK-8 Plantilla de proceso con etapas ordenadas · IK-9 Insumos con ciclo de alerta (abierta → en gestión → cerrada) y registro de ingreso · IK-10 Navegación por rol (barra inferior en móvil, lateral en escritorio) y guarda "No tienes acceso" · IK-11 Control de la OT en P-03: detener con motivo, reanudar, anular con motivo y marcar entregada (Fig. 4.8), con el historial de la orden para la Encargada |
+El prototipo es una maqueta navegable en HTML5 y CSS3, con *design tokens* y el mínimo de JavaScript (navegación por rol, diálogos y cambios de estado visual). No tiene back-end, usa datos ficticios y no nombra a la empresa, para poder publicarse. Se entrega como Anexo D. El login simula el acceso con un selector de rol, así que no requiere credenciales.
 
-**Pantallas del prototipo (Tabla 5.1):**
+Demuestra once interacciones clave:
+
+- **IK-1** Login, MFA para roles privilegiados y redirección por rol.
+- **IK-2** Mi Trabajo → detalle de la OT.
+- **IK-3** Iniciar y terminar una etapa, con el mensaje "Sigue: …". Reportar un problema deja la etapa bloqueada con motivo obligatorio.
+- **IK-4** Reportar un faltante de insumo.
+- **IK-5** Registrar una OT con vista previa de las etapas que se generan.
+- **IK-6** Aprobar o rechazar un diseño, con motivo y separación de funciones (R6).
+- **IK-7** Panel con indicadores que filtran atrasadas, en riesgo y bloqueadas.
+- **IK-8** Plantilla de proceso con etapas ordenadas.
+- **IK-9** Ciclo de una alerta de insumo (abierta → en gestión → cerrada) y registro de ingreso.
+- **IK-10** Navegación por rol (barra inferior en móvil, lateral en escritorio) y guarda "No tienes acceso".
+- **IK-11** Control de la OT: detener y anular con motivo, reanudar, marcar entregada y ver su historial.
+
+**Tabla 5.1 — Pantallas del prototipo**
 
 | ID | Pantalla | Perfil | HU / CU |
 |---|---|---|---|
@@ -620,13 +545,13 @@ El mapa de navegación es un árbol jerárquico de rutas. Cada nodo es una ruta 
 | P-11 | Avisos | Todos | HU-01 / CU-06 (notificar siguiente responsable) |
 | P-12 | Mi perfil | Todos | HU-11 / CU-01 |
 
-**Especificación de la interacción crítica IK-3 (P-03):** la tarjeta de la etapa muestra un **chip de estado** (Disponible → En curso → Terminada) y un único **botón primario** contextual ("Iniciar etapa" → "Terminar etapa"). Al terminar, aparece un diálogo para confirmar los consumos, prellenados con la cantidad requerida y editables. Al confirmar, se muestra una franja de éxito con el texto **"Listo. Sigue: Sublimado — área Sublimación (responsable: …)"**, que es la respuesta directa al problema "no sé qué sigue". Las acciones secundarias ("Reportar faltante", "Reportar problema", "Adjuntar foto") están agrupadas bajo el botón primario y separadas visualmente para evitar toques accidentales.
+**La interacción crítica es IK-3, en P-03.** La tarjeta de la etapa muestra un chip de estado (Disponible → En curso → Terminada) y un solo botón principal, que cambia de "Iniciar etapa" a "Terminar etapa". Al terminar, un diálogo pide confirmar los consumos, que vienen prellenados. Luego aparece el mensaje **"Listo. Sigue: Sublimado — área Sublimación (responsable: …)"**, que responde directamente al problema de no saber qué sigue. Las acciones secundarias (reportar faltante o problema, adjuntar foto) quedan separadas del botón principal para evitar toques por error.
 
 ### 5.4 Consistencia visual y adaptabilidad
 
-La guía de estilo se implementa como *design tokens* (variables CSS del prototipo, Anexo D) que se reutilizarán en el front-end real. La identidad corporativa de Kotoduo no está documentada en el levantamiento: la paleta propuesta usa un azul institucional con un acento naranja (energía, publicidad) y se ajustará a su logotipo en la validación A01.
+La guía de estilo está escrita como *design tokens* (variables CSS del prototipo) que reutilizará el front-end real. Kotoduo no tiene una identidad gráfica documentada, así que se propone un azul institucional con un acento naranja, que se ajustará a su logotipo en la validación A01.
 
-**Paleta cromática y contraste (WCAG 2.2, criterio 1.4.3 AA ≥ 4,5:1 para texto normal; Tabla 5.2):**
+**Tabla 5.2 — Paleta y contraste** (WCAG 2.2, criterio 1.4.3 AA: ≥ 4,5:1 para texto normal)
 
 | Token | Hex | Uso | Contraste sobre blanco | Contraste sobre fondo `#F8FAFC` |
 |---|---|---|---|---|
@@ -639,42 +564,37 @@ La guía de estilo se implementa como *design tokens* (variables CSS del prototi
 | `--color-texto-2` | `#4B5563` | Texto secundario, metadatos | 7,56:1 ✔ | 7,22:1 ✔ |
 | `--color-fondo` | `#F8FAFC` | Fondo de la aplicación | — | — |
 
-El color **nunca es el único portador de significado** (WCAG 1.4.1): cada estado combina color, ícono y texto (p. ej., "⚠ Bloqueada").
+El color nunca es la única señal (WCAG 1.4.1): cada estado combina color, ícono y texto, por ejemplo "⚠ Bloqueada".
 
 | Aspecto | Regla / decisión | Evidencia |
 |---|---|---|
-| Tipografía y jerarquía | Fuente del sistema (`system-ui`: Roboto en Android, San Francisco en iOS, Segoe UI en Windows); no requiere descarga, es legible y familiar. Escala: H1 1,5 rem/700, H2 1,25 rem/600, cuerpo 1 rem (16 px mínimo, evita el zoom automático en iOS), metadatos 0,875 rem. Interlineado 1,5 | Todas las pantallas del prototipo (tokens `--fs-*`) |
+| Tipografía y jerarquía | Fuente del sistema (`system-ui`: Roboto en Android, San Francisco en iOS, Segoe UI en Windows): no se descarga y es familiar. Escala: H1 1,5 rem/700, H2 1,25 rem/600, cuerpo 1 rem (16 px mínimo, evita el zoom automático en iOS), metadatos 0,875 rem. Interlineado 1,5 | Todas las pantallas del prototipo (tokens `--fs-*`) |
 | Colores y contraste | Tabla 5.2; foco visible de 3 px con `--color-primario` (WCAG 2.4.7 / 2.4.11) | P-01 a P-08 |
-| Componentes y consistencia | Biblioteca única: botón (primario, secundario, peligro), chip de estado, tarjeta de OT, tabla, diálogo, campo con etiqueta visible y mensaje de error asociado (`aria-describedby`), franja de aviso. Mismo verbo, misma acción en todas las pantallas ("Terminar etapa") | Clases `.btn`, `.chip`, `.card` y `dialog` del prototipo |
+| Componentes y consistencia | Biblioteca única: botón (primario, secundario, peligro), chip de estado, tarjeta de OT, tabla, diálogo, campo con etiqueta visible y mensaje de error asociado, franja de aviso. El mismo verbo hace la misma acción en todas las pantallas ("Terminar etapa") | Clases `.btn`, `.chip`, `.card` y `dialog` del prototipo |
 | Estados del sistema | Vacío ("No tienes etapas pendientes"), cargando (esqueleto), error con acción ("Sin conexión" + "Reintentar"), éxito (franja verde) | P-02, P-03 |
-| Áreas táctiles | Objetivos de al menos 48×48 px (supera el mínimo de 24×24 px de WCAG 2.5.8); separación ≥ 8 px entre acciones | Botones de P-03 |
-| Diseño adaptable / responsive | *Mobile-first* con CSS Grid/Flexbox y tres *breakpoints*: **< 600 px** (1 columna, barra inferior, tablas como tarjetas), **600–1023 px** (2 columnas, tablet), **≥ 1024 px** (barra lateral + contenido de hasta 1200 px, tablas completas). Imágenes `max-width: 100%`; sin desplazamiento horizontal a 320 px (WCAG 1.4.10 *Reflow*) | Pruebas en 360×800 (Android típico), 390×844 (iPhone), 768×1024 y 1366×768; CP-34 |
+| Áreas táctiles | Objetivos de al menos 48×48 px (sobre el mínimo de 24×24 px de WCAG 2.5.8); separación ≥ 8 px entre acciones | Botones de P-03 |
+| Diseño adaptable | *Mobile-first* con CSS Grid/Flexbox y tres cortes: **< 600 px** (1 columna, barra inferior, tablas como tarjetas), **600–1023 px** (2 columnas), **≥ 1024 px** (barra lateral y contenido de hasta 1200 px). Sin desplazamiento horizontal a 320 px (WCAG 1.4.10) | Pruebas en 360×800, 390×844, 768×1024 y 1366×768; CP-34 |
 | Idioma y redacción | `lang="es-CL"`, tuteo, frases cortas, fechas `dd-mm-aaaa`, sin anglicismos técnicos | Todas |
 
 ### 5.5 Retroalimentación de usuarios y mejoras aplicadas
 
-La retroalimentación se gestiona en dos rondas:
+La retroalimentación llega en dos rondas:
 
-- **Ronda 0** (antecedentes del cliente): observaciones reales entregadas por Kotoduo en el documento de antecedentes complementarios, que modificaron el diseño inicial.
-- **Ronda 1** (actividad A06): prueba de usabilidad moderada del prototipo v1 con al menos 5 participantes (2 operarios, 1 vendedor, 1 diseñador y la encargada de producción). Cada participante realiza las tareas T1 "¿Qué te toca hacer ahora y qué sigue?", T2 "Termina la etapa de impresión", T3 "Avisa que se acabó el papel" y T4 "Registra una orden de 30 camisetas", con protocolo de pensamiento en voz alta, tiempo por tarea, tasa de éxito y cuestionario SUS (Brooke, 1996).
+- **Ronda 0:** observaciones reales de Kotoduo en el documento de antecedentes complementarios. Ya cambiaron el diseño (Tabla 5.3).
+- **Ronda 1 (actividad A06):** prueba de usabilidad del prototipo con al menos cinco personas (dos operarios, un vendedor, un diseñador y la encargada de producción). Cada una resuelve cuatro tareas mientras piensa en voz alta: T1 "¿Qué te toca hacer ahora y qué sigue?", T2 "Termina la etapa de impresión", T3 "Avisa que se acabó el papel" y T4 "Registra una orden de 30 camisetas". Se mide el tiempo, la tasa de éxito y el puntaje SUS (Brooke, 1996). Sus resultados se registran como FB-07 en adelante.
 
-**Tabla 5.3 — Registro de retroalimentación**
+**Tabla 5.3 — Retroalimentación incorporada (ronda 0)**
 
-| ID | Ronda / fecha | Usuario / perfil | Observación | Decisión | Cambio realizado / justificación |
-|---|---|---|---|---|---|
-| FB-01 | R0 / antecedentes | Contraparte Kotoduo (gerencia) | "Sería crear una app para el celular, así es más práctica para los trabajadores" | Incorporar | Diseño *mobile-first* como PWA instalable; navegación inferior en móvil (sección 4.7, 5.4) |
-| FB-02 | R0 / antecedentes | Contraparte Kotoduo | "Que sea un sistema fácil, práctico y amigable" | Incorporar | Inicio por rol con una sola tarea principal; botón primario único y contextual en P-03 (IK-3); lenguaje del taller |
-| FB-03 | R0 / antecedentes | Contraparte Kotoduo | Excluir "los contactos de clientes" y "temas de dinero" | Incorporar | P-04 sin teléfono, correo, precio ni pago; campo `referencia_cliente` limitado al nombre de la institución (sección 6.2) |
-| FB-04 | R0 / antecedentes | Contraparte Kotoduo | La aceptación del diseño es información relevante del proceso | Incorporar | Se agrega el módulo M6 y la pantalla P-05; la producción no se habilita sin diseño aprobado (Fig. 4.15) |
-| FB-05 | R0 / antecedentes | Contraparte Kotoduo | Trabajadores "sin quedar parados cuando no estén las personas a cargo" | Incorporar | El mensaje "Sigue: etapa — área — responsable" al terminar, y las instrucciones visibles en cada etapa, se convierten en el elemento central de P-03 |
-| FB-06 | R0 / antecedentes | Contraparte Kotoduo | Perfiles "administrador" y "de respuesta" | Incorporar con ajuste | Se refinan en 5 roles para respetar el mínimo privilegio; la equivalencia se valida en A01 (sección 7.1) |
-| FB-07 | R1 / [dd-mm] | [Operario 1] | [Completar tras la sesión A06] | [Incorporar / No incorporar] | [Cambio v1 → v2 y pantalla afectada] |
-| FB-08 | R1 / [dd-mm] | [Operario 2] | [Completar] | [ ] | [ ] |
-| FB-09 | R1 / [dd-mm] | [Vendedor] | [Completar] | [ ] | [ ] |
-| FB-10 | R1 / [dd-mm] | [Diseñador] | [Completar] | [ ] | [ ] |
-| FB-11 | R1 / [dd-mm] | [Encargada de Producción] | [Completar] | [ ] | [ ] |
+| ID | Usuario / perfil | Observación | Decisión | Cambio realizado |
+|---|---|---|---|---|
+| FB-01 | Contraparte Kotoduo (gerencia) | "Sería crear una app para el celular, así es más práctica para los trabajadores" | Incorporar | Diseño *mobile-first* como PWA instalable; navegación inferior en móvil (secciones 4.7 y 5.4) |
+| FB-02 | Contraparte Kotoduo | "Que sea un sistema fácil, práctico y amigable" | Incorporar | Inicio por rol con una sola tarea principal; botón primario único y contextual en P-03 (IK-3); lenguaje del taller |
+| FB-03 | Contraparte Kotoduo | Excluir "los contactos de clientes" y "temas de dinero" | Incorporar | P-04 sin teléfono, correo, precio ni pago; `referencia_cliente` limitado al nombre de la institución (sección 6.2) |
+| FB-04 | Contraparte Kotoduo | La aceptación del diseño es información relevante del proceso | Incorporar | Se agregan el módulo M6 y la pantalla P-05; sin diseño aprobado no hay producción (Fig. 4.15) |
+| FB-05 | Contraparte Kotoduo | Trabajadores "sin quedar parados cuando no estén las personas a cargo" | Incorporar | El mensaje "Sigue: etapa — área — responsable" y las instrucciones visibles pasan a ser el centro de P-03 |
+| FB-06 | Contraparte Kotoduo | Perfiles "administrador" y "de respuesta" | Incorporar con ajuste | Se refinan en 5 roles para respetar el mínimo privilegio; la equivalencia se valida en A01 (sección 7.1) |
 
-**Criterios de decisión:** se incorpora la observación si (a) afecta a una tarea crítica (T1–T3), (b) se repite en 2 o más participantes, o (c) impide completar una tarea. Se posterga al backlog si es una mejora estética o de bajo impacto. Se descarta si contradice el alcance acordado, y en ese caso se documenta la razón. La comparación v1 → v2 se adjunta en el Anexo D (capturas antes/después).
+**Cómo se decide en la ronda 1.** Una observación se incorpora si afecta una tarea crítica (T1–T3), si la repiten dos o más participantes o si impide completar una tarea. Las mejoras estéticas o de bajo impacto pasan al backlog. Lo que contradice el alcance acordado se descarta y se deja anotada la razón. Las capturas antes y después (v1 → v2) se agregan al Anexo D.
 
 ---
 
@@ -682,9 +602,9 @@ La retroalimentación se gestiona en dos rondas:
 
 ### 6.1 Modelo de datos: entidades y relaciones
 
-*Simbología:* el modelo usa la notación de Ingeniería de la Información ("pata de gallo"). `||` significa exactamente uno, `|o` cero o uno, `|{` uno o muchos y `o{` cero o muchos. Los atributos marcados con `*` son obligatorios (NOT NULL). `<<PK>>`, `<<FK>>` y `<<UK>>` indican clave primaria, foránea y única. La línea punteada `etapa_orden` → `plantilla_etapa` señala una relación no identificadora y opcional. Las tablas en gris (`«ref»`) se detallan en otra figura.
+El modelo usa la notación "pata de gallo". Los atributos con `*` son obligatorios, y `<<PK>>`, `<<FK>>` y `<<UK>>` marcan las claves primaria, foránea y única.
 
-**Figura 6.1 — Modelo entidad-relación: visión general.** Muestra las 16 tablas y todas sus relaciones, sin atributos. El color identifica el grupo y la figura donde se detalla.
+**Figura 6.1 — Modelo entidad-relación: visión general.** Las 16 tablas y todas sus relaciones, sin atributos. El color indica el grupo y la figura que lo detalla.
 
 ![Figura 6.1 — Modelo entidad-relación: visión general](figuras/6.1-modelo-datos/fig-6.01-er-general.png)
 
@@ -704,7 +624,7 @@ La retroalimentación se gestiona en dos rondas:
 
 ![Figura 6.5 — ER: insumos, kardex y alertas](figuras/6.1-modelo-datos/fig-6.05-er-insumos.png)
 
-El modelo tiene **16 tablas** en el esquema `sgp`, agrupadas por módulo:
+Las 16 tablas viven en el esquema `sgp` y se agrupan por módulo:
 
 | Grupo | Tablas | Módulo |
 |---|---|---|
@@ -730,21 +650,15 @@ El modelo tiene **16 tablas** en el esquema `sgp`, agrupadas por módulo:
 
 **Decisiones de optimización:**
 
-1. **Tercera forma normal.** `requerimiento_insumo` no almacena `orden_id`, porque se deriva de `etapa_orden` y evita la anomalía de actualización. `rol` y `area` son catálogos referenciados en lugar de textos repetidos.
-2. **Desnormalización controlada y justificada.**
-   - `etapa_orden` copia nombre, área, instrucciones y duración desde la plantilla: es una *instantánea* histórica, no una redundancia, porque la plantilla puede cambiar.
-   - `insumo.stock_actual` es un valor derivado del kardex, mantenido por el trigger R3 para evitar sumar miles de movimientos en cada consulta.
-3. **JSONB acotado.** `orden_trabajo.especificaciones` guarda tallas, medidas y colores, que varían por tipo de trabajo, con `CHECK jsonb_typeof = 'object'`. Los atributos por los que se filtra (estado, fechas, tipo) son columnas relacionales indexadas.
-4. **Claves.** Se usa UUID en las entidades expuestas en URL o eventos (`usuario`, `orden_trabajo`, `etapa_orden`): no son enumerables, lo que dificulta el IDOR, y se pueden generar sin coordinación. Se usan `SERIAL` en catálogos internos. El código de negocio `OT-AAAA-NNNN` es una clave alternativa (`UNIQUE`).
-5. **Índices diseñados por consulta.**
-   - `ix_etapa_responsable_estado` para *Mi Trabajo*.
-   - `ix_ot_estado_compromiso` para el panel.
-   - `ix_mov_insumo_fecha` para el kardex.
-   - Índices **parciales**: `ux_alerta_auto_abierta` (a lo más una alerta automática abierta por insumo), `ux_aprobacion_pendiente` e `ix_outbox_pendiente`.
+1. **Tercera forma normal.** `requerimiento_insumo` no guarda `orden_id`, porque se obtiene desde `etapa_orden`. `rol` y `area` son catálogos y no textos repetidos.
+2. **Dos redundancias controladas.** `etapa_orden` copia los datos de la plantilla como foto histórica, porque la plantilla puede cambiar. `insumo.stock_actual` guarda el resultado del kardex, mantenido por el trigger R3, para no sumar miles de movimientos en cada consulta.
+3. **JSONB acotado.** `orden_trabajo.especificaciones` guarda tallas, medidas y colores, que cambian según el tipo de trabajo. Todo lo que se usa para filtrar (estado, fechas, tipo) es una columna indexada.
+4. **Claves.** Las entidades que aparecen en URL o eventos usan UUID: no se pueden adivinar, lo que dificulta el acceso a datos ajenos (IDOR). Los catálogos internos usan `SERIAL`, y el código `OT-AAAA-NNNN` es una clave alternativa `UNIQUE`.
+5. **Un índice por consulta frecuente:** `ix_etapa_responsable_estado` (Mi Trabajo), `ix_ot_estado_compromiso` (panel) e `ix_mov_insumo_fecha` (kardex). Los índices **parciales** `ux_alerta_auto_abierta`, `ux_aprobacion_pendiente` e `ix_outbox_pendiente` cubren solo las filas que importan y, en los dos primeros, garantizan que haya una sola fila abierta.
 
 ### 6.2 Diccionario y reglas de integridad
 
-El diccionario completo documenta cada campo de las 16 tablas con su tipo, clave o restricción y descripción, y está en el **Anexo J (Tabla J.1)**. La Tabla 6.1 resume, por tabla, la clave primaria y las restricciones que sostienen las reglas de negocio.
+La Tabla 6.1 resume, por tabla, la clave primaria y las restricciones que sostienen las reglas de negocio. El diccionario completo, campo por campo, está en el Anexo J (Tabla J.1).
 
 **Tabla 6.1 — Resumen del diccionario de datos** (PK = clave primaria, FK = clave foránea, UQ = única, CK = restricción CHECK)
 
@@ -767,21 +681,21 @@ El diccionario completo documenta cada campo de las 16 tablas con su tipo, clave
 | `aprobacion_diseno` | SERIAL | UQ (orden_id, version); una sola versión PENDIENTE por OT; quien sube el diseño no lo resuelve (segregación) |
 | `outbox_evento` | BIGSERIAL | `payload` JSONB obligatorio; índice parcial sobre los eventos pendientes |
 
-**Reglas de integridad referencial (política ON DELETE):**
+**Integridad referencial (qué pasa al borrar):**
 
 | Política | Dónde | Justificación |
 |---|---|---|
-| `CASCADE` | `orden_trabajo → etapa_orden → requerimiento_insumo`; `tipo_trabajo → plantilla_etapa → plantilla_insumo`; `usuario → sesion_refresh, usuario_rol` | Composición: las partes no tienen sentido sin el todo. En la práctica las OT no se borran, se anulan |
-| `RESTRICT` | Referencias a `insumo`, `area`, `tipo_trabajo`, `rol`; `orden_trabajo.creado_por`; `movimiento_insumo.usuario_id`; `aprobacion_diseno.subido_por` | Impide perder historia: no se elimina un insumo con movimientos ni un usuario autor (se desactiva con `activo = FALSE`) |
-| `SET NULL` | `etapa_orden.responsable_id`, `etapa_orden.plantilla_etapa_id`, `usuario.area_id`, referencias opcionales de alertas y outbox | La entidad sobrevive aunque desaparezca la referencia opcional |
+| `CASCADE` | `orden_trabajo → etapa_orden → requerimiento_insumo`; `tipo_trabajo → plantilla_etapa → plantilla_insumo`; `usuario → sesion_refresh, usuario_rol` | Composición: las partes no tienen sentido sin el todo. En la práctica, las OT no se borran: se anulan |
+| `RESTRICT` | Referencias a `insumo`, `area`, `tipo_trabajo`, `rol`; `orden_trabajo.creado_por`; `movimiento_insumo.usuario_id`; `aprobacion_diseno.subido_por` | Evita perder historia: no se borra un insumo con movimientos ni un usuario autor (se desactiva con `activo = FALSE`) |
+| `SET NULL` | `etapa_orden.responsable_id`, `etapa_orden.plantilla_etapa_id`, `usuario.area_id`, referencias opcionales de alertas y outbox | La entidad sigue existiendo aunque desaparezca la referencia opcional |
 
 **Reglas de negocio implementadas en la base de datos:**
 
 | Regla | Mecanismo | Verificación |
 |---|---|---|
 | R1. `actualizado_en` siempre vigente | Trigger `fn_set_actualizado_en` | — |
-| R2. Solo transiciones de estado válidas en `etapa_orden` (Fig. 4.7) y en `orden_trabajo` (Fig. 4.8), con sus condiciones: la OT termina solo con todas sus etapas cerradas, se reanuda solo sin etapas bloqueadas y, mientras está DETENIDA, ninguna etapa se inicia ni se termina; en la etapa, con incremento de `version` | Triggers `trg_etapa_transicion` y `trg_orden_transicion` (lanzan `check_violation`) | CP-02 |
-| R3. Cada movimiento actualiza el stock; si queda ≤ mínimo, se crea **una** alerta automática | Trigger `trg_movimiento_insumo` + índice único parcial + `ON CONFLICT DO NOTHING` | CP-14, consulta 6 |
+| R2. Solo transiciones de estado válidas en `etapa_orden` (Fig. 4.7) y en `orden_trabajo` (Fig. 4.8): la OT termina solo con todas sus etapas cerradas, se reanuda solo sin etapas bloqueadas y, mientras está DETENIDA, ninguna etapa se inicia ni se termina; cada cambio de la etapa incrementa `version` | Triggers `trg_etapa_transicion` y `trg_orden_transicion` (lanzan `check_violation`) | CP-02 |
+| R3. Cada movimiento actualiza el stock; si queda ≤ mínimo, se crea **una** alerta automática | Trigger `trg_movimiento_insumo` + índice único parcial + `ON CONFLICT DO NOTHING` | CP-14 |
 | R4. Stock nunca negativo | `CHECK (stock_actual >= 0)` aborta la transacción completa | CP-14 |
 | R5. Bloqueo con motivo; terminada con fecha | `ck_etapa_bloqueo`, `ck_etapa_terminada` | CP-01 |
 | R6. Quien sube un diseño no puede aprobarlo | `ck_aprobacion_segregacion` | CP-16 |
@@ -790,40 +704,26 @@ El diccionario completo documenta cada campo de las 16 tablas con su tipo, clave
 
 ### 6.3 Bases de implementación de la base de datos estructurada
 
-En esta etapa se fijan los **principios y buenas prácticas** con que se construirá el esquema `sgp` en PostgreSQL 16; no se incluye código. El script se escribe como migraciones versionadas en A11 (Sprint 1) y se completa en cada Sprint junto al módulo que lo usa. Para la sintaxis y los ejemplos concretos, el equipo seguirá la documentación oficial citada en cada fila. El **Anexo B** contiene un borrador referencial del esquema (DDL y consultas de ejemplo), que sirve como punto de partida para A11 y se ajustará en las migraciones.
+El esquema `sgp` se construye en PostgreSQL 16 como migraciones versionadas: parte en A11 (Sprint 1) y crece en cada Sprint junto al módulo que lo usa. El Anexo B trae un borrador del esquema (DDL y consultas de ejemplo) que sirve de punto de partida. La Tabla 6.2 fija los principios que sigue; la sintaxis se toma de la documentación oficial de PostgreSQL 16 (PostgreSQL Global Development Group, 2024).
 
 **Tabla 6.2 — Principios de implementación en PostgreSQL**
 
-| Principio | Qué se establece | Reglas del modelo que lo aplican | Documentación de referencia |
-|---|---|---|---|
-| Integridad declarativa primero | Las reglas que se pueden expresar como restricción (`PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `CHECK`, `NOT NULL`) se declaran en el esquema y no solo en la aplicación. La base de datos rechaza un dato inválido venga de donde venga | R4, R5, R6 y las políticas `ON DELETE` (6.2) | PostgreSQL 16, *Constraints*: https://www.postgresql.org/docs/16/ddl-constraints.html |
-| Transacciones ACID por caso de uso | Cada caso de uso que modifica varias tablas (p. ej., terminar una etapa) se ejecuta en **una** transacción: o se aplican todos los cambios o ninguno. Se usa el nivel de aislamiento por defecto (*Read Committed*) más bloqueo explícito donde hay competencia | CU-06, outbox (6.5) | *Transaction Isolation*: https://www.postgresql.org/docs/16/transaction-iso.html |
-| Control de concurrencia | Bloqueo pesimista de fila (`SELECT … FOR UPDATE`) sobre la etapa que se modifica, combinado con concurrencia optimista mediante la columna `version`. Así, dos operarios que actúan a la vez producen una sola transición | R2, CP-19 | *Explicit Locking*: https://www.postgresql.org/docs/16/explicit-locking.html |
-| Triggers solo para invariantes críticas | Se reservan para reglas que deben cumplirse ante cualquier cliente y que una restricción no puede expresar: transiciones de estado, mantenimiento del stock derivado y fecha de actualización. La lógica de negocio general permanece en la capa de servicio | R1, R2, R3 | *Trigger Functions* (PL/pgSQL): https://www.postgresql.org/docs/16/plpgsql-trigger.html |
-| Operaciones idempotentes | Las inserciones que pueden repetirse (alerta automática de insumo) usan una restricción única y la cláusula `ON CONFLICT`, de modo que un reintento o una carrera no duplican el registro | R3 | *INSERT — ON CONFLICT*: https://www.postgresql.org/docs/16/sql-insert.html |
-| Índices diseñados por consulta | Cada índice se justifica por una consulta frecuente (Mi Trabajo, panel, kardex). Los índices **parciales** cubren solo el subconjunto relevante (alertas abiertas, outbox pendiente) y además garantizan unicidad condicional. Se verifican con `EXPLAIN` en A26 | Índices de 6.1 | *Partial Indexes*: https://www.postgresql.org/docs/16/indexes-partial.html; *Using EXPLAIN*: https://www.postgresql.org/docs/16/using-explain.html |
-| JSONB acotado | Solo los atributos variables por tipo de trabajo van en `JSONB`; todo atributo por el que se filtra o se relaciona es una columna tipada | `orden_trabajo.especificaciones` | *JSON Types*: https://www.postgresql.org/docs/16/datatype-json.html |
-| Mínimo privilegio | La aplicación se conecta con un rol sin privilegios de administración ni de DDL. Los registros históricos (kardex, outbox) no admiten `UPDATE` ni `DELETE` para ese rol | R7, R8 | *Privileges*: https://www.postgresql.org/docs/16/ddl-priv.html; *Database Roles*: https://www.postgresql.org/docs/16/user-manag.html |
-| Esquema versionado | Todo cambio de estructura es una migración revisada en PR y aplicada por el pipeline, nunca un cambio manual en producción. Cada migración se prueba primero en staging | A10, A11 | Documentación de `node-pg-migrate`: https://salsita.github.io/node-pg-migrate/ |
-| Respaldo y recuperación | Se usa la recuperación a un punto en el tiempo (PITR) del proveedor gestionado y se prueba una restauración antes del piloto | RNF-05, A29 | *Continuous Archiving and PITR*: https://www.postgresql.org/docs/16/continuous-archiving.html |
-
-**Criterios de verificación.** Cada criterio se verifica dos veces: primero sobre el borrador del Anexo B en un ambiente local (Tabla 6.4, ya ejecutada) y luego, durante la construcción, sobre la base de datos de staging, con captura (Figura 6.6) y reporte de pruebas (Anexo F):
-
-| Comportamiento esperado | Regla | Caso de prueba |
+| Principio | Qué se establece | Reglas del modelo que lo aplican |
 |---|---|---|
-| Una transición inválida (p. ej., PENDIENTE → TERMINADA en una etapa o TERMINADA → EN_PRODUCCION en una OT) es rechazada por la base de datos | R2 | CP-02 |
-| Una OT con etapas abiertas no pasa a TERMINADA, no se reanuda con una etapa bloqueada y, mientras está DETENIDA, no se inicia ninguna de sus etapas | R2 | CP-02 |
-| Terminar una etapa actualiza la etapa, habilita la siguiente y registra el evento outbox en una sola transacción | Transacción por caso de uso | CP-01, CP-11 |
-| Un consumo que dejaría stock negativo aborta la transacción completa | R4 | CP-14 |
-| Varios consumos bajo el mínimo generan **una sola** alerta automática abierta | R3 | CP-14 |
-| No se puede eliminar un insumo con movimientos | `RESTRICT` | CP-14 |
-| Quien sube un diseño no puede aprobarlo | R6 | CP-16 |
-| Dos terminaciones simultáneas de la misma etapa producen una sola transición | Concurrencia | CP-19 |
-| El rol de la aplicación no puede modificar el kardex ni el outbox | R7, R8 | CP-32 |
+| Integridad declarativa primero | Toda regla que se pueda escribir como restricción (`PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `CHECK`, `NOT NULL`) se declara en el esquema. La base rechaza un dato inválido venga de donde venga | R4, R5, R6 y las políticas `ON DELETE` (6.2) |
+| Una transacción por caso de uso | Si un caso de uso toca varias tablas (p. ej., terminar una etapa), todo se guarda o nada. Se usa *Read Committed* con bloqueos explícitos donde hay competencia | CU-06, outbox (6.5) |
+| Control de concurrencia | Se bloquea la fila que se modifica (`SELECT … FOR UPDATE`) y se compara la columna `version`. Si dos operarios actúan a la vez, ocurre una sola transición | R2, CP-19 |
+| Triggers solo para invariantes críticas | Se usan para reglas que deben cumplirse ante cualquier cliente y que una restricción no alcanza a expresar. El resto de la lógica vive en la capa de servicio | R1, R2, R3 |
+| Operaciones idempotentes | Las inserciones que se pueden repetir usan una restricción única con `ON CONFLICT`, así un reintento no duplica el registro | R3 |
+| Índices diseñados por consulta | Cada índice responde a una consulta frecuente. Los parciales cubren solo las filas relevantes y garantizan unicidad condicional. Se revisan con `EXPLAIN` en A26 | Índices de 6.1 |
+| JSONB acotado | Solo lo que varía por tipo de trabajo va en `JSONB`; lo que se filtra o relaciona es una columna con tipo | `orden_trabajo.especificaciones` |
+| Mínimo privilegio | La aplicación se conecta con un rol sin permisos de administración ni de DDL, que no puede modificar ni borrar el kardex ni el outbox | R7, R8 |
+| Esquema versionado | Todo cambio de estructura es una migración revisada en un PR y aplicada por el pipeline, primero en staging. Nunca se cambia a mano en producción | A10, A11 |
+| Respaldo y recuperación | Recuperación a un punto en el tiempo (PITR) del proveedor y una restauración de prueba antes del piloto | RNF-06, A29 |
 
-**Verificación anticipada de los borradores.** Para no esperar a la construcción, los borradores de los Anexos B y C se ejecutaron sobre los motores reales con contenedores Docker locales (PostgreSQL 16.13 y MongoDB 9.0.4) el 22-10-2026. Se usó MongoDB 9.0 en local porque la versión 8.0 no arranca en kernels Linux 6.19 o superiores (SERVER-121912); la 9.0 expone la misma API y el diseño sigue apuntando a MongoDB 8 en Atlas. Cada fila resume una prueba sobre una base recién creada; las pruebas que modifican datos se revierten al terminar.
+**Los borradores ya se probaron.** Para no esperar a la construcción, los borradores de los Anexos B y C se ejecutaron el 22-10-2026 sobre los motores reales, en contenedores Docker locales (PostgreSQL 16.13 y MongoDB 9.0.4). En local se usó MongoDB 9.0 porque la 8.0 no arranca en kernels Linux 6.19 o superiores (SERVER-121912); la 9.0 tiene la misma API, y el diseño sigue apuntando a MongoDB 8 en Atlas. Cada prueba corrió sobre una base recién creada (Tabla 6.3). Durante la construcción se repiten sobre staging y sus reportes van al Anexo F.
 
-**Tabla 6.4 — Resultados de la verificación local de los borradores**
+**Tabla 6.3 — Resultados de la verificación local de los borradores**
 
 | Verificación | Regla | Resultado obtenido |
 |---|---|---|
@@ -844,11 +744,9 @@ En esta etapa se fijan los **principios y buenas prácticas** con que se constru
 | Reintento de la publicación de un evento ya procesado | 6.4, 6.5 | 0 documentos nuevos (*upsert* idempotente) |
 | Consulta de la bandeja de notificaciones | 6.4 | Resuelta con el índice `ix_bandeja` |
 
-> [Insertar captura de la ejecución en staging como Figura 6.6, una vez completado A11.]
-
 ### 6.4 Bases de implementación de la base de datos no estructurada
 
-MongoDB (base `sgp_docs`) almacena la información **de esquema variable, alto volumen de escritura y sin necesidad de *joins***. Igual que en 6.3, aquí se definen las decisiones de modelado y las buenas prácticas; la sintaxis concreta se toma de la documentación oficial de MongoDB. El **Anexo C** contiene un borrador referencial de los validadores, los índices y el script de inicialización.
+MongoDB (base `sgp_docs`) guarda lo que cambia de forma, se escribe mucho y no necesita *joins*: la bitácora, las evidencias y las notificaciones. El Anexo C trae un borrador de los validadores, los índices y el script de inicialización.
 
 | Colección | Propósito | Clave / identificador | Índices | Retención |
 |---|---|---|---|---|
@@ -856,36 +754,27 @@ MongoDB (base `sgp_docs`) almacena la información **de esquema variable, alto v
 | `evidencias_etapa` | Fotos, notas y versiones de diseño con metadatos libres por tipo de trabajo (RF-07, RF-08) | `ObjectId` (referenciado por `aprobacion_diseno.evidencia_ref`) | Por orden y fecha; por etapa; por hash del archivo | Indefinida |
 | `notificaciones` | Bandeja in-app y estado del push | Identificador determinista por evento y destinatario | Por destinatario, estado de lectura y fecha | TTL 90 días |
 
-**Tabla 6.3 — Principios de implementación en MongoDB**
+**Tabla 6.4 — Principios de implementación en MongoDB** (MongoDB, Inc., 2025)
 
-| Principio | Qué se establece | Documentación de referencia |
-|---|---|---|
-| Modelar según los patrones de acceso | Se **incrusta** lo que se lee siempre junto (actor, estado anterior y nuevo dentro del evento) y se **referencia** lo que tiene ciclo de vida propio (la OT y la etapa, que viven en PostgreSQL). Cada documento se diseña para responder a una pantalla concreta sin *joins* | MongoDB Manual, *Data Modeling*: https://www.mongodb.com/docs/manual/data-modeling/ |
-| Esquema flexible, pero validado | Cada colección tiene un validador `$jsonSchema` en modo de rechazo: los campos obligatorios, los tipos y los valores permitidos se controlan en el servidor, mientras los metadatos variables quedan abiertos | *Schema Validation*: https://www.mongodb.com/docs/manual/core/schema-validation/ |
-| Índices por consulta | Cada índice compuesto responde a una consulta de la aplicación y sigue la guía *Equality-Sort-Range* (primero los campos de igualdad, luego el de orden y al final los de rango) | *Indexes*: https://www.mongodb.com/docs/manual/indexes/ |
-| Retención automática | La caducidad de la bitácora y de las notificaciones se implementa con índices TTL, sin procesos de limpieza manuales | *TTL Indexes*: https://www.mongodb.com/docs/manual/core/index-ttl/ |
-| Escrituras idempotentes | El relay escribe con *upsert* sobre un identificador determinista: reintentar el mismo evento no crea un duplicado | *updateOne* (opción `upsert`): https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/ |
-| Durabilidad confirmada | Las escrituras de auditoría usan *write concern* `majority`, para que el relay marque un evento como procesado solo cuando está replicado | *Write Concern*: https://www.mongodb.com/docs/manual/reference/write-concern/ |
-| Inmutabilidad de la auditoría | Solo el usuario de base de datos del relay tiene permiso de escritura sobre `bitacora_eventos`; el usuario de la API solo puede leerla. Ninguno tiene permiso de borrado | *Security Checklist*: https://www.mongodb.com/docs/manual/administration/security-checklist/ |
+| Principio | Qué se establece |
+|---|---|
+| Modelar según cómo se lee | Se **incrusta** lo que siempre se lee junto (el actor y los estados anterior y nuevo, dentro del evento) y se **referencia** lo que tiene vida propia (la OT y la etapa, que viven en PostgreSQL). Cada documento responde a una pantalla sin *joins* |
+| Esquema flexible, pero validado | Cada colección tiene un validador `$jsonSchema` en modo de rechazo: el servidor controla los campos obligatorios, los tipos y los valores permitidos, y deja abiertos los metadatos variables |
+| Índices por consulta | Cada índice compuesto responde a una consulta y sigue el orden igualdad, orden y rango (*Equality-Sort-Range*) |
+| Retención automática | La bitácora y las notificaciones caducan con índices TTL, sin procesos de limpieza manuales |
+| Escrituras idempotentes | El relay escribe con *upsert* sobre un identificador determinista: reintentar un evento no crea un duplicado |
+| Durabilidad confirmada | La auditoría se escribe con *write concern* `majority`: el relay marca un evento como procesado solo cuando ya está replicado |
+| Auditoría inmutable | Solo el usuario del relay puede escribir en `bitacora_eventos`; el de la API solo puede leerla. Nadie puede borrar |
 
-**Criterios de verificación planificados** (se ejecutan en A18 y A21, con captura como Figura 6.7):
-
-- Las tres colecciones existen con su validador e índices.
-- Un documento que no cumple el validador (p. ej., un tipo de evento inexistente) es rechazado.
-- Reintentar la publicación de un evento ya procesado no crea un segundo documento (prueba de integración del relay, A23).
-- Las consultas de la bandeja y del historial de una orden usan su índice, verificado con `explain`.
-
-Los cuatro criterios ya se cumplieron sobre el borrador del Anexo C en el ambiente local (Tabla 6.4); en A18 y A21 se repiten sobre staging.
-
-> [Insertar captura de la ejecución en staging como Figura 6.7, una vez completados A18 y A21.]
+La Tabla 6.3 muestra que el borrador del Anexo C ya cumple lo esperado: las tres colecciones tienen su validador e índices, el validador rechaza un tipo de evento inexistente, un reintento no duplica documentos y la bandeja usa su índice.
 
 ### 6.5 Integración entre datos estructurados y no estructurados
 
-**Estrategia: outbox transaccional** (Richardson, 2018). Una transacción no puede abarcar PostgreSQL y MongoDB a la vez. Escribir en ambas bases desde la API ("doble escritura") arriesgaría perder eventos si el proceso falla entre una escritura y otra. Por eso:
+**Estrategia: outbox transaccional** (Richardson, 2018). Una transacción no puede abarcar PostgreSQL y MongoDB a la vez. Si la API escribiera en las dos por separado, una caída entre ambas escrituras perdería eventos. Por eso:
 
-1. El servicio escribe el cambio de negocio **y** su evento en `outbox_evento` en la **misma transacción PostgreSQL**: o se guardan ambos o ninguno.
-2. El **relay** (cada 5 s) lee los eventos pendientes con `FOR UPDATE SKIP LOCKED` y los publica en `bitacora_eventos` y `notificaciones` con `_id` determinista (`evt-<id>`), mediante un *upsert* idempotente. Luego marca `procesado_en`.
-3. Si MongoDB no está disponible, el evento queda pendiente y se reintenta (`intentos` + 1). Si un evento acumula 10 intentos fallidos, se genera una alerta en Sentry. La consistencia es **eventual con garantía de entrega al menos una vez**, y la idempotencia la convierte en *exactamente una vez* en efecto.
+1. El servicio guarda el cambio de negocio **y** su evento en `outbox_evento` en la **misma transacción** de PostgreSQL: se guardan los dos o ninguno.
+2. Cada 5 segundos, el **relay** lee los eventos pendientes con `FOR UPDATE SKIP LOCKED` y los publica en `bitacora_eventos` y `notificaciones` con un `_id` determinista (`evt-<id>`). Después marca el evento como procesado.
+3. Si MongoDB no responde, el evento queda pendiente y se reintenta. Tras 10 intentos fallidos se genera una alerta en Sentry. El resultado es una entrega **al menos una vez**, y la idempotencia hace que el efecto sea **exactamente una vez**.
 
 | Dato / proceso | Origen estructurado (PostgreSQL) | Origen no estructurado (MongoDB / R2) | Mecanismo de relación / integración |
 |---|---|---|---|
@@ -893,57 +782,57 @@ Los cuatro criterios ya se cumplieron sobre el borrador del Anexo C en el ambien
 | Versiones de diseño | `aprobacion_diseno` (estado, versión, quién aprueba) | `evidencias_etapa` (tipo DISENO) + archivo en R2 | `aprobacion_diseno.evidencia_ref` = `ObjectId` del documento; el documento guarda `object_key` y `sha256` del archivo |
 | Evidencias de etapa | `etapa_orden.id` | `evidencias_etapa.etapa_orden_id` | Referencia lógica por UUID; la API valida que la etapa exista y pertenezca al actor antes de emitir la URL prefirmada |
 | Notificaciones | Evento outbox (ETAPA_TERMINADA, ALERTA_INSUMO_CREADA) | `notificaciones` | El relay resuelve los destinatarios (responsable de la siguiente etapa o usuarios con rol Encargada) y crea un documento por destinatario |
-| Vista "Detalle de orden" | OT, etapas y requerimientos (consulta SQL) | Historial y evidencias (consulta Mongo por `orden_id`) | Composición en la capa de servicio (*API composition*): dos consultas ejecutadas en paralelo |
+| Vista "Detalle de orden" | OT, etapas y requerimientos (consulta SQL) | Historial y evidencias (consulta Mongo por `orden_id`) | La capa de servicio combina dos consultas ejecutadas en paralelo (*API composition*) |
 | Analítica futura de tiempos | `etapa_orden.iniciada_en / terminada_en` | `bitacora_eventos` (eventos ETAPA_*) | Agregaciones en Mongo sin cargar la BD transaccional |
 
-**Regla de propiedad del dato:** PostgreSQL es la **fuente de verdad** de todo estado de negocio. MongoDB nunca se usa para decidir una transición; solo registra lo ocurrido y almacena contenido variable. Por eso la eventual demora del relay (≤ 5 s) no afecta la consistencia operativa.
+**Quién manda sobre el dato:** PostgreSQL es la única fuente de verdad del estado del negocio. MongoDB nunca decide una transición; solo registra lo que pasó y guarda contenido variable. Por eso, que el relay tarde hasta 5 segundos no afecta la operación.
 
 ---
 
 ## 7. Seguridad y estándares de programación segura
 
-El sistema gestiona principalmente información operativa, pero su indisponibilidad o manipulación detendría la producción, el mismo problema que se busca resolver. Además, guarda datos personales de trabajadores (nombre, usuario, actividad), sujetos a la Ley N.º 19.628 modificada por la Ley N.º 21.719 y al Código del Trabajo (sección 7.7). Los controles técnicos se alinean con OWASP ASVS 4.0.3 nivel 2 en autenticación (V2), sesión (V3) y control de acceso (V4), y con OWASP Top 10:2021. En el plano de gestión, se alinean con ISO/IEC 27001/27002, CIS Controls v8.1 y NIST CSF 2.0.
+El sistema maneja sobre todo información operativa, pero si se cae o alguien lo manipula, la producción se detiene: justo el problema que se quiere resolver. También guarda datos personales de los trabajadores (nombre, usuario y actividad), protegidos por la Ley N.º 19.628, modificada por la Ley N.º 21.719, y por el Código del Trabajo (sección 7.7). Los controles técnicos siguen OWASP ASVS 4.0.3 nivel 2 en autenticación (V2), sesión (V3) y control de acceso (V4), y OWASP Top 10:2021.
 
 ### 7.1 Roles y perfiles de acceso
 
 | Rol / perfil | Funciones permitidas | Información accesible | Restricciones |
 |---|---|---|---|
-| **Administrador** | Todo lo de la Encargada; crear, desactivar y restablecer usuarios; asignar roles; revocar sesiones; consultar la bitácora completa | Toda la información del sistema | MFA obligatorio; no puede eliminar registros de bitácora ni kardex; no se puede quitar a sí mismo el último rol Administrador (siempre existe al menos uno) |
+| **Administrador** | Todo lo de la Encargada; crear, desactivar y restablecer usuarios; asignar roles; revocar sesiones; consultar la bitácora completa | Toda la información del sistema | MFA obligatorio; no puede eliminar registros de bitácora ni kardex; no puede quitarse el último rol Administrador (siempre existe al menos uno) |
 | **Encargada de Producción** | Gestionar plantillas, tipos de trabajo e insumos; ver todas las OT; asignar/reasignar responsables; omitir o desbloquear etapas; detener, reanudar o anular OT; gestionar alertas; ver el panel; consultar la bitácora por OT; restablecer la clave de un operario | Todas las OT, etapas, insumos, alertas y panel; usuarios (solo nombre y área) | MFA obligatorio; sin gestión de usuarios ni roles (solo restablece claves de operarios) |
 | **Vendedor** | Crear OT; editar sus OT en estado REGISTRADA; registrar la respuesta del cliente al diseño; marcar una OT como ENTREGADA | Todas las OT (lectura) y su avance; versiones de diseño | No avanza etapas de producción; no gestiona insumos ni plantillas |
 | **Diseñador** | Ver y avanzar **sus** etapas de diseño; subir versiones de diseño; reportar faltantes | Sus etapas asignadas y las OT asociadas; stock (lectura) | No puede aprobar sus propios diseños (R6) |
-| **Operario** | Ver y avanzar **sus** etapas; registrar consumo; reportar faltante o problema; adjuntar evidencia | Solo las etapas asignadas a él y los datos de producción de esas OT; stock (lectura) | No ve el panel global, la bitácora ni etapas de otros; no edita OT |
+| **Operario** | Ver y avanzar **sus** etapas; registrar consumo; reportar faltante o problema; adjuntar evidencia | Solo sus etapas asignadas y los datos de producción de esas OT; stock (lectura) | No ve el panel global, la bitácora ni etapas de otros; no edita OT |
 
-**Correspondencia con el levantamiento:** el perfil "administrador" mencionado por el cliente equivale a Administrador más Encargada de Producción. El perfil "de respuesta" equivale a Operario y Diseñador. Vendedor surge del proceso confirmado *vendedor → encargada de producción → operarios*.
+El perfil "administrador" que mencionó el cliente equivale a Administrador más Encargada de Producción. El perfil "de respuesta" equivale a Operario y Diseñador. El Vendedor sale del proceso confirmado *vendedor → encargada de producción → operarios*.
 
 ### 7.2 Política de autenticación
 
 | Control | Política | Fundamento |
 |---|---|---|
 | Identificador | `nombre_usuario` único (los operarios pueden no tener correo) | Usabilidad del taller |
-| Contraseña | Mínimo **12 caracteres**, máximo 128; se permiten espacios y frases; **sin reglas de composición** ni expiración periódica; se rechazan claves de una lista de 100.000 contraseñas comprometidas y las que contienen el nombre de usuario | ASVS V2.1.1, V2.1.7; NIST SP 800-63B |
-| Almacenamiento | **Argon2id** (m = 19 MiB, t = 2, p = 1) con sal aleatoria por usuario; parámetros en el hash (formato PHC) para recalibrar sin migración | OWASP Password Storage Cheat Sheet |
-| MFA | **TOTP obligatorio** para Administrador y Encargada de Producción (cuentas privilegiadas), opcional para el resto. Secreto cifrado con AES-256-GCM; 10 códigos de recuperación de un solo uso, guardados con hash | ASVS V2.8; privilegio elevado |
-| Fuerza bruta | 5 intentos fallidos → bloqueo de cuenta por 15 min (progresivo: 30 y 60 min); *rate limit* de 10 solicitudes/min por IP en `/auth/*` (API) más regla WAF en Cloudflare | ASVS V2.2.1 |
-| Mensajes | Error genérico: "Usuario o contraseña incorrectos". Se verifica contra un hash ficticio cuando el usuario no existe, para igualar los tiempos y evitar la enumeración de cuentas | OWASP Authentication Cheat Sheet |
-| Token de acceso | JWT firmado con **EdDSA (Ed25519)**, vigencia **10 min**, con `sub`, `roles` y `jti`; se guarda **solo en memoria** de la PWA (nunca en `localStorage`) y se envía en `Authorization: Bearer` | Limita el impacto de un XSS |
-| Token de refresco | Opaco de 256 bits, guardado con hash SHA-256 en `sesion_refresh`. Cookie `__Host-`, `HttpOnly; Secure; SameSite=Strict; Path=/`. **Rotación en cada uso**; si se reutiliza un token ya rotado, se revoca toda la `familia_id` (posible robo) | OWASP Session Management; RFC 9700 |
-| Duración de sesión | Inactividad: 2 h (operarios) / 30 min (Administrador, Encargada). Absoluta: 12 h, igual a una jornada | ASVS V3.3 |
-| Cierre de sesión | Revoca el refresh en el servidor; el Administrador puede revocar todas las sesiones de un usuario (p. ej., por pérdida del teléfono) | ASVS V3.3.1 |
-| Recuperación | Operarios: la Encargada o el Administrador generan una **clave temporal de un solo uso** (24 h) con cambio obligatorio (`debe_cambiar_clave`). Usuarios con correo: enlace de un solo uso, 30 min, con token guardado como hash | ASVS V2.5 |
+| Contraseña | Mínimo **12 caracteres**, máximo 128; se permiten espacios y frases; **sin reglas de composición** ni expiración periódica; se rechazan las claves de una lista de 100.000 contraseñas comprometidas y las que contienen el nombre de usuario | ASVS V2.1.1, V2.1.7; NIST SP 800-63B |
+| Almacenamiento | **Argon2id** (m = 19 MiB, t = 2, p = 1) con sal aleatoria por usuario; parámetros guardados en el hash (formato PHC) para recalibrar sin migración | OWASP Password Storage Cheat Sheet |
+| MFA | **TOTP obligatorio** para Administrador y Encargada de Producción, opcional para el resto. Secreto cifrado con AES-256-GCM; 10 códigos de recuperación de un solo uso, guardados con hash | ASVS V2.8; privilegio elevado |
+| Fuerza bruta | 5 intentos fallidos → bloqueo de 15 min (luego 30 y 60 min); límite de 10 solicitudes/min por IP en `/auth/*` y regla WAF en Cloudflare | ASVS V2.2.1 |
+| Mensajes | Error genérico: "Usuario o contraseña incorrectos". Si el usuario no existe, se compara igual contra un hash ficticio, para que el tiempo de respuesta no revele qué cuentas existen | OWASP Authentication Cheat Sheet |
+| Token de acceso | JWT firmado con **EdDSA (Ed25519)**, vigencia **10 min**, con `sub`, `roles` y `jti`; vive **solo en memoria** de la PWA (nunca en `localStorage`) y se envía en `Authorization: Bearer` | Limita el daño de un XSS |
+| Token de refresco | Opaco de 256 bits, guardado con hash SHA-256 en `sesion_refresh`. Cookie `__Host-`, `HttpOnly; Secure; SameSite=Strict; Path=/`. **Rota en cada uso**; si alguien reutiliza uno ya rotado, se revoca toda la `familia_id` (posible robo) | OWASP Session Management; RFC 9700 |
+| Duración de sesión | Inactividad: 2 h (operarios) / 30 min (Administrador, Encargada). Absoluta: 12 h, una jornada | ASVS V3.3 |
+| Cierre de sesión | Revoca el refresh en el servidor; el Administrador puede cerrar todas las sesiones de un usuario (p. ej., si pierde el teléfono) | ASVS V3.3.1 |
+| Recuperación | Operarios: la Encargada o el Administrador generan una **clave temporal de un solo uso** (24 h) que obliga a cambiarla. Usuarios con correo: enlace de un solo uso de 30 min, con token guardado como hash | ASVS V2.5 |
 | Primer ingreso | Cambio de clave obligatorio y registro de MFA si el rol lo exige | — |
 | Transporte | Solo HTTPS (TLS 1.2+, HSTS de 1 año con `preload`) | ASVS V9 |
-| Registro | Todo inicio de sesión exitoso o fallido, bloqueo y revocación genera un evento en la bitácora (sin la contraseña) | ASVS V7 |
+| Registro | Cada inicio de sesión, exitoso o fallido, cada bloqueo y cada revocación queda en la bitácora (sin la contraseña) | ASVS V7 |
 
 ### 7.3 Política de autorización
 
-**Modelo:** RBAC con **permisos atómicos** definidos como código en `packages/shared/permisos.ts`, versionados y revisados en PR. Se aplica en tres capas:
+El modelo es **RBAC con permisos atómicos**: cada acción tiene su propio permiso, y la lista vive como código en `packages/shared/permisos.ts`, revisada en cada PR. Se aplica en tres niveles:
 
-1. **Denegación por defecto:** toda ruta de la API declara su permiso. Una ruta sin `requierePermiso()` falla una prueba automatizada de inventario de rutas.
-2. **Autorización por propiedad (nivel de objeto):** el servicio verifica que el recurso pertenezca al actor, por ejemplo `etapa.responsable_id = actor.id`. Además, las consultas del Operario filtran en SQL por `responsable_id = $1`, de modo que nunca se cargan datos ajenos (prevención de IDOR, OWASP A01).
-3. **Autorización por estado:** una acción solo procede si el estado lo permite, por ejemplo no se termina una etapa PENDIENTE ni se inicia una etapa de una OT DETENIDA (Fig. 4.7 y 4.8).
+1. **Rol, con denegación por defecto.** Cada ruta de la API declara su permiso. Si una ruta no tiene `requierePermiso()`, falla una prueba automática que revisa todas las rutas.
+2. **Propiedad del recurso.** El servicio comprueba que el recurso sea del actor (`etapa.responsable_id = actor.id`). Además, el SQL de las consultas del Operario filtra por responsable, así que nunca carga datos ajenos. Esto previene el IDOR (OWASP A01).
+3. **Estado del recurso.** Una acción solo procede si el estado lo permite: no se termina una etapa PENDIENTE ni se inicia una etapa de una OT DETENIDA.
 
-La PWA oculta los botones no permitidos usando el **mismo mapa**, pero esa ocultación es solo usabilidad: la autoridad es siempre la API.
+La PWA oculta los botones no permitidos con el **mismo mapa** de permisos, pero eso es solo comodidad para el usuario: quien decide es siempre la API.
 
 **Tabla 7.1 — Matriz de permisos (RBAC).** ✔ = permitido · ◐ = permitido con restricción de propiedad o estado · — = denegado
 
@@ -975,16 +864,16 @@ La PWA oculta los botones no permitidos usando el **mismo mapa**, pero esa ocult
 
 **Reglas complementarias:**
 
-- **Segregación de funciones:** quien sube un diseño no lo resuelve (R6, validado en la API y en la BD).
-- **Cambios de rol:** solo un Administrador asigna roles; el cambio invalida el JWT vigente porque los roles se revalidan al refrescar (≤ 10 min) y la acción queda en la bitácora.
-- **Cuentas desactivadas:** `activo = FALSE` revoca de inmediato las sesiones de refresh.
-- **Mínimo privilegio en infraestructura:** el usuario de BD de la aplicación (`sgp_app`) no puede alterar el esquema ni borrar el kardex o el outbox; el usuario de Mongo de la aplicación solo puede hacer `insert`/`find` en `bitacora_eventos`.
+- **Separación de funciones:** quien sube un diseño no lo resuelve (R6). Lo validan la API y la base de datos.
+- **Cambios de rol:** solo un Administrador asigna roles. El cambio rige en el siguiente refresco del token (≤ 10 min) y queda en la bitácora.
+- **Cuentas desactivadas:** `activo = FALSE` cierra de inmediato sus sesiones.
+- **Mínimo privilegio en la infraestructura:** el usuario de base de datos de la aplicación (`sgp_app`) no puede cambiar el esquema ni borrar el kardex o el outbox, y el usuario de Mongo de la aplicación solo puede leer `bitacora_eventos`.
 
 ### 7.4 Amenazas y medidas de mitigación
 
-La metodología combina **STRIDE** (Shostack, 2014) sobre los flujos de la Fig. 4.19 con las categorías de **OWASP Top 10:2021**. El riesgo se calcula como probabilidad × impacto (Alto / Medio / Bajo).
+Las amenazas se identificaron con **STRIDE** (Shostack, 2014) sobre los flujos de la Fig. 4.19 y se cruzaron con las categorías de **OWASP Top 10:2021**. El riesgo es probabilidad × impacto (Alto, Medio o Bajo).
 
-La Tabla 7.2 resume las 16 amenazas identificadas con su nivel de riesgo, el control principal y el caso de prueba que lo verifica. Ocho son de riesgo alto (AM-01, AM-03, AM-05 a AM-08, AM-10 y AM-12). La matriz completa, con el activo afectado, el escenario de riesgo, la probabilidad, el impacto y todas las medidas de mitigación, está en el **Anexo K (Tabla K.1)**.
+Se identificaron 16 amenazas, y ocho son de riesgo alto. La Tabla 7.2 las resume con su control principal y su prueba. La matriz completa, con activo, escenario, probabilidad, impacto y todas las medidas, está en el Anexo K (Tabla K.1).
 
 **Tabla 7.2 — Resumen del modelo de amenazas**
 
@@ -1009,27 +898,25 @@ La Tabla 7.2 resume las 16 amenazas identificadas con su nivel de riesgo, el con
 
 ### 7.5 Estándares de codificación segura
 
-Los estándares se derivan de OWASP Top 10:2021, ASVS 4.0.3 y la OWASP Cheat Sheet Series, y son **exigibles por la Definition of Done**. Cada PR incluye la lista de cotejo de seguridad (Anexo E) y no se fusiona si el pipeline detecta un hallazgo High.
+Los estándares salen de OWASP Top 10:2021, ASVS 4.0.3 y la OWASP Cheat Sheet Series, y son **obligatorios por la Definition of Done**. Cada PR incluye la lista de cotejo de seguridad (Anexo E) y no se fusiona si el pipeline encuentra un hallazgo High.
 
 | Área | Estándar / regla definida | Aplicación en el proyecto | Control automático |
 |---|---|---|---|
 | Validación de entradas | Toda entrada (body, params, query, headers) se valida con un esquema Zod `.strict()` con listas blancas, longitudes máximas y tipos; se rechaza lo desconocido (A03) | Middleware de validación en cada ruta; los mismos esquemas en el formulario de la PWA | Prueba que verifica que cada ruta declare un esquema |
-| Codificación de salida | Prohibido `innerHTML`/`dangerouslySetInnerHTML`; el texto de usuario se renderiza como texto; CSP sin `unsafe-inline` | React JSX; `helmet.contentSecurityPolicy` | ESLint `react/no-danger` = error |
+| Codificación de salida | Prohibido `innerHTML`/`dangerouslySetInnerHTML`; el texto de usuario se muestra como texto; CSP sin `unsafe-inline` | React JSX; `helmet.contentSecurityPolicy` | ESLint `react/no-danger` = error |
 | Autenticación y autorización | Ver 7.2–7.3; denegación por defecto; verificación de propiedad en el servicio | Middleware de permisos y capa de servicio (patrón 3 de 7.6) | Prueba de inventario de rutas; CP-27, CP-28 |
 | Gestión de errores | Manejador centralizado; respuesta genérica con `request_id`; el detalle va solo al log; nunca se exponen *stack traces*, SQL ni versiones | Manejador de errores único de la API | CP-24 (sin fugas) |
 | Logging y auditoría | Logs JSON estructurados; sin contraseñas, tokens ni cuerpos completos (`redact`); eventos de seguridad en la bitácora | `pino` + outbox | Revisión de PR |
-| Protección / cifrado de información | TLS 1.2+ extremo a extremo (`sslmode=verify-full`); Argon2id para claves; AES-256-GCM para el secreto TOTP; SHA-256 para tokens de refresco y recuperación | `crypto` nativo de Node.js | Pruebas unitarias del módulo de cifrado |
-| Gestión de secretos y configuración | Secretos solo en variables de entorno del proveedor; configuración validada con Zod al arrancar (la app falla si falta un secreto); rotación semestral de las claves JWT (`kid`) | Módulo de configuración validado al arranque | GitHub *secret scanning* + *push protection* |
+| Cifrado | TLS 1.2+ de punta a punta (`sslmode=verify-full`); Argon2id para claves; AES-256-GCM para el secreto TOTP; SHA-256 para tokens de refresco y recuperación | `crypto` nativo de Node.js | Pruebas unitarias del módulo de cifrado |
+| Secretos y configuración | Secretos solo en variables de entorno del proveedor; configuración validada con Zod al arrancar (la app no parte si falta un secreto); rotación semestral de las claves JWT (`kid`) | Módulo de configuración validado al arranque | GitHub *secret scanning* + *push protection* |
 | Acceso a datos | Solo consultas parametrizadas; la capa *repository* es la única con SQL; transacciones explícitas; usuario de BD con mínimo privilegio; `statement_timeout` | Driver `pg` con parámetros posicionales | Regla Semgrep `no-sql-string-concat` |
 | Dependencias | Versiones fijadas con lockfile; auditoría en cada PR; Dependabot semanal; imágenes base oficiales *slim* | `package-lock.json`, `Dockerfile` | `npm audit`, Dependabot |
 | Archivos | Lista blanca de tipos y tamaños; *bucket* privado; URL prefirmadas de corta vida | Servicio de evidencias (patrón 8 de 7.6) | CP-31 |
-| Revisión de código | Todo cambio pasa por PR revisado por el otro integrante con la lista de cotejo de seguridad | Protección de rama `main` | Regla de GitHub |
+| Revisión de código | Todo cambio pasa por un PR revisado por el otro integrante con la lista de cotejo de seguridad | Protección de rama `main` | Regla de GitHub |
 
 ### 7.6 Evidencia de aplicación de estándares seguros
 
-En esta etapa la evidencia es de **diseño**: para cada estándar de 7.5 se define el patrón obligatorio, la amenaza que mitiga, la documentación que el equipo seguirá para implementarlo y la prueba que demostrará que se aplicó. No se incluye código. Los patrones se implementan primero en los Sprints 1–2 (A12, A16, A18) y desde ahí se exigen en el resto de los módulos mediante la Definition of Done y la lista de cotejo del Anexo E. El **Anexo G** contiene un borrador referencial en TypeScript de cada patrón, que sirve como punto de partida para la construcción.
-
-La Tabla 7.3 resume los ocho patrones obligatorios. El **Anexo K (Tabla K.2)** describe cada patrón en detalle y enlaza la documentación oficial que el equipo seguirá para implementarlo.
+Por ahora la evidencia es de diseño: cada estándar de 7.5 se traduce en un patrón obligatorio con la amenaza que mitiga y la prueba que demostrará que se aplicó (Tabla 7.3). Los patrones se implementan primero en los Sprints 1 y 2 (A12, A16 y A18), y desde ahí la DoD los exige en el resto de los módulos. El Anexo K (Tabla K.2) describe cada patrón y la documentación que se sigue, y el Anexo G trae un borrador en TypeScript de cada uno.
 
 **Tabla 7.3 — Patrones de codificación segura**
 
@@ -1044,67 +931,36 @@ La Tabla 7.3 resume los ocho patrones obligatorios. El **Anexo K (Tabla K.2)** d
 | 7 | Manejo centralizado de errores | Fuga de información (A05, A09) | CP-24 (sin fugas); revisión de logs |
 | 8 | Subida segura de archivos | Archivos maliciosos; IDOR; agotamiento de almacenamiento | CP-31 |
 
-**Cómo se demostrará la aplicación.** Durante la construcción, la evidencia de cada patrón será: (1) el PR que lo implementa, revisado por el otro integrante con la lista de cotejo del Anexo E; (2) el resultado del control automático del pipeline (Semgrep, ESLint, `npm audit`, *secret scanning*); y (3) el reporte del caso de prueba asociado, que se adjunta en el Anexo F.
+Durante la construcción, cada patrón deja tres evidencias: el PR que lo implementa, revisado con la lista de cotejo del Anexo E; el resultado de los controles automáticos (Semgrep, ESLint, `npm audit` y *secret scanning*); y el reporte de su caso de prueba en el Anexo F.
 
 ### 7.7 Marco normativo chileno y estándares de referencia
 
-El SGP trata datos personales de los trabajadores de Kotoduo: identificación (nombre, usuario, correo), credenciales, área, asignaciones y registro de actividad (inicio y término de etapas, bitácora y fotografías de evidencia). No trata datos sensibles (salud, biometría, afiliación sindical) ni datos de contacto de clientes (RNF-09). **Kotoduo es el responsable del tratamiento.** El equipo de desarrollo, durante el proyecto, y los proveedores cloud actúan como **encargados** que tratan los datos por cuenta de Kotoduo.
+El SGP trata datos personales de los trabajadores: identificación, credenciales, área, asignaciones y registro de actividad. No trata datos sensibles (salud, biometría o afiliación sindical) ni contactos de clientes. **Kotoduo es el responsable de esos datos;** el equipo de desarrollo y los proveedores cloud los tratan por encargo suyo.
 
-Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia el 1 de diciembre de 2026. El piloto (H2) operará bajo la ley modificada, por lo que el diseño se ajusta desde ya a ella y no solo al texto anterior. El contenido legal de esta sección es una interpretación técnica para orientar el diseño; Kotoduo debe validarla con asesoría jurídica antes del paso a producción.
+Las modificaciones de la Ley N.º 21.719 entran en vigencia el 1 de diciembre de 2026. Como el piloto (H2) operará con la ley ya modificada, el diseño se ajusta a ella desde ahora. Esta lectura es una interpretación técnica para orientar el diseño; Kotoduo debe validarla con asesoría jurídica antes de pasar a producción.
 
-**Tabla 7.4 — Normativa chilena aplicable.**
+**Tabla 7.4 — Normativa chilena aplicable**
 
-| Norma | Alcance en el SGP | Obligación relevante | Medida en el diseño | Evidencia |
-|---|---|---|---|---|
-| Constitución Política, art. 19 N.º 4 (reformado por la Ley N.º 21.096, 2018) | Todo dato personal tratado | Consagra el derecho a la protección de los datos personales | Fundamento del resto de las medidas | — |
-| Ley N.º 19.628 sobre protección de datos personales, modificada por la Ley N.º 21.719 (2024) | Datos de los trabajadores usuarios | Principios de licitud, finalidad, proporcionalidad, calidad, responsabilidad, seguridad, transparencia y confidencialidad; deber de información; derechos de acceso, rectificación, supresión, oposición, portabilidad y bloqueo; medidas de seguridad apropiadas al riesgo; notificación de vulneraciones a la Agencia de Protección de Datos Personales; reglas para encargados y transferencias internacionales. Las infracciones gravísimas se sancionan con multas de hasta 20.000 UTM | Minimización (RNF-09); finalidad declarada; controles de 7.1–7.5; aviso de privacidad; atención de derechos; retención definida; procedimiento de incidentes (decisiones D1–D7) | AM-16, CP-32, Tabla 7.6 |
-| Código del Trabajo, arts. 5, 153, 154 y 154 bis | Registro de actividad de los trabajadores (bitácora, tiempos de etapa, evidencias) | Las facultades del empleador tienen como límite los derechos fundamentales del trabajador, en especial su intimidad, vida privada y honra. Las medidas de control deben constar en el Reglamento Interno, ser generales, impersonales y respetuosas de la dignidad. El empleador debe mantener reserva de los datos privados del trabajador. Una vulneración puede reclamarse por el procedimiento de tutela laboral (art. 485) | El registro tiene por finalidad la trazabilidad de la OT, no la vigilancia; sin geolocalización, cámara permanente ni ranking de productividad individual; cada operario ve solo lo propio | D1, D8; guía rápida (A30) |
-| Ley N.º 21.459 (2022), delitos informáticos | Pruebas de seguridad y pentest (A27) | Sanciona el acceso a un sistema sin autorización o excediendo la autorización otorgada | Pentest solo con autorización escrita de Kotoduo, alcance definido y contra staging; se respetan las políticas de pruebas de los proveedores | D9; acta de autorización (A27) |
-| Ley N.º 21.663 (2024), Ley Marco de Ciberseguridad | Kotoduo no es prestador de servicios esenciales ni operador de importancia vital | No impone obligaciones directas al proyecto | Se adoptan voluntariamente sus principios de gestión de riesgos y reporte de incidentes, y las recomendaciones de la Agencia Nacional de Ciberseguridad (ANCI) | D6 |
+| Norma | Qué exige en este proyecto | Medida en el diseño |
+|---|---|---|
+| Constitución, art. 19 N.º 4 (Ley N.º 21.096) y Ley N.º 19.628 modificada por la Ley N.º 21.719 | Licitud, finalidad, proporcionalidad y seguridad; deber de informar; derechos de acceso, rectificación, supresión, oposición, portabilidad y bloqueo; notificar vulneraciones a la Agencia de Protección de Datos Personales; reglas para encargados y transferencias internacionales. Multas de hasta 20.000 UTM | Minimización (RNF-09), controles de 7.1–7.5 y decisiones D1–D7 |
+| Código del Trabajo, arts. 5, 153, 154 y 154 bis | El control del empleador no puede pasar a llevar la intimidad ni la dignidad del trabajador; las medidas de control deben estar en el Reglamento Interno | El registro de actividad sirve para seguir la OT, no para vigilar personas (D1, D8) |
+| Ley N.º 21.459, delitos informáticos | Sanciona el acceso a un sistema sin autorización | Pentest solo con autorización escrita y contra staging (D9) |
+| Ley N.º 21.663, Ley Marco de Ciberseguridad | No obliga directamente a Kotoduo, que no presta servicios esenciales | Se adoptan de forma voluntaria sus principios de gestión de riesgos y reporte de incidentes |
 
 **Decisiones de diseño derivadas de la normativa:**
 
-1. **D1. Finalidad y proporcionalidad del registro de actividad.** La bitácora y los tiempos de etapa existen para la trazabilidad de la OT (RF-12) y el análisis agregado por tipo de trabajo. El panel agrega por OT, no por trabajador, y el sistema no genera rankings ni reportes de productividad individual. Si Kotoduo decide usar estos registros como medida de control laboral, debe incorporarlos a su Reglamento Interno e informarlo a los trabajadores (art. 154).
-2. **D2. Deber de información.** Un aviso de privacidad, accesible desde el login y el perfil, indica qué datos se tratan, con qué finalidad, por cuánto tiempo, quién es el responsable y cómo ejercer los derechos. Se construye junto con HU-11.
-3. **D3. Derechos de los titulares.** Se atienden con funciones existentes: el perfil permite la rectificación; la consulta de bitácora filtrada por usuario (HU-12) permite entregar al titular el registro de su actividad (acceso y portabilidad); la baja lógica de la cuenta implementa la supresión o el bloqueo. Los registros de auditoría se conservan durante su periodo de retención porque su integridad es necesaria para la trazabilidad.
-4. **D4. Retención.** Bitácora: 24 meses (RNF-05, TTL). Notificaciones: 90 días (TTL). Al vencer la retención, los datos identificatorios de usuarios desactivados se seudonimizan; durante el piloto es un procedimiento manual del Administrador y su automatización queda para una versión posterior.
-5. **D5. Encargados y transferencia internacional.** Render, Neon, MongoDB Atlas, Cloudflare y Sentry procesan datos fuera de Chile. Antes de cargar datos reales se aceptan sus acuerdos de tratamiento de datos (DPA) con cláusulas contractuales tipo, se elige la región más cercana disponible y la transferencia se documenta en el registro de actividades de tratamiento. A Sentry no se envían datos personales (depuración de eventos).
-6. **D6. Vulneraciones de seguridad.** Procedimiento en cinco pasos: detectar (Sentry, UptimeRobot, alerta de reutilización de refresh), contener (revocar sesiones, rotar claves `kid`), evaluar el alcance, notificar a la Agencia sin dilación indebida y a los titulares cuando la ley lo exija, y registrar el incidente con sus lecciones aprendidas. Kotoduo lo ejecuta con apoyo del equipo.
-7. **D7. Datos de prueba.** Desarrollo y staging usan solo datos semilla ficticios. La carga inicial desde el Excel actual (A29) se hace solo en producción y únicamente con las columnas necesarias.
-8. **D8. Fotografías de evidencia.** Registran el trabajo, no a las personas. La guía rápida lo indica y el formulario de evidencia lo recuerda.
-9. **D9. Pentest autorizado.** Antes de A27 se firma un acta con Kotoduo que define el alcance, el ambiente (staging), las fechas y las técnicas permitidas.
+1. **D1. Finalidad del registro.** La bitácora y los tiempos sirven para seguir la OT y analizar por tipo de trabajo. El panel agrupa por OT, no por persona, y no hay rankings de productividad individual.
+2. **D2. Deber de información.** Un aviso de privacidad, accesible desde el login y el perfil, explica qué datos se tratan, para qué, por cuánto tiempo y cómo ejercer los derechos.
+3. **D3. Derechos de los titulares.** Se atienden con funciones que ya existen: el perfil permite rectificar, la bitácora filtrada por usuario entrega el registro propio y la baja lógica de la cuenta implementa la supresión o el bloqueo.
+4. **D4. Retención.** Bitácora: 24 meses. Notificaciones: 90 días. Después, los datos de usuarios desactivados se seudonimizan.
+5. **D5. Encargados y transferencia internacional.** Antes de cargar datos reales se aceptan los acuerdos de tratamiento de datos (DPA) de los proveedores y se documenta la transferencia. A Sentry no se envían datos personales.
+6. **D6. Vulneraciones.** Procedimiento en cinco pasos: detectar, contener, evaluar, notificar a la Agencia y a los titulares cuando corresponda, y registrar lo aprendido.
+7. **D7. Datos de prueba.** Desarrollo y staging usan solo datos ficticios.
+8. **D8. Fotos de evidencia.** Registran el trabajo, no a las personas.
+9. **D9. Pentest autorizado.** Antes de A27 se firma con Kotoduo un acta con el alcance, el ambiente, las fechas y las técnicas permitidas.
 
-**Pertinencia de los estándares.** La Ley N.º 21.719 exige medidas de seguridad apropiadas según el riesgo, el estado de la técnica y el costo de aplicación, pero no prescribe un estándar. Los estándares internacionales permiten demostrar esa diligencia (principio de responsabilidad) y sirven de base para el modelo de prevención de infracciones que la ley contempla como voluntario. El INN adoptó la norma ISO/IEC 27001 en Chile como NCh-ISO 27001. No se busca una certificación, cuyo costo no se justifica para una pyme, sino usar estos estándares como catálogo de controles verificables.
-
-**Tabla 7.5 — Estándares de referencia y su relación con la normativa chilena.**
-
-| Estándar | Uso en el proyecto | Relación con la normativa chilena | Aplicación en el SGP |
-|---|---|---|---|
-| ISO/IEC 27001:2022 (NCh-ISO 27001) | Marco de gestión de la seguridad de la información y del riesgo | Medidas de seguridad apropiadas al riesgo; principio de responsabilidad | Modelo de amenazas con probabilidad e impacto (7.4); controles exigibles por la DoD |
-| ISO/IEC 27002:2022 | Catálogo de controles | Seguridad y confidencialidad de los datos personales | 5.15 control de acceso (7.1–7.3); 5.34 privacidad y protección de datos personales (D1–D5); 8.5 autenticación segura (7.2); 8.13 respaldo (AM-15); 8.15 registro de eventos (bitácora); 8.25 y 8.28 desarrollo y codificación seguros (7.5); 8.29 pruebas de seguridad (A27); 8.33 información de prueba (D7) |
-| ISO/IEC 27701 | Extensión de privacidad de ISO/IEC 27001 para responsables y encargados | Deber de información, derechos de los titulares y obligaciones del encargado | D2, D3 y D5 |
-| ISO/IEC 29100:2011 | Marco de principios de privacidad | Equivale a los principios de finalidad, proporcionalidad y transparencia de la ley | RNF-09 y D1 |
-| ISO/IEC 27018:2019 | Protección de datos personales en nubes públicas que actúan como encargadas | Selección de encargados y transferencia internacional | Criterio para evaluar a los proveedores (D5) |
-| ISO/IEC 27035-1:2023 | Gestión de incidentes de seguridad | Notificación de vulneraciones a la Agencia y a los titulares | Procedimiento D6 |
-| CIS Critical Security Controls v8.1 (IG1 + control 16) | Salvaguardas priorizadas para organizaciones pequeñas sin equipo de TI | Traduce las "medidas apropiadas" en acciones verificables para una pyme | 3 protección de datos (inventario, retención y eliminación segura: D4); 5 y 6 gestión de cuentas y accesos con MFA (7.2); 8 registros de auditoría (bitácora); 11 recuperación de datos (AM-15); 14 concientización (A30); 16 seguridad del software (7.5, 8.6); 17 respuesta a incidentes (D6) |
-| NIST Cybersecurity Framework 2.0 | Estructura de cumplimiento en seis funciones | La función Gobernar (GV.OC-03) exige conocer y gestionar los requisitos legales, incluidos los de privacidad | Gobernar: esta sección; Proteger: 7.1–7.5; Detectar: Sentry y UptimeRobot; Responder: D6; Recuperar: PITR y respaldos |
-| NIST Privacy Framework 1.0 | Gestión del riesgo de privacidad | Derechos de los titulares, transparencia y minimización | D1–D4 |
-| NIST SP 800-218 (SSDF) 1.1 | Prácticas de desarrollo seguro | Medidas de seguridad desde el diseño | DoD, SAST, revisión de PR (incluido el código generado con IA) |
-| NIST SP 800-115 | Metodología de pruebas técnicas y pentest | Pruebas autorizadas (Ley N.º 21.459) | Planificación, ejecución e informe de A27 |
-| NIST SP 800-61 Rev. 3 | Respuesta a incidentes alineada con CSF 2.0 | Notificación de vulneraciones | Procedimiento D6 |
-
-**Tabla 7.6 — Cumplimiento normativo en la planificación.** Las tareas normativas se integran en actividades existentes del plan (Anexo H, Tabla H.1), sin agregar días al cronograma.
-
-| Actividad | Tarea normativa | Entregable |
-|---|---|---|
-| A01 (D1) | Validar con Kotoduo su rol de responsable, la finalidad del registro de actividad (D1) y si incluirá las medidas de control en su Reglamento Interno | Acta de validación |
-| A07 (D8–D9) | Elaborar la matriz normativa y el registro de actividades de tratamiento | Sección 7.7 |
-| A11 (D12) | Cargar solo datos semilla ficticios en desarrollo y staging (D7) | Script de semillas |
-| A12, A15 (Sprint 1) | Construir el aviso de privacidad en el login y el perfil (D2) | Pantallas P-01 y P-12 |
-| A27 (D28–D29) | Firmar el acta de autorización del pentest (D9); aplicar NIST SP 800-115; verificar que los logs no contengan datos personales | Acta + informe CP-24 a CP-32 |
-| A29 (D30) | Aceptar los DPA de los proveedores antes de cargar datos reales; cargar desde el Excel solo las columnas necesarias (D5, D7) | Registro de transferencias |
-| A30 (D30) | Informar a los trabajadores sobre el tratamiento de sus datos y las reglas para las fotografías de evidencia (D2, D8) | Guía rápida + registro de asistencia |
-| A31 (D30) | Entregar a Kotoduo los procedimientos de incidentes (D6), de atención de derechos (D3) y de retención (D4) | Anexo de procedimientos |
+La ley pide medidas de seguridad acordes al riesgo, pero no impone un estándar. Por eso se usan ISO/IEC 27001 y 27002, CIS Controls v8.1 y NIST CSF 2.0 como catálogo de controles verificables, sin buscar una certificación. El Anexo M relaciona cada estándar con la ley (Tabla M.1) y ubica las tareas normativas dentro del plan, sin agregar días al cronograma (Tabla M.2).
 
 ---
 
@@ -1112,12 +968,12 @@ Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia
 
 ### 8.1 Objetivo y alcance del plan de pruebas
 
-**Objetivo:** demostrar con evidencia reproducible que SGP-Kotoduo cumple RF-01–RF-12 y RNF-01–RNF-09. En particular, que un trabajador puede conocer y ejecutar su siguiente actividad sin intervención de una persona encargada (criterio de éxito del cliente), y que los controles de la sección 7 mitigan las amenazas AM-01–AM-16.
+**Objetivo:** demostrar con evidencia reproducible que SGP-Kotoduo cumple RF-01 a RF-12 y RNF-01 a RNF-09. Lo más importante es comprobar que un trabajador conoce y ejecuta su siguiente actividad sin ayuda de una encargada (el criterio de éxito del cliente), y que los controles del capítulo 7 frenan las amenazas AM-01 a AM-16.
 
 | Aspecto | Definición |
 |---|---|
 | Incluido | Módulos M1–M8 de la API, PWA (P-01 a P-12), triggers y vista de PostgreSQL, validadores de MongoDB, relay outbox, URL prefirmadas, cabeceras y configuración de despliegue |
-| Excluido | Infraestructura interna de los proveedores (Cloudflare, Render, Neon, Atlas), pruebas de carga de tipo estrés destructivo en producción, compatibilidad con navegadores sin soporte de Service Worker, funciones fuera de alcance (precios, contactos, Softland) |
+| Excluido | Infraestructura interna de los proveedores (Cloudflare, Render, Neon, Atlas), pruebas de estrés destructivas en producción, navegadores sin soporte de Service Worker, funciones fuera de alcance (precios, contactos, Softland) |
 | Niveles | Unitarias → integración → sistema/E2E → aceptación (usabilidad con usuarios reales); no funcionales: rendimiento y seguridad |
 | Ambientes | Unitarias: local y CI. Integración: CI con Testcontainers (PostgreSQL 16 + MongoDB). E2E, rendimiento y seguridad: **staging**, con datos sintéticos (nunca en producción) |
 | Datos de prueba | Semillas del script DDL (Anexo B) + generador de 5.000 OT sintéticas para volumen; usuarios ficticios por rol |
@@ -1133,7 +989,7 @@ Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia
 | HU-11 / RF-01 | CU-01, CU-02 | CP-07, CP-08, CP-09, CP-10, CP-28, CP-29, CP-30 | Unitaria, integración, seguridad | Política de claves, login, MFA, bloqueo, sesión, permisos |
 | HU-07 / RF-02 | CU-03 | CP-03, CP-28 | Unitaria, seguridad | Plantilla ordenada; solo Encargada/Admin la modifican |
 | HU-05 / RF-03, RF-04 | CU-04 | CP-04, CP-06, CP-11 | Unitaria, integración | Validación, generación de etapas, fecha estimada, evento de bitácora |
-| HU-08 / RF-04 | CU-12 (y CU-04, alternativo 3b) | CP-01, CP-11, CP-12, CP-27 | Unitaria, integración, seguridad | Asignación, omisión y desbloqueo de etapas; aislamiento por responsable |
+| HU-08 / RF-04 | CU-12 | CP-01, CP-11, CP-12, CP-27 | Unitaria, integración, seguridad | Asignación, omisión y desbloqueo de etapas; aislamiento por responsable |
 | HU-01 / RF-05 | CU-05 | CP-20, CP-33, CP-34 | Rendimiento, usabilidad, E2E | Mi Trabajo rápido, comprensible y adaptable |
 | HU-02 / RF-06 | CU-06 | CP-01, CP-02, CP-12, CP-13, CP-19, CP-21, CP-27 | Unitaria, integración, rendimiento, seguridad | Máquina de estados, avance, cierre de OT, concurrencia, IDOR |
 | HU-04 / RF-07 | CU-06 (extensión) | CP-17, CP-25, CP-31 | Integración, seguridad | Evidencia almacenada, XSS y archivos maliciosos |
@@ -1149,35 +1005,27 @@ Las modificaciones de la Ley N.º 21.719 a la Ley N.º 19.628 entran en vigencia
 
 ### 8.3 Pruebas unitarias
 
-Las pruebas unitarias aíslan la lógica de dominio y los servicios usando repositorios simulados. Se ejecutan con **Vitest** en cada *commit* y en CI, con una meta de cobertura ≥ 70 % en `services` y del 100 % en las funciones de transición y permisos. Unidades: `puedeTransicionar` (máquina de estados), `generarEtapas`, `calcularFechaEstimada` (jornada de 8 h, días hábiles), `Insumo.estaBajoMinimo`, esquemas Zod, `validarPoliticaClave` y `PERMISOS_POR_ROL`. Casos: CP-01 a CP-08 (Anexo L, Tabla L.1).
+Prueban la lógica del dominio y los servicios por separado, con repositorios simulados. Corren con **Vitest** en cada *commit* y en CI. La meta es una cobertura de al menos 70 % en los servicios y de 100 % en las funciones de transición y de permisos. Casos: CP-01 a CP-08 (Anexo L, Tabla L.1).
 
 ### 8.4 Pruebas de integración
 
-Las pruebas de integración verifican la API completa (rutas → servicios → BD real) con **Supertest** contra contenedores efímeros de PostgreSQL 16 y MongoDB levantados por **Testcontainers**. Cada suite aplica las migraciones y semillas y se limpia al terminar. También validan el contrato real con la base de datos (triggers, CHECK, FK), el relay outbox → MongoDB y las URL prefirmadas (contra un emulador S3, MinIO). Casos: CP-09 a CP-19 (Anexo L, Tabla L.2). Se complementan con colecciones **Postman** para exploración manual de la API en staging.
+Prueban la API completa (rutas → servicios → base real) con **Supertest**, contra contenedores temporales de PostgreSQL 16 y MongoDB creados por **Testcontainers**. Así se comprueban de verdad los triggers, las restricciones, el relay outbox y las URL firmadas (contra MinIO, un emulador de S3). Casos: CP-09 a CP-19 (Anexo L, Tabla L.2).
 
 ### 8.5 Pruebas de rendimiento
 
-Las pruebas de rendimiento usan **k6** en staging, con una carga derivada del contexto: ~25 trabajadores, picos al inicio de la jornada y un escenario de 40 usuarios virtuales (VU) concurrentes (1,6× la dotación) como margen. Métricas: latencia p95/p99, tasa de error y *throughput*. En el front-end se mide **Lighthouse** (LCP, TBT) con la limitación "4G lenta". Para volumen, se usa una BD con 5.000 OT y 30.000 etapas sintéticas, y `EXPLAIN ANALYZE` para confirmar el uso de índices. Casos: CP-20 a CP-23 (Anexo L, Tabla L.3). Los umbrales son *thresholds* de k6: la ejecución falla automáticamente si no se cumplen.
+Usan **k6** en staging con 40 usuarios concurrentes, 1,6 veces la dotación de unos 25 trabajadores. Se mide la latencia p95 y p99, la tasa de error y el *throughput*. En la PWA, **Lighthouse** mide la carga con una red "4G lenta". Para volumen se carga una base con 5.000 OT y 30.000 etapas sintéticas, y `EXPLAIN ANALYZE` confirma el uso de índices. Si un umbral no se cumple, la ejecución de k6 falla sola. Casos: CP-20 a CP-23 (Anexo L, Tabla L.3).
 
 ### 8.6 Pruebas de seguridad
 
-Las pruebas de seguridad derivan directamente de la Tabla 7.2:
-
-- **DAST** con OWASP ZAP (*baseline* en cada despliegue a staging y escaneo activo antes de producción).
-- **SAST** con Semgrep y ESLint security en cada PR.
-- Auditoría de dependencias (`npm audit`, Dependabot).
-- **Pruebas manuales dirigidas** con Postman: IDOR, escalada, CSRF y reutilización de tokens.
-- **Lista de cotejo ASVS nivel 2** (Anexo E).
-
-Casos: CP-24 a CP-32 (Anexo L, Tabla L.4).
+Salen directamente de la Tabla 7.2 y combinan cinco técnicas: análisis dinámico con OWASP ZAP (en cada despliegue a staging y antes de producción), análisis estático con Semgrep y ESLint en cada PR, auditoría de dependencias, pruebas manuales con Postman (IDOR, escalada, CSRF y reutilización de tokens) y la lista de cotejo ASVS nivel 2 (Anexo E). Casos: CP-24 a CP-32 (Anexo L, Tabla L.4).
 
 ### 8.7 Pruebas de usabilidad
 
-Las pruebas de usabilidad se hacen con usuarios reales de Kotoduo (mínimo 5, uno o más por rol) sobre staging, en sus propios teléfonos, con el protocolo de la sección 5.5 (tareas T1–T4, pensamiento en voz alta y cuestionario SUS). Se complementan con pruebas automatizadas de accesibilidad (axe-core en Playwright) y capturas *responsive* en 4 *viewports*. Casos: CP-33 a CP-36 (Anexo L, Tabla L.5). El indicador clave de éxito del cliente es el **porcentaje de operarios que identifican su siguiente actividad sin ayuda** (meta ≥ 80 %).
+Se hacen con al menos cinco trabajadores reales de Kotoduo, en sus propios teléfonos y sobre staging, con el protocolo de la sección 5.5. Se complementan con revisiones automáticas de accesibilidad (axe-core en Playwright) y capturas en cuatro tamaños de pantalla. El indicador clave es el **porcentaje de operarios que encuentran su siguiente actividad sin ayuda**, con una meta de al menos 80 %. Casos: CP-33 a CP-36 (Anexo L, Tabla L.5).
 
 ### 8.8 Diseño, ejecución y resultados de casos de prueba
 
-Los 36 casos de prueba comparten un mismo formato: identificador, historia de usuario o amenaza que verifican, descripción, precondición, pasos y datos, resultado esperado, resultado obtenido y estado. La Tabla 8.1 los resume por tipo; las especificaciones completas están en el **Anexo L (Tablas L.1 a L.5)**.
+Los 36 casos de prueba tienen el mismo formato: identificador, HU o amenaza que verifican, descripción, precondición, pasos y datos, resultado esperado, resultado obtenido y estado. La Tabla 8.1 los resume por tipo, y el Anexo L (Tablas L.1 a L.5) trae su especificación completa.
 
 **Tabla 8.1 — Casos de prueba por tipo**
 
@@ -1189,22 +1037,11 @@ Los 36 casos de prueba comparten un mismo formato: identificador, historia de us
 | Seguridad | CP-24 a CP-32 (9) | Inyección, XSS, CSRF, IDOR, escalada, fuerza bruta, reutilización de sesión, archivos y configuración (AM-01 a AM-12) | ZAP, Postman, Semgrep, lista de cotejo (Anexo E) | Tabla L.4 |
 | Usabilidad y adaptabilidad | CP-33 a CP-36 (4) | Autonomía del operario, diseño responsive, satisfacción (SUS) y accesibilidad | Sesiones moderadas, Playwright, axe-core | Tabla L.5 |
 
-**Registro de resultados.** La columna "Resultado obtenido" de las tablas del Anexo L se completa al ejecutar cada caso en su Sprint (actividades A23, A26, A27 y A28). Los reportes completos (Vitest, k6, ZAP y Lighthouse) se adjuntan en el Anexo F. Si el resultado obtenido difiere del esperado, se registra la incidencia (ID de issue, severidad y acción tomada) y el estado pasa a "Rechazado" hasta su corrección.
-
-**Tabla 8.2 — Resumen de ejecución (a completar)**
-
-| Tipo | Casos | Aprobados | Rechazados | Pendientes |
-|---|---|---|---|---|
-| Unitarias | 8 | [ ] | [ ] | 8 |
-| Integración | 11 | [ ] | [ ] | 11 |
-| Rendimiento | 4 | [ ] | [ ] | 4 |
-| Seguridad | 9 | [ ] | [ ] | 9 |
-| Usabilidad / adaptabilidad | 4 | [ ] | [ ] | 4 |
-| **Total** | **36** | | | **36** |
+**Estado de ejecución.** Las reglas de la base de datos ya se verificaron sobre los borradores (Tabla 6.3). Los 36 casos de prueba están pendientes: se ejecutan en sus Sprints (actividades A23, A26, A27 y A28), y sus reportes (Vitest, k6, ZAP, Lighthouse y Playwright) se adjuntan en el Anexo F. Si un resultado no coincide con el esperado, se abre una incidencia con su severidad y el caso queda "Rechazado" hasta corregirlo.
 
 ### 8.9 Herramientas manuales y automatizadas
 
-La estrategia equilibra **automatización** para todo lo repetible y regresivo (se ejecuta en cada PR, sin costo marginal) con **pruebas manuales** donde el juicio humano aporta lo que una herramienta no puede: comprensión del usuario real, exploración creativa de la seguridad y validación del negocio. De los 36 casos, 27 son automatizables en CI y 9 requieren ejecución manual o mixta (CP-26 a CP-30 en su fase exploratoria, CP-32 con su lista de cotejo, CP-33 y CP-35).
+Todo lo repetible se **automatiza**: corre en cada PR y no cuesta más ejecutarlo de nuevo. Las **pruebas manuales** quedan para lo que necesita criterio humano: entender al usuario real, explorar la seguridad con creatividad y validar el negocio. De los 36 casos, 27 se automatizan en CI y 9 son manuales o mixtos (CP-26 a CP-30 en su fase exploratoria, CP-32, CP-33 y CP-35).
 
 | Herramienta / técnica | Manual / automatizada | Pruebas que apoya | Propósito | Evidencia |
 |---|---|---|---|---|
@@ -1217,8 +1054,8 @@ La estrategia equilibra **automatización** para todo lo repetible y regresivo (
 | Semgrep + ESLint (`eslint-plugin-security`, `react/no-danger`) | Automatizada (SAST) | AM-01, AM-03, AM-10 | Bloquear patrones inseguros antes del *merge* | Comentarios en el PR |
 | `npm audit` + Dependabot + GitHub *secret scanning* | Automatizada | CP-32, AM-12, AM-10 | Dependencias vulnerables y secretos filtrados | Alertas de GitHub |
 | Postman (colecciones por rol) | Manual (exploratoria) | CP-26 a CP-30; exploración de la API | Pruebas dirigidas de autorización, CSRF y sesión que requieren manipular tokens y orígenes | Colección exportada + capturas |
-| Lista de cotejo OWASP ASVS L2 (Anexo E) | Manual | CP-32; revisión de PR | Verificar controles no detectables por herramientas (política de sesión, recuperación, logs) | Lista de cotejo firmada por el revisor |
-| Sesiones de usabilidad moderadas (pensamiento en voz alta) | Manual | CP-33, rondas de feedback 5.5 | Validar autonomía y comprensión con trabajadores reales | Registro de tareas, tiempos y observaciones |
+| Lista de cotejo OWASP ASVS L2 (Anexo E) | Manual | CP-32; revisión de PR | Verificar controles que las herramientas no detectan (política de sesión, recuperación, logs) | Lista de cotejo firmada por el revisor |
+| Sesiones de usabilidad moderadas (pensamiento en voz alta) | Manual | CP-33, ronda 1 de 5.5 | Validar autonomía y comprensión con trabajadores reales | Registro de tareas, tiempos y observaciones |
 | Cuestionario SUS | Manual | CP-35 | Medir la satisfacción con un instrumento estandarizado | Planilla de puntajes |
 | Revisión de código por pares | Manual | Todas (preventiva) | Detectar defectos lógicos y de seguridad antes de la integración | Aprobación del PR en GitHub |
 | Ensayo de restauración de respaldo | Manual | AM-15 | Verificar RPO/RTO restaurando el `pg_dump` en una rama de Neon | Acta con tiempos medidos |
@@ -1227,25 +1064,13 @@ La estrategia equilibra **automatización** para todo lo repetible y regresivo (
 
 ## 9. Conclusiones
 
-1. **Coherencia diagnóstico–diseño.** El problema central confirmado por Kotoduo, que los trabajadores no saben qué sigue cuando faltan las personas encargadas, se resuelve con tres decisiones trazables:
-   - plantillas de proceso que externalizan el conocimiento experto (M2);
-   - la máquina de estados de la etapa con habilitación y notificación automática de la siguiente (M4);
-   - una vista personal *mobile-first* que responde "qué hago ahora y qué sigue".
-
-   La gestión reactiva de insumos se ataca en la causa, porque las alertas se generan al planificar y al consumir, y no al descubrir el faltante.
-2. **Arquitectura proporcional.** Un monolito modular con PWA y persistencia políglota equilibra simplicidad operativa para un equipo de dos personas, bajo costo (≈ US$ 7–10/mes) y capacidad de evolución. Las cinco vistas 4+1 describen la misma solución con nombres consistentes y se validan con los casos de uso CU-01 a CU-14.
-3. **Integridad en varias capas.** Las reglas críticas (transiciones, stock no negativo, alertas únicas, segregación en la aprobación de diseños) se aplican en el dominio **y** en PostgreSQL. La integración con MongoDB mediante outbox transaccional evita la pérdida de eventos de auditoría sin introducir transacciones distribuidas. Los borradores del DDL y de los validadores documentales se ejecutaron sobre los motores reales y cumplieron los 16 criterios verificables en la base de datos (Tabla 6.4).
-4. **Seguridad basada en riesgo.** Se identificaron 16 amenazas, de las cuales 8 son de riesgo alto (inyección, XSS, IDOR, escalada, fuerza bruta, robo de sesión, secretos, dependencias). Cada una tiene una mitigación concreta, un estándar de codificación exigible por la DoD y un caso de prueba que la verifica.
-5. **Riesgos y aspectos pendientes para la implementación:**
-   - validar con la contraparte los supuestos marcados como "S" (A01), en especial el nivel de detalle de insumos y quién registra la aceptación del diseño;
-   - confirmar la disponibilidad de teléfonos y conectividad en el taller y en terreno (instalaciones);
-   - ejecutar la ronda de usabilidad con trabajadores reales (FB-07 a FB-11);
-   - ejecutar y documentar los 36 casos de prueba en los Sprints 1–4;
-   - definir con Kotoduo quién financia el costo mensual mínimo del hosting.
+1. **El diseño responde al problema del diagnóstico.** Que los trabajadores no sepan qué sigue se resuelve con tres piezas: plantillas que sacan el proceso de la memoria de tres personas (M2), una máquina de estados que habilita y avisa la siguiente etapa (M4) y una vista móvil que contesta "qué hago ahora y qué sigue". Los faltantes de insumos se atacan en su origen, porque las alertas nacen al planificar y al consumir.
+2. **La arquitectura es proporcional al problema.** Un monolito modular con PWA y dos bases de datos es simple de operar para dos personas, cuesta unos US$ 7–10 al mes y puede crecer. Las cinco vistas 4+1 usan los mismos nombres y se validan con los casos de uso CU-01 a CU-14.
+3. **Las reglas críticas se protegen en dos capas.** Transiciones, stock no negativo, alertas únicas y separación de funciones se validan en el dominio y en PostgreSQL. El outbox evita perder eventos de auditoría sin transacciones distribuidas. Los borradores de las dos bases ya pasaron los 16 criterios verificables (Tabla 6.3).
+4. **La seguridad parte del riesgo.** Cada una de las 16 amenazas, ocho de ellas altas, tiene una mitigación, un estándar exigido por la DoD y un caso de prueba.
+5. **Queda pendiente para la construcción:** validar con Kotoduo los supuestos "S" (A01), en especial el detalle de insumos y quién registra la aceptación del diseño; confirmar que hay teléfonos y conectividad en el taller; hacer la ronda de usabilidad con trabajadores reales; ejecutar los 36 casos de prueba; y definir quién paga el hosting.
 
 ## 10. Referencias
-
-Aqua Security. (s.f.). *Trivy documentation*. https://trivy.dev/
 
 Brooke, J. (1996). SUS: A "quick and dirty" usability scale. En P. W. Jordan, B. Thomas, B. A. Weerdmeester & I. L. McClelland (Eds.), *Usability evaluation in industry* (pp. 189–194). Taylor & Francis.
 
@@ -1281,7 +1106,7 @@ Kruchten, P. B. (1995). The 4+1 view model of architecture. *IEEE Software, 12*(
 
 Lodderstedt, T., Bradley, J., Labunets, A., & Fett, D. (2025). *Best current practice for OAuth 2.0 security* (RFC 9700). Internet Engineering Task Force. https://www.rfc-editor.org/rfc/rfc9700
 
-MongoDB, Inc. (2025). *Schema validation*. MongoDB Manual. https://www.mongodb.com/docs/manual/core/schema-validation/
+MongoDB, Inc. (2025). *MongoDB manual: Data modeling, schema validation, indexes and write concern*. https://www.mongodb.com/docs/manual/
 
 Morris, K. (2020). *Infrastructure as code: Dynamic systems for the cloud age* (2.ª ed.). O'Reilly Media.
 
@@ -1297,13 +1122,7 @@ National Institute of Standards and Technology. (2025). *Digital identity guidel
 
 National Institute of Standards and Technology. (2025). *Incident response recommendations and considerations for cybersecurity risk management* (NIST SP 800-61 Rev. 3). https://doi.org/10.6028/NIST.SP.800-61r3
 
-Neon. (s.f.). *Manage Neon with Terraform*. Neon documentation. https://neon.com/docs/reference/terraform
-
-Nielsen, J. (1994, actualizado 2024). *10 usability heuristics for user interface design*. Nielsen Norman Group. https://www.nngroup.com/articles/ten-usability-heuristics/
-
 OpenTofu. (s.f.). *OpenTofu documentation*. The Linux Foundation. https://opentofu.org/docs/
-
-OpenTofu. (s.f.). *State and plan encryption*. OpenTofu documentation. https://opentofu.org/docs/language/state/encryption/
 
 OWASP Foundation. (2021). *OWASP Top 10:2021*. https://owasp.org/Top10/
 
@@ -1313,8 +1132,6 @@ OWASP Foundation. (s.f.). *OWASP Cheat Sheet Series: Password storage, session m
 
 PostgreSQL Global Development Group. (2024). *PostgreSQL 16 documentation*. https://www.postgresql.org/docs/16/
 
-Render. (s.f.). *Render Terraform provider*. Render documentation. https://render.com/docs/terraform-provider
-
 Richardson, C. (2018). *Microservices patterns: With examples in Java*. Manning.
 
 Sánchez Cárcamo, M. (2026). *Planteamiento del problema: Caso Kotoduo* [Material de curso]. Proyecto Integrado, INACAP.
@@ -1323,110 +1140,41 @@ Schwaber, K., & Sutherland, J. (2020). *The Scrum guide*. https://scrumguides.or
 
 Shostack, A. (2014). *Threat modeling: Designing for security*. Wiley.
 
-Sommerville, I. (2016). *Software engineering* (10.ª ed.). Pearson.
-
 Wiggins, A. (2011). *The twelve-factor app*. https://12factor.net/
 
 World Wide Web Consortium. (2023). *Web Content Accessibility Guidelines (WCAG) 2.2*. https://www.w3.org/TR/WCAG22/
 
 ---
 
-## 11. Preparación para la defensa oral
+## 11. Manifiesto de uso de inteligencia artificial
 
-**Pregunta 1 (Arquitectura). ¿Por qué un monolito modular y no microservicios? ¿Cómo demuestran que las cinco vistas 4+1 describen la misma solución?**
+Este manifiesto declara cómo se usó la IA generativa en el informe y sus anexos, qué hizo directamente el estudiante y cómo se verificó lo producido con ayuda.
 
-*Respuesta:* La elección responde a los requerimientos y restricciones:
-
-- **Escala:** unos 25 usuarios y cerca de 30 OT por semana. Un solo proceso Node.js con un pool de 10 conexiones cubre el umbral de RNF-03 (p95 < 500 ms con 40 VU, CP-20).
-- **Equipo y costo:** son dos desarrolladores y no hay presupuesto definido (RNF-08). Los microservicios agregarían despliegues independientes, observabilidad distribuida y consistencia eventual en todas partes sin aportar valor al cliente.
-- **Evolución:** el monolito es **modular**. M1–M8 tienen límites explícitos (Fig. 4.11), con dependencias en una sola dirección (Fig. 4.13), y la integración asíncrona ya pasa por el outbox. Si en el futuro M5 se integrara con proveedores, se podría extraer sin reescribir el resto.
-
-La coherencia se demuestra recorriendo el escenario CU-06 por todas las vistas:
-
-- **Lógica:** `EtapaOrden` y `EtapaService.terminar` (Fig. 4.3, 4.6 y 4.7).
-- **Desarrollo:** se implementa en el componente M4, paquete `modules/etapas` (Fig. 4.11–4.13).
-- **Procesos:** está en el bucle de producción, con concurrencia en el *fork* y trabajo del relay (Fig. 4.14, 4.16–4.18 y Tabla 4.1).
-- **Física:** se ejecuta en el contenedor de Render y persiste en Neon y Atlas (Fig. 4.19).
-- **Verificación:** CP-01, CP-12, CP-19 y CP-27.
-
-Los nombres de módulos, entidades y roles son idénticos en todas las vistas.
-
-**Pregunta 2 (Base de datos). Usan PostgreSQL y MongoDB. ¿Cómo garantizan la consistencia si no pueden hacer una transacción que abarque ambas? ¿Qué pasa si MongoDB está caído cuando un operario termina una etapa?**
-
-*Respuesta:* Se aplica el patrón **outbox transaccional**. El cambio de negocio (etapa terminada, consumo, siguiente etapa disponible) y el evento de auditoría se escriben en la **misma transacción ACID de PostgreSQL**, en la tabla `outbox_evento`: o se guardan ambos o ninguno. El relay publica luego en MongoDB con un `_id` determinista (`evt-<id>`) mediante un *upsert*. Esto da entrega **al menos una vez** y efecto **exactamente una vez**. Esto se verificará con la prueba de reintento definida en 6.4: publicar dos veces el mismo evento debe dejar un solo documento.
-
-Si MongoDB está caído, la operación del operario **no falla**: el evento queda pendiente (`procesado_en IS NULL`) y se reintenta. Tras 10 intentos fallidos se alerta en Sentry. Esto es aceptable porque PostgreSQL es la única fuente de verdad del estado de negocio y MongoDB nunca decide transiciones; solo registra lo ocurrido.
-
-Se descartó la doble escritura desde la API porque una caída entre ambas escrituras dejaría una acción sin auditar, lo que rompería RNF-05. También se descartó el *two-phase commit* porque ambos motores gestionados no lo soportan entre sí y bloquearía la operación.
-
-**Pregunta 3 (Base de datos / integridad). ¿Por qué validan las transiciones de estado y el stock en la base de datos si ya lo hace la aplicación? ¿No es duplicar lógica?**
-
-*Respuesta:* Es **defensa en profundidad** sobre las reglas cuya violación tendría más impacto en el negocio. La aplicación valida primero (`puedeTransicionar`) para dar mensajes claros al usuario. La base de datos garantiza la regla **ante cualquier cliente**: un error en una versión futura, un script de migración, una carga desde el Excel o una consulta manual de soporte.
-
-- Los triggers `trg_etapa_transicion` y `trg_orden_transicion` rechazan, por ejemplo, PENDIENTE→TERMINADA en una etapa, TERMINADA→EN_PRODUCCION en una OT o cerrar una OT con etapas abiertas (CP-02, Tabla 6.4).
-- `CHECK (stock_actual >= 0)` aborta la transacción **completa** si un consumo deja stock negativo, de modo que no queda una etapa terminada con el kardex inconsistente (CP-14).
-- El índice único parcial `ux_alerta_auto_abierta` con `ON CONFLICT DO NOTHING` garantiza **una** alerta automática abierta por insumo aun con consumos concurrentes, algo que la aplicación no puede asegurar sin bloqueos adicionales.
-
-La duplicación está controlada: un único grafo de estados (Fig. 4.7) es la especificación de ambas implementaciones, y CP-01 y CP-02 prueban las dos.
-
-**Pregunta 4 (Seguridad / autenticación). ¿Por qué no guardan el JWT en `localStorage`, como muchos tutoriales? ¿Cómo se protegen de XSS y CSRF a la vez?**
-
-*Respuesta:* `localStorage` es legible por cualquier script de la página, así que un solo XSS (AM-03) permitiría robar un token de larga duración. El diseño separa dos tokens:
-
-- **Token de acceso:** JWT EdDSA de **10 minutos**, guardado **solo en memoria** y enviado como `Bearer`. Un XSS no puede persistirlo más allá de su breve vida y, como no es una cookie, las peticiones de negocio **no son vulnerables a CSRF**: un sitio externo no puede agregar el encabezado `Authorization`.
-- **Token de refresco:** opaco y guardado con hash en la BD. Viaja en una cookie `__Host-` con `HttpOnly` (inaccesible para JavaScript, mitiga XSS) y `SameSite=Strict` (no se envía desde otros sitios, mitiga CSRF). El único endpoint que usa esa cookie verifica además `Origin` y un encabezado personalizado (CP-26). El refresco **rota** el token en cada uso y, si detecta la reutilización de uno ya rotado, revoca toda la familia (CP-30), lo que detecta robos de sesión.
-
-Contra XSS se suman: React escapa por defecto, `dangerouslySetInnerHTML` está prohibido por lint y la CSP `script-src 'self'` bloquea scripts inyectados (CP-25).
-
-**Pregunta 5 (Seguridad / autorización y concurrencia). Un operario cambia el ID en la URL para terminar la etapa de un compañero, o dos operarios presionan "Terminar" al mismo tiempo. ¿Qué ocurre exactamente?**
-
-*Respuesta:* Son dos riesgos distintos con controles distintos:
-
-- **IDOR (AM-05, OWASP A01).** El permiso por rol (`etapas.avanzar_propias`) no basta, porque ambos operarios lo tienen. Por eso `EtapaService.terminar` bloquea la fila con `SELECT … FOR UPDATE` y compara `etapa.responsable_id` con `actor.id`, que proviene del JWT verificado y nunca del cuerpo de la solicitud. Si no coinciden, responde **404**, para no revelar que la etapa existe. Además, las consultas de lectura del operario filtran en SQL por `responsable_id = $1`, y los identificadores son UUID no enumerables. CP-27 lo verifica.
-- **Concurrencia (CP-19).** Ambas solicitudes llegan con `version = 3`. La primera obtiene el bloqueo de fila, termina la etapa y el trigger incrementa `version` a 4. La segunda espera el bloqueo y, al obtenerlo, encuentra `version = 4 ≠ 3` y estado TERMINADA. Responde **409 Conflict** ("la etapa fue actualizada por otro usuario") y no vuelve a habilitar la siguiente etapa ni a descontar insumos dos veces.
-
-El resultado es una sola transición, un solo consumo y un solo evento en la bitácora: la integridad se mantiene sin depender de que la UI deshabilite el botón.
-
----
-
-## 12. Manifiesto de uso de inteligencia artificial
-
-Este manifiesto declara cómo se usó la inteligencia artificial generativa en la elaboración de este informe y de sus anexos, qué partes son responsabilidad directa del estudiante y cómo se verificó lo producido con asistencia.
-
-**Herramienta utilizada.** Claude Code (Anthropic), con el modelo Claude Opus, usado como asistente dentro del editor de código.
-
-**Usos declarados.**
+**Herramienta:** Claude Code (Anthropic), con el modelo Claude Opus, como asistente dentro del editor de código.
 
 | Entregable | Uso de la IA | Intervención del estudiante |
 |---|---|---|
 | Texto del informe | Redacción de borradores, corrección de estilo y revisión de coherencia entre secciones | Definición del contenido, revisión y aprobación de cada cambio |
 | Diagramas (Anexo A) | Escritura de las fuentes PlantUML a partir de las decisiones de arquitectura | Decisiones de arquitectura, revisión de las figuras renderizadas |
-| Modelo de datos (Anexos B y C) | Borradores del DDL de PostgreSQL, de los validadores de MongoDB y de las consultas de ejemplo | Reglas de negocio e integridad, ejecución de la verificación (Tabla 6.4) |
+| Modelo de datos (Anexos B y C) | Borradores del DDL de PostgreSQL, de los validadores de MongoDB y de las consultas de ejemplo | Reglas de negocio e integridad, ejecución de la verificación (Tabla 6.3) |
 | Prototipo (Anexo D) | Maquetación HTML/CSS de las pantallas | Flujos, perfiles y contenido de cada pantalla |
 | Patrones seguros (Anexo G) | Fragmentos de código de referencia | Selección de controles y estándares (capítulo 7) |
 | Presentación de disertación | Armado de las diapositivas a partir del informe | Revisión del contenido y preparación de la exposición |
 | Versión LaTeX | Conversión del documento a la plantilla institucional | Revisión del documento compilado |
 
-**Lo que no se delegó.** El diagnóstico de la Unidad 1 y la información entregada por la contraparte de Kotoduo, el alcance del proyecto, las decisiones de arquitectura, tecnología y priorización, y la aprobación final de cada cambio incorporado al informe. La IA no tuvo contacto con la contraparte ni accedió a sus sistemas.
+**Lo que no se delegó:** el diagnóstico de la Unidad 1, la información de la contraparte, el alcance, las decisiones de arquitectura, tecnología y priorización, y la aprobación final de cada cambio. La IA no tuvo contacto con Kotoduo ni con sus sistemas.
 
-**Verificación aplicada.** Ningún resultado se incorporó sin revisión:
+**Cómo se verificó:** los borradores de base de datos se ejecutaron sobre los motores reales (Tabla 6.3); los diagramas se renderizaron y se contrastaron con el texto y la matriz de permisos; las afirmaciones técnicas y normativas se revisaron contra las fuentes del capítulo 10; y se comprobó la coherencia entre el informe, los anexos y la presentación. Toda salida de la IA se trató como un borrador que podía tener errores. Al asistente solo se le entregó la información del diagnóstico de la Unidad 1, y el prototipo usa datos ficticios.
 
-- los borradores de base de datos se ejecutaron sobre los motores reales y se contrastaron con los criterios verificables de la Tabla 6.4;
-- los diagramas se renderizaron y se revisaron contra el texto y la matriz de permisos;
-- las afirmaciones técnicas y normativas se contrastaron con la documentación oficial citada en la sección 10;
-- el texto final se revisó para comprobar la coherencia entre el informe, los anexos y la presentación.
-
-**Límites y resguardos.** Los modelos de lenguaje pueden producir errores o información inexacta con apariencia correcta; por eso toda salida se trató como borrador sujeto a verificación. La información de la contraparte entregada al asistente se limitó a la ya descrita en el diagnóstico de la Unidad 1, y el prototipo usa datos ficticios y anonimizados. La responsabilidad por el contenido de este informe es exclusivamente del estudiante.
-
-**Declaración.** Declaro que el uso de inteligencia artificial descrito en este manifiesto es completo y veraz, y que el contenido de este informe refleja mi comprensión y mis decisiones sobre el proyecto.
+**Declaración.** Declaro que este manifiesto describe de forma completa y veraz el uso de inteligencia artificial, y que el contenido del informe refleja mi comprensión y mis decisiones sobre el proyecto. La responsabilidad por su contenido es exclusivamente mía.
 
 Carlos David Mac-Iver Reydet — 23 de octubre de 2026
 
 ---
 
-## 13. Anexos
+## 12. Anexos
 
-Los anexos E y H a L forman parte de este documento y reúnen las tablas extensas de consulta. Los demás son archivos del repositorio entregado junto con el informe.
+Los anexos E y H a M forman parte de este documento y reúnen las tablas largas de consulta. Los demás son archivos que se entregan junto con el informe.
 
 | Anexo | Contenido | Formato | Referenciado en |
 |---|---|---|---|
@@ -1435,39 +1183,42 @@ Los anexos E y H a L forman parte de este documento y reúnen las tablas extensa
 | C | Borrador referencial: validadores, índices y documentos de MongoDB + script de inicialización | Esquemas JSON y script de MongoDB | 6.4–6.5 |
 | D | Prototipo navegable y capturas v1 → v2 | Maqueta HTML/CSS | 5.3–5.5 |
 | E | Lista de cotejo de seguridad para PR y pruebas (ASVS L2, extracto) | Este documento | 7.5, 8.6, 8.9 |
-| F | Reportes de ejecución de pruebas (Vitest, k6, ZAP, Lighthouse, Playwright) | Reportes HTML/JSON [Adjuntar tras la ejecución] | 8.8 |
+| F | Reportes de ejecución de pruebas (Vitest, k6, ZAP, Lighthouse, Playwright) | Reportes HTML/JSON, se agregan al ejecutar las pruebas | 8.8 |
 | G | Borrador referencial: fragmentos de código de los patrones de codificación segura | Documento con código TypeScript | 7.6 |
 | H | Plan detallado de actividades (A00–A31) y matriz de dependencias | Este documento | 3.1, 3.2 |
-| I | Matriz de tecnologías con justificación y necesidad futura | Este documento | 4.7 |
+| I | Matriz de tecnologías e infraestructura como código | Este documento | 4.7 |
 | J | Diccionario de datos completo | Este documento | 6.2 |
 | K | Matriz de modelado de amenazas y patrones de codificación segura en detalle | Este documento | 7.4, 7.6 |
 | L | Especificación de los casos de prueba CP-01 a CP-36 | Este documento | 8.3 a 8.8 |
+| M | Estándares de referencia y tareas normativas del plan | Este documento | 7.7 |
 
 ### Anexo E — Lista de cotejo de seguridad (extracto ASVS 4.0.3 L2)
 
-| # | Control | Ref. ASVS | Cumple (S/N) | Evidencia |
+El revisor marca cada control en el PR o en la prueba correspondiente.
+
+| # | Control | Ref. ASVS | Cumple | Evidencia |
 |---|---|---|---|---|
-| 1 | Las contraseñas tienen ≥ 12 caracteres, sin reglas de composición, y se comparan contra una lista de claves comprometidas | V2.1.1, V2.1.7 | [ ] | CP-07 |
-| 2 | Las contraseñas se almacenan con Argon2id con parámetros iguales o superiores a los de OWASP | V2.4.1 | [ ] | Revisión del servicio de autenticación |
-| 3 | El bloqueo y la limitación de tasa protegen el login | V2.2.1 | [ ] | CP-29 |
-| 4 | Las cuentas privilegiadas exigen MFA | V2.8 / V4.3.1 | [ ] | CP-10 |
-| 5 | Los tokens de sesión se generan con ≥ 128 bits de entropía y se guardan con hash | V3.2.2 | [ ] | Revisión del servicio de sesiones |
-| 6 | Las cookies usan `__Host-`, `Secure`, `HttpOnly` y `SameSite` | V3.4.1–V3.4.5 | [ ] | CP-09 |
-| 7 | Las sesiones expiran por inactividad y tiempo absoluto, y se revocan al cerrar sesión | V3.3.1–V3.3.4 | [ ] | CP-30 |
-| 8 | El control de acceso deniega por defecto y se aplica en el servidor | V4.1.1, V4.1.5 | [ ] | CP-28 |
-| 9 | Se verifica la autorización a nivel de objeto (IDOR) | V4.2.1 | [ ] | CP-27 |
-| 10 | Toda entrada se valida con listas blancas | V5.1.3 | [ ] | CP-06, CP-24 |
-| 11 | Las consultas a BD están parametrizadas | V5.3.4 | [ ] | Semgrep + CP-24 |
-| 12 | Los errores no exponen información sensible | V7.4.1 | [ ] | CP-24 |
-| 13 | Los logs no contienen credenciales ni tokens | V7.1.1 | [ ] | Revisión de logs |
-| 14 | Las cabeceras CSP, HSTS y `nosniff` están presentes | V14.4 | [ ] | CP-32 |
-| 15 | Los archivos subidos se validan por tipo y tamaño y se sirven sin ejecución | V12.1, V12.5 | [ ] | CP-31 |
-| 16 | No hay secretos en el repositorio y se rotan | V2.10, V14.3 | [ ] | *Secret scanning* |
-| 17 | Las dependencias no tienen vulnerabilidades altas conocidas | V14.2.1 | [ ] | `npm audit` |
+| 1 | Las contraseñas tienen ≥ 12 caracteres, sin reglas de composición, y se comparan contra una lista de claves comprometidas | V2.1.1, V2.1.7 | ☐ | CP-07 |
+| 2 | Las contraseñas se almacenan con Argon2id con parámetros iguales o superiores a los de OWASP | V2.4.1 | ☐ | Revisión del servicio de autenticación |
+| 3 | El bloqueo y la limitación de tasa protegen el login | V2.2.1 | ☐ | CP-29 |
+| 4 | Las cuentas privilegiadas exigen MFA | V2.8 / V4.3.1 | ☐ | CP-10 |
+| 5 | Los tokens de sesión se generan con ≥ 128 bits de entropía y se guardan con hash | V3.2.2 | ☐ | Revisión del servicio de sesiones |
+| 6 | Las cookies usan `__Host-`, `Secure`, `HttpOnly` y `SameSite` | V3.4.1–V3.4.5 | ☐ | CP-09 |
+| 7 | Las sesiones expiran por inactividad y tiempo absoluto, y se revocan al cerrar sesión | V3.3.1–V3.3.4 | ☐ | CP-30 |
+| 8 | El control de acceso deniega por defecto y se aplica en el servidor | V4.1.1, V4.1.5 | ☐ | CP-28 |
+| 9 | Se verifica la autorización a nivel de objeto (IDOR) | V4.2.1 | ☐ | CP-27 |
+| 10 | Toda entrada se valida con listas blancas | V5.1.3 | ☐ | CP-06, CP-24 |
+| 11 | Las consultas a BD están parametrizadas | V5.3.4 | ☐ | Semgrep + CP-24 |
+| 12 | Los errores no exponen información sensible | V7.4.1 | ☐ | CP-24 |
+| 13 | Los logs no contienen credenciales ni tokens | V7.1.1 | ☐ | Revisión de logs |
+| 14 | Las cabeceras CSP, HSTS y `nosniff` están presentes | V14.4 | ☐ | CP-32 |
+| 15 | Los archivos subidos se validan por tipo y tamaño y se sirven sin ejecución | V12.1, V12.5 | ☐ | CP-31 |
+| 16 | No hay secretos en el repositorio y se rotan | V2.10, V14.3 | ☐ | *Secret scanning* |
+| 17 | Las dependencias no tienen vulnerabilidades altas conocidas | V14.2.1 | ☐ | `npm audit` |
 
 ### Anexo H — Plan detallado de actividades y matriz de dependencias
 
-Detalla el resumen por Sprint de la sección 3.1 (Tabla 3.2) y las dependencias clave de la sección 3.2 (Tabla 3.5).
+Detalla el resumen por Sprint de la sección 3.1 (Tabla 3.2) y las dependencias clave de la sección 3.2 (Tabla 3.4).
 
 **Tabla H.1 — Plan detallado de actividades.** Duración en días hábiles; "D" indica el día relativo del proyecto.
 
@@ -1572,6 +1323,31 @@ Detalla la Tabla 4.2 de la sección 4.7.
 | Observabilidad | `pino` (logs JSON), Sentry (errores), UptimeRobot (disponibilidad) | Logs con `request_id`, alertas de error y caída | Planes gratuitos; diagnósticos sin exponer datos sensibles en logs | Métricas de negocio (tiempo por etapa) en un tablero |
 | Gestión del proyecto | GitHub Projects (tablero Scrum) | Backlog, Sprints, tablero y burndown | Vincula HU ↔ PR ↔ CI en una sola herramienta | — |
 | Diagramas | PlantUML | Todas las figuras del informe | Diagramas como texto, versionables y revisables en PR | — |
+
+**Infraestructura como código (práctica ideal, fuera del alcance comprometido)**
+
+La sección 4.7 la plantea como la primera mejora después del piloto (Morris, 2020). Si se adopta, sigue cinco principios:
+
+1. **Módulos por función, no por proveedor.** Seis módulos: borde y DNS, front-end, cómputo de la API, base de datos estructurada, base de datos no estructurada y archivos. Cada módulo entrega las mismas salidas, sin importar el proveedor: URL de la API, cadenas de conexión y nombre del *bucket*. Cambiar de proveedor es reemplazar un módulo.
+2. **La aplicación depende solo de interfaces estándar.** La API conoce una imagen Docker, los protocolos de PostgreSQL y MongoDB, la API de S3 y su configuración por variables de entorno (Wiggins, 2011). Sin esto, cambiar de proveedor obligaría a reescribir código. Este principio ya forma parte del diseño.
+3. **Los mismos módulos para cada ambiente.** Staging y producción salen de los mismos módulos, con distinto tamaño. Así staging se parece de verdad a producción y las pruebas de integración y rendimiento son válidas.
+4. **Los cambios se revisan como el código.** Cada PR que toca `infra/` valida la sintaxis, busca configuraciones inseguras con Trivy y muestra un *plan* con lo que se creará, cambiará o destruirá. Aplicarlo en producción pide la misma aprobación manual que el despliegue de la API.
+5. **Estado remoto y cifrado.** El estado de OpenTofu puede contener secretos, así que se guarda cifrado en un *bucket* privado. Los tokens de los proveedores viven en los secretos de GitHub Environments, nunca en el repositorio.
+
+**Tabla I.2 — Módulos de infraestructura y proveedores intercambiables**
+
+| Módulo | Proveedor inicial | Alternativa en AWS | Alternativa en Google Cloud | Proveedor de OpenTofu inicial |
+|---|---|---|---|---|
+| Borde y DNS | Cloudflare DNS, proxy y WAF | Route 53 + CloudFront + AWS WAF | Cloud DNS + Cloud Load Balancing + Cloud Armor | `cloudflare/cloudflare` (oficial) |
+| Front-end (PWA estática) | Cloudflare Pages | S3 + CloudFront o Amplify Hosting | Firebase Hosting | `cloudflare/cloudflare` (oficial) |
+| Cómputo de la API (contenedor) | Render Web Service | ECS Fargate o Lightsail Containers | Cloud Run | `render-oss/render` (oficial) |
+| BD estructurada (PostgreSQL 16) | Neon | RDS for PostgreSQL | Cloud SQL for PostgreSQL | `kislerdm/neon` (comunitario, patrocinado por Neon) |
+| BD no estructurada (MongoDB 8) | MongoDB Atlas | MongoDB Atlas desplegado en AWS | MongoDB Atlas desplegado en Google Cloud | `mongodb/mongodbatlas` (oficial) |
+| Archivos (API S3) | Cloudflare R2 | Amazon S3 | Cloud Storage (API XML interoperable con S3) | `cloudflare/cloudflare` (oficial) |
+
+MongoDB se mantiene en Atlas con cualquier nube, porque Atlas también corre sobre AWS, Google Cloud y Azure. Amazon DocumentDB se descartó: es compatible con MongoDB solo en parte, y el diseño de la sección 6.4 usa índices TTL y el *aggregation pipeline*.
+
+**Límites de la portabilidad.** La IaC reproduce la infraestructura, pero no mueve los datos ni borra las diferencias entre servicios. Una migración real también exige trasladar los datos con las herramientas de respaldo de cada motor, actualizar el DNS y adaptar lo que no tiene equivalente directo, como el *branching* de Neon o las reglas del WAF. Además, el proveedor de OpenTofu para Neon es comunitario y el de Render es reciente: si alguno se abandona, se reemplaza solo su módulo.
 
 ### Anexo J — Diccionario de datos
 
@@ -1712,65 +1488,99 @@ Detalla las Tablas 7.2 y 7.3 del capítulo 7. El riesgo se calcula como probabil
 
 ### Anexo L — Especificación de los casos de prueba
 
-Detalla la Tabla 8.1 del capítulo 8. La columna "Resultado obtenido" se completa al ejecutar cada caso en su Sprint; el procedimiento de registro se describe en la sección 8.8.
+Detalla la Tabla 8.1 del capítulo 8. La columna "Resultado obtenido" se llena al ejecutar cada caso en su Sprint (sección 8.8); mientras tanto muestra "—".
 
 **Tabla L.1 — Pruebas unitarias (Vitest)**
 
 | ID | HU / CU | Descripción | Precondición | Pasos / datos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|---|---|
-| CP-01 | HU-02 / CU-06 | Transiciones válidas de la etapa | — | `EtapaOrden.puedeTransicionar` para DISPONIBLE→EN_CURSO, EN_CURSO→TERMINADA, EN_CURSO→BLOQUEADA, BLOQUEADA→EN_CURSO, DISPONIBLE→OMITIDA; `OrdenTrabajo.puedeTransicionar` para EN_PRODUCCION→DETENIDA, DETENIDA→EN_DISENO | `true` en los 7 casos | [Completar tras ejecución] | Pendiente |
-| CP-02 | HU-02 / CU-06 | Transiciones inválidas rechazadas | — | Etapa: PENDIENTE→TERMINADA, TERMINADA→EN_CURSO, DISPONIBLE→TERMINADA, EN_CURSO→OMITIDA con la OT activa, DISPONIBLE→EN_CURSO con la OT DETENIDA; OT: TERMINADA→EN_PRODUCCION, DETENIDA→TERMINADA, EN_PRODUCCION→TERMINADA con etapas abiertas, DETENIDA→EN_PRODUCCION con una etapa BLOQUEADA | `false`; en BD, el trigger lanza `check_violation` | [Completar] | Pendiente |
-| CP-03 | HU-07 / CU-04 | Generación de etapas desde la plantilla | Plantilla "Uniforme" con 6 etapas | `generarEtapas(tipo, cantidad=30)` | 6 etapas con secuencia 1..6; la primera DISPONIBLE y el resto PENDIENTE; requerimientos = cantidad × cantidad_por_unidad (p. ej., tela 36 m) | [Completar] | Pendiente |
-| CP-04 | HU-05 / CU-04 | Fecha estimada de término | Etapas con 23 h totales; registro el lunes 09:00 | `calcularFechaEstimada(jornada=8)` | Miércoles de la misma semana (3 jornadas hábiles); omite sábado y domingo | [Completar] | Pendiente |
-| CP-05 | HU-09 / CU-08 | Umbral de stock mínimo | — | `estaBajoMinimo` con stock 2/mín 2; 2,01/2; 0/0 | `true`, `false`, `true` (la regla es ≤) | [Completar] | Pendiente |
-| CP-06 | HU-05 / CU-04 | Validación de la OT | — | `NuevaOrdenSchema` con cantidad 0; título de 200 caracteres; campo extra `precio`; caso válido | Error en los 3 primeros (incluido el campo no permitido); éxito en el válido | [Completar] | Pendiente |
-| CP-07 | HU-11 / CU-01 | Política de contraseñas | Lista de claves comprometidas cargada | `validarPoliticaClave`: "abc12345678" (11), "contraseña123" (comprometida), "tinta plotter azul 2026" | Rechaza, rechaza, acepta | [Completar] | Pendiente |
-| CP-08 | HU-11 / CU-02 | Mapa de permisos | — | Verificar `PERMISOS_POR_ROL` contra la Tabla 7.1 (prueba tabular de 25 permisos × 5 roles) | 125 aserciones coinciden; Operario sin `ordenes.crear`; Diseñador sin `diseno.resolver` | [Completar] | Pendiente |
+| CP-01 | HU-02 / CU-06 | Transiciones válidas de la etapa | — | `EtapaOrden.puedeTransicionar` para DISPONIBLE→EN_CURSO, EN_CURSO→TERMINADA, EN_CURSO→BLOQUEADA, BLOQUEADA→EN_CURSO, DISPONIBLE→OMITIDA; `OrdenTrabajo.puedeTransicionar` para EN_PRODUCCION→DETENIDA, DETENIDA→EN_DISENO | `true` en los 7 casos | — | Pendiente |
+| CP-02 | HU-02 / CU-06 | Transiciones inválidas rechazadas | — | Etapa: PENDIENTE→TERMINADA, TERMINADA→EN_CURSO, DISPONIBLE→TERMINADA, EN_CURSO→OMITIDA con la OT activa, DISPONIBLE→EN_CURSO con la OT DETENIDA; OT: TERMINADA→EN_PRODUCCION, DETENIDA→TERMINADA, EN_PRODUCCION→TERMINADA con etapas abiertas, DETENIDA→EN_PRODUCCION con una etapa BLOQUEADA | `false`; en BD, el trigger lanza `check_violation` | — | Pendiente |
+| CP-03 | HU-07 / CU-04 | Generación de etapas desde la plantilla | Plantilla "Uniforme" con 6 etapas | `generarEtapas(tipo, cantidad=30)` | 6 etapas con secuencia 1..6; la primera DISPONIBLE y el resto PENDIENTE; requerimientos = cantidad × cantidad_por_unidad (p. ej., tela 36 m) | — | Pendiente |
+| CP-04 | HU-05 / CU-04 | Fecha estimada de término | Etapas con 23 h totales; registro el lunes 09:00 | `calcularFechaEstimada(jornada=8)` | Miércoles de la misma semana (3 jornadas hábiles); omite sábado y domingo | — | Pendiente |
+| CP-05 | HU-09 / CU-08 | Umbral de stock mínimo | — | `estaBajoMinimo` con stock 2/mín 2; 2,01/2; 0/0 | `true`, `false`, `true` (la regla es ≤) | — | Pendiente |
+| CP-06 | HU-05 / CU-04 | Validación de la OT | — | `NuevaOrdenSchema` con cantidad 0; título de 200 caracteres; campo extra `precio`; caso válido | Error en los 3 primeros (incluido el campo no permitido); éxito en el válido | — | Pendiente |
+| CP-07 | HU-11 / CU-01 | Política de contraseñas | Lista de claves comprometidas cargada | `validarPoliticaClave`: "abc12345678" (11), "contraseña123" (comprometida), "tinta plotter azul 2026" | Rechaza, rechaza, acepta | — | Pendiente |
+| CP-08 | HU-11 / CU-02 | Mapa de permisos | — | Verificar `PERMISOS_POR_ROL` contra la Tabla 7.1 (prueba tabular de 25 permisos × 5 roles) | 125 aserciones coinciden; Operario sin `ordenes.crear`; Diseñador sin `diseno.resolver` | — | Pendiente |
 
 **Tabla L.2 — Pruebas de integración (Supertest + Testcontainers)**
 
 | ID | HU / CU | Descripción | Precondición | Pasos / datos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|---|---|
-| CP-09 | HU-11 / CU-01 | Login correcto de operario | Usuario `operario.sub` activo | `POST /api/v1/auth/login` con credenciales válidas | 200 con `accessToken` (JWT, `exp` = 10 min); cookie `__Host-sgp_rt` con `HttpOnly`, `Secure`, `SameSite=Strict`; evento LOGIN_EXITOSO en la bitácora | [Completar] | Pendiente |
-| CP-10 | HU-11 / CU-01 | MFA obligatorio para la Encargada | `encargada.prod` con MFA | Login → `POST /auth/mfa` con código TOTP válido y luego inválido | Primer paso: 200 `{mfaRequerido: true}` sin tokens; código válido: 200 con tokens; inválido: 401 | [Completar] | Pendiente |
-| CP-11 | HU-05, HU-12 / CU-04 | Registro de OT end-to-end en datos | Vendedor autenticado | `POST /api/v1/ordenes` (tipo 1, cantidad 30) | 201 con `codigo` OT-AAAA-NNNN; 6 etapas en PostgreSQL; ≤ 5 s después, documento ORDEN_REGISTRADA en `bitacora_eventos` con `_id = evt-n` | [Completar] | Pendiente |
-| CP-12 | HU-02 / CU-06 | Terminar etapa habilita la siguiente | Etapa 2 EN_CURSO asignada al operario | `POST /api/v1/etapas/{id}/terminar` `{version, consumos:[{insumoId:3, cantidad:0.6}]}` | 200 `{siguienteEtapa:"Sublimado", area:"Sublimación"}`; etapa 3 DISPONIBLE; stock descontado; notificación ETAPA_DISPONIBLE para el responsable de la etapa 3; variante con la etapa 3 OMITIDA: se habilita la etapa 4 | [Completar] | Pendiente |
-| CP-13 | HU-02 / CU-06 | Terminar la última etapa cierra la OT | Etapa 6 EN_CURSO | Terminar la etapa 6 | OT en estado TERMINADA con `terminada_en`; evento ORDEN_ESTADO_CAMBIADO | [Completar] | Pendiente |
-| CP-14 | HU-09 / CU-08 | Alerta automática única | Papel: stock 4, mínimo 2 | Dos consumos: −2,5 y −0,5; luego un consumo de −2 | Una sola alerta AUTOMATICA abierta; el tercer consumo (stock negativo) devuelve 409 y revierte la transacción completa | [Completar] | Pendiente |
-| CP-15 | HU-03 / CU-09 | Reporte manual de faltante | Operario con etapa EN_CURSO | `POST /api/v1/alertas` `{insumoId, etapaId, comentario}` | 201; alerta MANUAL con `reportada_por`; notificación ALERTA_INSUMO a los usuarios Encargada | [Completar] | Pendiente |
-| CP-16 | HU-06 / CU-07 | Aprobación de diseño y segregación | Diseño v1 PENDIENTE subido por el Diseñador | (a) El Vendedor rechaza sin comentario; (b) rechaza con comentario; (c) el Diseñador intenta aprobar su v2; (d) el Vendedor aprueba la v2 | (a) 400; (b) 200, RECHAZADO; (c) 403; (d) 200, APROBADO y la primera etapa de producción pasa a DISPONIBLE | [Completar] | Pendiente |
-| CP-17 | HU-04 / CU-06 | Evidencia con URL prefirmada | Etapa propia; emulador S3 activo | Solicitar URL (image/jpeg, 300 KB) → PUT al emulador → `POST /evidencias` con metadatos | URL con expiración de 300 s; documento en `evidencias_etapa` con `object_key` y `sha256` válidos | [Completar] | Pendiente |
-| CP-18 | HU-10 / CU-10, CU-14 | Panel identifica atrasadas y en riesgo | 4 OT: compromiso ayer (activa), mañana, ayer (TERMINADA) y una activa con fecha estimada posterior al compromiso | `GET /api/v1/panel/ordenes?filtro=atrasadas`; luego ejecutar dos veces el Verificador de atrasos | Atrasadas: solo la primera, con `porcentaje_avance` correcto; la cuarta queda `en_riesgo` y la Encargada recibe una sola notificación (operación idempotente) | [Completar] | Pendiente |
-| CP-19 | HU-02 / CU-06 | Concurrencia sobre la misma etapa | Etapa EN_CURSO, version = 3 | Dos `POST /terminar` simultáneos (`Promise.all`) con version 3 | Una respuesta 200 y otra 409; la siguiente etapa se habilita una sola vez | [Completar] | Pendiente |
+| CP-09 | HU-11 / CU-01 | Login correcto de operario | Usuario `operario.sub` activo | `POST /api/v1/auth/login` con credenciales válidas | 200 con `accessToken` (JWT, `exp` = 10 min); cookie `__Host-sgp_rt` con `HttpOnly`, `Secure`, `SameSite=Strict`; evento LOGIN_EXITOSO en la bitácora | — | Pendiente |
+| CP-10 | HU-11 / CU-01 | MFA obligatorio para la Encargada | `encargada.prod` con MFA | Login → `POST /auth/mfa` con código TOTP válido y luego inválido | Primer paso: 200 `{mfaRequerido: true}` sin tokens; código válido: 200 con tokens; inválido: 401 | — | Pendiente |
+| CP-11 | HU-05, HU-12 / CU-04 | Registro de OT end-to-end en datos | Vendedor autenticado | `POST /api/v1/ordenes` (tipo 1, cantidad 30) | 201 con `codigo` OT-AAAA-NNNN; 6 etapas en PostgreSQL; ≤ 5 s después, documento ORDEN_REGISTRADA en `bitacora_eventos` con `_id = evt-n` | — | Pendiente |
+| CP-12 | HU-02 / CU-06 | Terminar etapa habilita la siguiente | Etapa 2 EN_CURSO asignada al operario | `POST /api/v1/etapas/{id}/terminar` `{version, consumos:[{insumoId:3, cantidad:0.6}]}` | 200 `{siguienteEtapa:"Sublimado", area:"Sublimación"}`; etapa 3 DISPONIBLE; stock descontado; notificación ETAPA_DISPONIBLE para el responsable de la etapa 3; variante con la etapa 3 OMITIDA: se habilita la etapa 4 | — | Pendiente |
+| CP-13 | HU-02 / CU-06 | Terminar la última etapa cierra la OT | Etapa 6 EN_CURSO | Terminar la etapa 6 | OT en estado TERMINADA con `terminada_en`; evento ORDEN_ESTADO_CAMBIADO | — | Pendiente |
+| CP-14 | HU-09 / CU-08 | Alerta automática única | Papel: stock 4, mínimo 2 | Dos consumos: −2,5 y −0,5; luego un consumo de −2 | Una sola alerta AUTOMATICA abierta; el tercer consumo (stock negativo) devuelve 409 y revierte la transacción completa | — | Pendiente |
+| CP-15 | HU-03 / CU-09 | Reporte manual de faltante | Operario con etapa EN_CURSO | `POST /api/v1/alertas` `{insumoId, etapaId, comentario}` | 201; alerta MANUAL con `reportada_por`; notificación ALERTA_INSUMO a los usuarios Encargada | — | Pendiente |
+| CP-16 | HU-06 / CU-07 | Aprobación de diseño y segregación | Diseño v1 PENDIENTE subido por el Diseñador | (a) El Vendedor rechaza sin comentario; (b) rechaza con comentario; (c) el Diseñador intenta aprobar su v2; (d) el Vendedor aprueba la v2 | (a) 400; (b) 200, RECHAZADO; (c) 403; (d) 200, APROBADO y la primera etapa de producción pasa a DISPONIBLE | — | Pendiente |
+| CP-17 | HU-04 / CU-06 | Evidencia con URL prefirmada | Etapa propia; emulador S3 activo | Solicitar URL (image/jpeg, 300 KB) → PUT al emulador → `POST /evidencias` con metadatos | URL con expiración de 300 s; documento en `evidencias_etapa` con `object_key` y `sha256` válidos | — | Pendiente |
+| CP-18 | HU-10 / CU-10, CU-14 | Panel identifica atrasadas y en riesgo | 4 OT: compromiso ayer (activa), mañana, ayer (TERMINADA) y una activa con fecha estimada posterior al compromiso | `GET /api/v1/panel/ordenes?filtro=atrasadas`; luego ejecutar dos veces el Verificador de atrasos | Atrasadas: solo la primera, con `porcentaje_avance` correcto; la cuarta queda `en_riesgo` y la Encargada recibe una sola notificación (operación idempotente) | — | Pendiente |
+| CP-19 | HU-02 / CU-06 | Concurrencia sobre la misma etapa | Etapa EN_CURSO, version = 3 | Dos `POST /terminar` simultáneos (`Promise.all`) con version 3 | Una respuesta 200 y otra 409; la siguiente etapa se habilita una sola vez | — | Pendiente |
 
 **Tabla L.3 — Pruebas de rendimiento (k6 / Lighthouse)**
 
 | ID | HU / CU | Descripción | Precondición | Pasos / datos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|---|---|
-| CP-20 | HU-01 / CU-05 | Carga de Mi Trabajo | Staging con 5.000 OT; 40 usuarios de prueba | k6: rampa 0→40 VU en 1 min, 5 min sostenido, `GET /mi-trabajo` cada 3 s por VU | p95 < 500 ms, p99 < 1 s, errores < 1 % | [Completar] | Pendiente |
-| CP-21 | HU-02 / CU-06 | Escrituras concurrentes de avance | 20 VU, cada uno con etapas propias | k6: 20 VU × 3 min, iniciar + terminar etapa | p95 < 800 ms; 0 errores 5xx; outbox drenado en < 30 s tras la prueba | [Completar] | Pendiente |
-| CP-22 | RNF-02, RNF-03 | Carga inicial de la PWA en el móvil | Build de producción en staging | Lighthouse móvil, "Slow 4G", 3 ejecuciones (mediana) | LCP < 2,5 s; TBT < 200 ms; PWA instalable (manifest y SW válidos) | [Completar] | Pendiente |
-| CP-23 | HU-10 / CU-10 | Panel con volumen | 5.000 OT, 30.000 etapas | `EXPLAIN ANALYZE` de `v_panel_ordenes` paginada (50) + k6 a 10 VU | Uso de `ix_ot_estado_compromiso`; p95 < 300 ms | [Completar] | Pendiente |
+| CP-20 | HU-01 / CU-05 | Carga de Mi Trabajo | Staging con 5.000 OT; 40 usuarios de prueba | k6: rampa 0→40 VU en 1 min, 5 min sostenido, `GET /mi-trabajo` cada 3 s por VU | p95 < 500 ms, p99 < 1 s, errores < 1 % | — | Pendiente |
+| CP-21 | HU-02 / CU-06 | Escrituras concurrentes de avance | 20 VU, cada uno con etapas propias | k6: 20 VU × 3 min, iniciar + terminar etapa | p95 < 800 ms; 0 errores 5xx; outbox drenado en < 30 s tras la prueba | — | Pendiente |
+| CP-22 | RNF-02, RNF-03 | Carga inicial de la PWA en el móvil | Build de producción en staging | Lighthouse móvil, "Slow 4G", 3 ejecuciones (mediana) | LCP < 2,5 s; TBT < 200 ms; PWA instalable (manifest y SW válidos) | — | Pendiente |
+| CP-23 | HU-10 / CU-10 | Panel con volumen | 5.000 OT, 30.000 etapas | `EXPLAIN ANALYZE` de `v_panel_ordenes` paginada (50) + k6 a 10 VU | Uso de `ix_ot_estado_compromiso`; p95 < 300 ms | — | Pendiente |
 
 **Tabla L.4 — Pruebas de seguridad (ZAP, Postman, Semgrep, lista de cotejo)**
 
 | ID | Amenaza | Descripción | Precondición | Pasos / datos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|---|---|
-| CP-24 | AM-01, AM-02 | Inyección SQL / NoSQL | Token de Encargada | `GET /ordenes?estado=' OR 1=1--`; `GET /ordenes/{id}` con `id = 1;DROP TABLE x`; body `{"insumoId": {"$ne": null}}`; escaneo activo de ZAP | 400 por validación en todos; sin errores SQL ni *stack traces* en la respuesta; ZAP sin alertas de inyección | [Completar] | Pendiente |
-| CP-25 | AM-03 | XSS almacenado | Operario autenticado | Guardar la nota `<img src=x onerror=alert(1)>` en una evidencia; abrirla como Encargada (Playwright) | El texto se muestra literal; no se ejecuta ningún script; la CSP bloquea la ejecución en línea (sin diálogo) | [Completar] | Pendiente |
-| CP-26 | AM-04 | CSRF en el refresh | Sesión válida en el navegador | Página en `https://evil.test` que hace `fetch(.../auth/refresh, {credentials:'include'})`; petición sin `X-Requested-With` | 403 por origen no permitido o encabezado ausente; la cookie no viaja (SameSite=Strict) | [Completar] | Pendiente |
-| CP-27 | AM-05 | IDOR horizontal | Operarios A y B con etapas propias | A envía `POST /etapas/{idDeB}/terminar` y `GET /evidencias?etapa={idDeB}` | 404 en ambas; la etapa de B no cambia; evento de seguridad registrado | [Completar] | Pendiente |
-| CP-28 | AM-06 | Escalada vertical | Token de Operario | `POST /plantillas`, `PATCH /usuarios/{id}/roles`, `GET /bitacora` | 403 en los tres; prueba de inventario: 0 rutas sin permiso declarado | [Completar] | Pendiente |
-| CP-29 | AM-07 | Fuerza bruta | Usuario activo | 6 logins fallidos seguidos; luego uno correcto; 11 solicitudes en 60 s desde la misma IP | Desde el 5.º fallo: bloqueo de 15 min (el login correcto también falla con mensaje genérico); la solicitud 11.ª recibe 429 | [Completar] | Pendiente |
-| CP-30 | AM-08 | Reutilización de un refresh rotado | Sesión con refresh R1 | Refrescar con R1 (obtiene R2); volver a usar R1; luego usar R2 | Uso de R1 repetido: 401 y revocación de la familia; R2 también 401; evento SESIONES_REVOCADAS | [Completar] | Pendiente |
-| CP-31 | AM-09 | Archivo no permitido | Etapa propia | Solicitar URL para `text/html`; para jpeg de 20 MB; PUT con `Content-Type` distinto al firmado | 400, 400 y 403 (firma inválida en R2) | [Completar] | Pendiente |
-| CP-32 | AM-10, AM-11, AM-12 | Configuración, cabeceras y dependencias | Staging desplegado | ZAP *baseline*; `npm audit --audit-level=high`; revisión con la lista de cotejo ASVS (Anexo E); revisión de logs sin secretos; con el rol `sgp_app`, intentar modificar `movimiento_insumo`, borrar `outbox_evento` y crear una tabla | ZAP sin High/Medium; CSP, HSTS, `X-Content-Type-Options`, `frame-ancestors` presentes; 0 vulnerabilidades altas; ítems ASVS L2 seleccionados cumplidos; los tres intentos con `sgp_app` fallan por falta de privilegios (R7, R8) | [Completar] | Pendiente |
+| CP-24 | AM-01, AM-02 | Inyección SQL / NoSQL | Token de Encargada | `GET /ordenes?estado=' OR 1=1--`; `GET /ordenes/{id}` con `id = 1;DROP TABLE x`; body `{"insumoId": {"$ne": null}}`; escaneo activo de ZAP | 400 por validación en todos; sin errores SQL ni *stack traces* en la respuesta; ZAP sin alertas de inyección | — | Pendiente |
+| CP-25 | AM-03 | XSS almacenado | Operario autenticado | Guardar la nota `<img src=x onerror=alert(1)>` en una evidencia; abrirla como Encargada (Playwright) | El texto se muestra literal; no se ejecuta ningún script; la CSP bloquea la ejecución en línea (sin diálogo) | — | Pendiente |
+| CP-26 | AM-04 | CSRF en el refresh | Sesión válida en el navegador | Página en `https://evil.test` que hace `fetch(.../auth/refresh, {credentials:'include'})`; petición sin `X-Requested-With` | 403 por origen no permitido o encabezado ausente; la cookie no viaja (SameSite=Strict) | — | Pendiente |
+| CP-27 | AM-05 | IDOR horizontal | Operarios A y B con etapas propias | A envía `POST /etapas/{idDeB}/terminar` y `GET /evidencias?etapa={idDeB}` | 404 en ambas; la etapa de B no cambia; evento de seguridad registrado | — | Pendiente |
+| CP-28 | AM-06 | Escalada vertical | Token de Operario | `POST /plantillas`, `PATCH /usuarios/{id}/roles`, `GET /bitacora` | 403 en los tres; prueba de inventario: 0 rutas sin permiso declarado | — | Pendiente |
+| CP-29 | AM-07 | Fuerza bruta | Usuario activo | 6 logins fallidos seguidos; luego uno correcto; 11 solicitudes en 60 s desde la misma IP | Desde el 5.º fallo: bloqueo de 15 min (el login correcto también falla con mensaje genérico); la solicitud 11.ª recibe 429 | — | Pendiente |
+| CP-30 | AM-08 | Reutilización de un refresh rotado | Sesión con refresh R1 | Refrescar con R1 (obtiene R2); volver a usar R1; luego usar R2 | Uso de R1 repetido: 401 y revocación de la familia; R2 también 401; evento SESIONES_REVOCADAS | — | Pendiente |
+| CP-31 | AM-09 | Archivo no permitido | Etapa propia | Solicitar URL para `text/html`; para jpeg de 20 MB; PUT con `Content-Type` distinto al firmado | 400, 400 y 403 (firma inválida en R2) | — | Pendiente |
+| CP-32 | AM-10, AM-11, AM-12 | Configuración, cabeceras y dependencias | Staging desplegado | ZAP *baseline*; `npm audit --audit-level=high`; revisión con la lista de cotejo ASVS (Anexo E); revisión de logs sin secretos; con el rol `sgp_app`, intentar modificar `movimiento_insumo`, borrar `outbox_evento` y crear una tabla | ZAP sin High/Medium; CSP, HSTS, `X-Content-Type-Options`, `frame-ancestors` presentes; 0 vulnerabilidades altas; ítems ASVS L2 seleccionados cumplidos; los tres intentos con `sgp_app` fallan por falta de privilegios (R7, R8) | — | Pendiente |
 
 **Tabla L.5 — Pruebas de usabilidad y adaptabilidad**
 
 | ID | HU / CU | Descripción | Precondición | Pasos / datos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|---|---|
-| CP-33 | HU-01, HU-02, HU-03 / CU-05, CU-06, CU-09 | Autonomía del operario (criterio de éxito) | 5 participantes; staging con OT asignadas | Tareas T1–T3 sin ayuda, en el propio teléfono, cronometradas | ≥ 80 % de éxito sin ayuda; T1 en ≤ 3 toques y < 30 s | [Completar] | Pendiente |
-| CP-34 | RNF-02 | Diseño responsive | Build en staging | Playwright: capturas de P-01 a P-12 en 360×800, 390×844, 768×1024 y 1366×768; aserción de ausencia de *scroll* horizontal | 0 desbordes horizontales; navegación inferior en < 600 px y lateral en ≥ 1024 px | [Completar] | Pendiente |
-| CP-35 | RNF-01 | Satisfacción percibida | Tras CP-33 | Cuestionario SUS (10 ítems) | Puntaje SUS promedio ≥ 70 | [Completar] | Pendiente |
-| CP-36 | RNF-01 | Accesibilidad automatizada | Build en staging | `@axe-core/playwright` en P-01 a P-12 (reglas WCAG 2.2 A/AA) | 0 violaciones *serious* o *critical* | [Completar] | Pendiente |
+| CP-33 | HU-01, HU-02, HU-03 / CU-05, CU-06, CU-09 | Autonomía del operario (criterio de éxito) | 5 participantes; staging con OT asignadas | Tareas T1–T3 sin ayuda, en el propio teléfono, cronometradas | ≥ 80 % de éxito sin ayuda; T1 en ≤ 3 toques y < 30 s | — | Pendiente |
+| CP-34 | RNF-02 | Diseño responsive | Build en staging | Playwright: capturas de P-01 a P-12 en 360×800, 390×844, 768×1024 y 1366×768; aserción de ausencia de *scroll* horizontal | 0 desbordes horizontales; navegación inferior en < 600 px y lateral en ≥ 1024 px | — | Pendiente |
+| CP-35 | RNF-01 | Satisfacción percibida | Tras CP-33 | Cuestionario SUS (10 ítems) | Puntaje SUS promedio ≥ 70 | — | Pendiente |
+| CP-36 | RNF-01 | Accesibilidad automatizada | Build en staging | `@axe-core/playwright` en P-01 a P-12 (reglas WCAG 2.2 A/AA) | 0 violaciones *serious* o *critical* | — | Pendiente |
+
+### Anexo M — Estándares de referencia y tareas normativas
+
+Detalla la sección 7.7. La Tabla M.1 relaciona cada estándar con la normativa chilena y con el diseño del SGP.
+
+**Tabla M.1 — Estándares de referencia y su relación con la normativa chilena**
+
+| Estándar | Uso en el proyecto | Relación con la normativa chilena | Aplicación en el SGP |
+|---|---|---|---|
+| ISO/IEC 27001:2022 (NCh-ISO 27001) | Marco de gestión de la seguridad de la información y del riesgo | Medidas de seguridad apropiadas al riesgo; principio de responsabilidad | Modelo de amenazas con probabilidad e impacto (7.4); controles exigidos por la DoD |
+| ISO/IEC 27002:2022 | Catálogo de controles | Seguridad y confidencialidad de los datos personales | 5.15 control de acceso (7.1–7.3); 5.34 privacidad (D1–D5); 8.5 autenticación segura (7.2); 8.13 respaldo (AM-15); 8.15 registro de eventos (bitácora); 8.25 y 8.28 desarrollo y codificación seguros (7.5); 8.29 pruebas de seguridad (A27); 8.33 información de prueba (D7) |
+| ISO/IEC 27701 | Extensión de privacidad de ISO/IEC 27001 para responsables y encargados | Deber de información, derechos de los titulares y obligaciones del encargado | D2, D3 y D5 |
+| ISO/IEC 29100:2011 | Marco de principios de privacidad | Equivale a los principios de finalidad, proporcionalidad y transparencia de la ley | RNF-09 y D1 |
+| ISO/IEC 27018:2019 | Protección de datos personales en nubes públicas que actúan como encargadas | Selección de encargados y transferencia internacional | Criterio para evaluar a los proveedores (D5) |
+| ISO/IEC 27035-1:2023 | Gestión de incidentes de seguridad | Notificación de vulneraciones a la Agencia y a los titulares | Procedimiento D6 |
+| CIS Critical Security Controls v8.1 (IG1 + control 16) | Salvaguardas priorizadas para organizaciones pequeñas sin equipo de TI | Convierte las "medidas apropiadas" en acciones verificables para una pyme | 3 protección de datos (D4); 5 y 6 cuentas y accesos con MFA (7.2); 8 registros de auditoría (bitácora); 11 recuperación de datos (AM-15); 14 concientización (A30); 16 seguridad del software (7.5, 8.6); 17 respuesta a incidentes (D6) |
+| NIST Cybersecurity Framework 2.0 | Estructura de cumplimiento en seis funciones | La función Gobernar (GV.OC-03) exige conocer y gestionar los requisitos legales, incluidos los de privacidad | Gobernar: sección 7.7; Proteger: 7.1–7.5; Detectar: Sentry y UptimeRobot; Responder: D6; Recuperar: PITR y respaldos |
+| NIST Privacy Framework 1.0 | Gestión del riesgo de privacidad | Derechos de los titulares, transparencia y minimización | D1–D4 |
+| NIST SP 800-218 (SSDF) 1.1 | Prácticas de desarrollo seguro | Medidas de seguridad desde el diseño | DoD, SAST, revisión de PR (incluido el código generado con IA) |
+| NIST SP 800-115 | Metodología de pruebas técnicas y pentest | Pruebas autorizadas (Ley N.º 21.459) | Planificación, ejecución e informe de A27 |
+| NIST SP 800-61 Rev. 3 | Respuesta a incidentes alineada con CSF 2.0 | Notificación de vulneraciones | Procedimiento D6 |
+
+**Tabla M.2 — Tareas normativas dentro del plan.** Se integran en actividades que ya existen (Anexo H, Tabla H.1), sin agregar días al cronograma.
+
+| Actividad | Tarea normativa | Entregable |
+|---|---|---|
+| A01 (D1) | Validar con Kotoduo su rol de responsable, la finalidad del registro de actividad (D1) y si incluirá las medidas de control en su Reglamento Interno | Acta de validación |
+| A07 (D8–D9) | Elaborar la matriz normativa y el registro de actividades de tratamiento | Sección 7.7 |
+| A11 (D12) | Cargar solo datos semilla ficticios en desarrollo y staging (D7) | Script de semillas |
+| A12, A15 (Sprint 1) | Construir el aviso de privacidad en el login y el perfil (D2) | Pantallas P-01 y P-12 |
+| A27 (D28–D29) | Firmar el acta de autorización del pentest (D9); aplicar NIST SP 800-115; verificar que los logs no contengan datos personales | Acta + informe CP-24 a CP-32 |
+| A29 (D30) | Aceptar los DPA de los proveedores antes de cargar datos reales; cargar desde el Excel solo las columnas necesarias (D5, D7) | Registro de transferencias |
+| A30 (D30) | Informar a los trabajadores sobre el tratamiento de sus datos y las reglas para las fotografías de evidencia (D2, D8) | Guía rápida + registro de asistencia |
+| A31 (D30) | Entregar a Kotoduo los procedimientos de incidentes (D6), de atención de derechos (D3) y de retención (D4) | Anexo de procedimientos |

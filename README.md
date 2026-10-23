@@ -42,7 +42,7 @@ Repositorio del **Informe N.º 2** del Proyecto Integrado (Unidad 2, INACAP). Co
 
 ## Cómo está organizado el informe
 
-El informe tiene dos niveles: el cuerpo (caps. 1–9) presenta decisiones, diagramas y tablas de resumen, y los anexos (cap. 13) reúnen las tablas extensas de consulta. La "Guía de lectura" al inicio del informe lo explica y define los códigos usados (RF, HU, CU, CP, AM, etc.).
+El informe tiene dos niveles: el cuerpo (caps. 1–9) presenta decisiones, diagramas y tablas de resumen, y los anexos (cap. 12) reúnen las tablas extensas de consulta. La "Guía de lectura" al inicio del informe lo explica y define los códigos usados (RF, HU, CU, CP, AM, etc.).
 
 | Cap. | Contenido |
 |---|---|
@@ -54,9 +54,10 @@ El informe tiene dos niveles: el cuerpo (caps. 1–9) presenta decisiones, diagr
 | 7 | Seguridad: roles, autenticación, amenazas y codificación segura |
 | 8 | Plan de pruebas |
 | 9–10 | Conclusiones y referencias |
-| 11 | Preparación para la defensa oral (balotario) |
-| 12 | Manifiesto de uso de inteligencia artificial |
-| 13 | Anexos: lista de cotejo (E) y tablas extensas (H: plan y dependencias, I: tecnologías, J: diccionario, K: amenazas y patrones, L: casos de prueba) |
+| 11 | Manifiesto de uso de inteligencia artificial |
+| 12 | Anexos: lista de cotejo (E) y tablas extensas (H: plan y dependencias, I: tecnologías e infraestructura como código, J: diccionario, K: amenazas y patrones, L: casos de prueba, M: estándares y tareas normativas) |
+
+La preparación para la defensa oral no forma parte del informe: la guía del curso la deja como material de estudio individual. Las respuestas clave están en la última diapositiva de la presentación.
 
 ## Cómo usar los artefactos
 
@@ -153,7 +154,7 @@ Abrir `anexos/prototipo/index.html` en el navegador. No requiere servidor ni cre
 ## Convenciones de trabajo
 
 - **Mantener la coherencia entre artefactos.** Un cambio en el modelo de datos afecta al diagrama ER (`diagramas/6.1-modelo-datos/`), a `ddl_postgresql.sql`, al resumen del diccionario (Tabla 6.1), al diccionario completo (Anexo J) y, si corresponde, a los casos de prueba (Anexo L).
-- **Resumen en el cuerpo, detalle en el anexo.** Las tablas extensas viven en los anexos H–L y el cuerpo muestra un resumen. Si cambias una, revisa la otra.
+- **Resumen en el cuerpo, detalle en el anexo.** Las tablas extensas viven en los anexos H–M y el cuerpo muestra un resumen. Si cambias una, revisa la otra.
 - **Respetar los identificadores.** El informe referencia requisitos y casos por ID (RF, HU, CU, CP, IK, P-xx). No los renumeres sin actualizar todas las referencias cruzadas.
 - **Sin rutas ni rúbrica en el texto.** El informe nombra los artefactos por su anexo (Anexos A–G), no por su ruta, y no cita la rúbrica. Las únicas rutas son los enlaces a las imágenes de `figuras/`: si mueves o renombras una figura, actualiza el Markdown y el `.tex`.
 - **Un cambio por rama.** Trabaja en una rama propia (por ejemplo `feat/cap7-amenazas` o `fix/ddl-indices`) y abre un Pull Request para que la otra persona revise antes de fusionar a `main`.
@@ -161,10 +162,9 @@ Abrir `anexos/prototipo/index.html` en el navegador. No requiere servidor ni cre
 
 ## Pendientes conocidos
 
-Campos marcados como `[Completar]` o `[Adjuntar…]` en el informe:
+El informe final no lleva marcadores entre corchetes (lo exige la guía del curso). Lo que queda pendiente se describe en el texto y se completa durante la construcción:
 
-- Carrera, sección, sede, docente y fecha de entrega (tabla inicial).
+- Ronda 1 de usabilidad (actividad A06): sus observaciones se agregan como FB-07 en adelante (sección 5.5).
+- Burndown real de cada Sprint (Tabla 3.3).
+- Columna "Resultado obtenido" de los casos de prueba (Anexo L, hoy "—") y reportes del Anexo F (Vitest, k6, ZAP, Lighthouse, Playwright).
 - Enlace público del prototipo, si se publica en GitHub Pages (sección 5.3).
-- Anexo F: reportes de ejecución de pruebas (Vitest, k6, ZAP, Lighthouse, Playwright).
-
-Antes de la entrega, busca estos marcadores con `grep -n "Completar\|Adjuntar" Informe2_Kotoduo_SGP.md`.
