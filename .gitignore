@@ -17,3 +17,4 @@ tex/*.log
 tex/*.out
 tex/*.toc
 tex/*.synctex.gz
+tex/*.pdf
