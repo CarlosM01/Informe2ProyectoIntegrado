@@ -282,6 +282,7 @@ CREATE TRIGGER trg_insumo_actualizado   BEFORE UPDATE ON insumo
 
 -- R2. Máquina de estados de etapa_orden (Fig. 4.7): solo transiciones permitidas.
 -- EN_CURSO y BLOQUEADA solo pasan a OMITIDA cuando la OT fue anulada.
+-- Con la OT DETENIDA no se inicia ni se termina una etapa (sí se puede desbloquear).
 CREATE FUNCTION fn_validar_transicion_etapa() RETURNS trigger LANGUAGE plpgsql AS $$
 DECLARE
     v_estado_ot VARCHAR(20);
@@ -290,6 +291,12 @@ BEGIN
         RETURN NEW;
     END IF;
     SELECT estado INTO v_estado_ot FROM orden_trabajo WHERE id = NEW.orden_id;
+    IF v_estado_ot = 'DETENIDA'
+       AND ((OLD.estado = 'DISPONIBLE' AND NEW.estado = 'EN_CURSO') OR
+            (OLD.estado = 'EN_CURSO'   AND NEW.estado = 'TERMINADA')) THEN
+        RAISE EXCEPTION 'La orden está DETENIDA: no se puede pasar la etapa de % a %', OLD.estado, NEW.estado
+            USING ERRCODE = 'check_violation';
+    END IF;
     IF NOT (
         (OLD.estado = 'PENDIENTE'  AND NEW.estado IN ('DISPONIBLE','OMITIDA')) OR
         (OLD.estado = 'DISPONIBLE' AND NEW.estado IN ('EN_CURSO','OMITIDA'))   OR
@@ -310,10 +317,24 @@ CREATE TRIGGER trg_etapa_transicion BEFORE UPDATE OF estado ON etapa_orden
 
 -- R2. Máquina de estados de orden_trabajo (Fig. 4.8). DETENIDA vuelve al subestado
 -- previo (EN_DISENO o EN_PRODUCCION); la aplicación elige el destino.
+-- Condiciones: TERMINADA exige todas las etapas cerradas; reanudar exige que no
+-- quede ninguna etapa BLOQUEADA.
 CREATE FUNCTION fn_validar_transicion_orden() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
     IF NEW.estado = OLD.estado THEN
         RETURN NEW;
+    END IF;
+    IF NEW.estado = 'TERMINADA' AND EXISTS (
+        SELECT 1 FROM etapa_orden
+         WHERE orden_id = NEW.id AND estado NOT IN ('TERMINADA','OMITIDA')) THEN
+        RAISE EXCEPTION 'La orden no puede terminar: tiene etapas abiertas'
+            USING ERRCODE = 'check_violation';
+    END IF;
+    IF OLD.estado = 'DETENIDA' AND NEW.estado IN ('EN_DISENO','EN_PRODUCCION') AND EXISTS (
+        SELECT 1 FROM etapa_orden
+         WHERE orden_id = NEW.id AND estado = 'BLOQUEADA') THEN
+        RAISE EXCEPTION 'La orden no puede reanudarse: tiene etapas bloqueadas'
+            USING ERRCODE = 'check_violation';
     END IF;
     IF NOT (
         (OLD.estado = 'REGISTRADA'    AND NEW.estado IN ('EN_PRODUCCION','ANULADA'))               OR
